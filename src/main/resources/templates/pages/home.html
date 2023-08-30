@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
+    <link th:href="@{../static/main.css}" rel="stylesheet" />
 </head>
 <body>
 <header th:replace="components/header::header"></header>
 <nav></nav>
 
+<h1 class="mt-2 text-xl" th:text="'Hello!'" />
 
 <ul role="list" class="divide-y divide-gray-100">
     <li class="flex justify-between gap-x-6 py-5">
@@ -99,8 +101,6 @@
         </div>
     </li>
 </ul>
-
-
 
 
 <footer th:replace="components/footer::footer"></footer>
