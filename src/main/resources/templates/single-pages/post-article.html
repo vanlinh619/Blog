@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Post Article</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script th:src="@{/post-article.js}"></script>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script type="module">
+    const {createApp} = Vue
+    const app = createApp(postArticle)
+    // app.component('PostArticle', postArticle)
+    app.mount('#app')
+</script>
+</body>
+</html>

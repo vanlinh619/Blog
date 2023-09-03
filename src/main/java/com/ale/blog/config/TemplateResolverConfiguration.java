@@ -34,4 +34,17 @@ public class TemplateResolverConfiguration {
 
         return templateResolver;
     }
+
+    @Bean
+    public ClassLoaderTemplateResolver thirdTemplateResolver() {
+        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        templateResolver.setPrefix("templates/single-pages/");
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode(TemplateMode.HTML);
+        templateResolver.setCharacterEncoding("UTF-8");
+        templateResolver.setOrder(2);
+        templateResolver.setCheckExistence(true);
+
+        return templateResolver;
+    }
 }
