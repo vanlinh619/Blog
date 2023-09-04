@@ -10,6 +10,6 @@ public class PostArticleController {
 
     @GetMapping
     public String postArticle() {
-        return "post-article";
+        return "single-pages/post-article";
     }
 }

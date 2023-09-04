@@ -23,9 +23,9 @@ public class TemplateResolverConfiguration {
     }
 
     @Bean
-    public ClassLoaderTemplateResolver secondTemplateResolver() {
+    public ClassLoaderTemplateResolver thirdTemplateResolver() {
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setPrefix("templates/components/");
+        templateResolver.setPrefix("templates/single-pages/");
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode(TemplateMode.HTML);
         templateResolver.setCharacterEncoding("UTF-8");
@@ -36,9 +36,9 @@ public class TemplateResolverConfiguration {
     }
 
     @Bean
-    public ClassLoaderTemplateResolver thirdTemplateResolver() {
+    public ClassLoaderTemplateResolver secondTemplateResolver() {
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setPrefix("templates/single-pages/");
+        templateResolver.setPrefix("templates/components/");
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode(TemplateMode.HTML);
         templateResolver.setCharacterEncoding("UTF-8");
@@ -47,4 +47,5 @@ public class TemplateResolverConfiguration {
 
         return templateResolver;
     }
+
 }
