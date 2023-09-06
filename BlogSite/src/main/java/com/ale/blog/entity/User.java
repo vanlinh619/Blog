@@ -1,8 +1,12 @@
 package com.ale.blog.entity;
 
 import com.ale.blog.entity.state.UserRole;
+import com.ale.blog.handler.utils.MessageType;
+import com.ale.blog.handler.utils.MessageValidate;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,15 +16,18 @@ import java.util.UUID;
 
 @Entity
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
-    @Column(length = 32)
+    @Column(length = 64)
+    @NotBlank(message = MessageValidate.NOT_BLANK)
     private String password;
     @Column(unique = true,length = 50)
+    @NotBlank(message = MessageValidate.NOT_BLANK)
     private String username;
     @Column(length = 50)
     private String firstName;

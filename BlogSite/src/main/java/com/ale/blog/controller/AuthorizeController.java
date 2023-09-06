@@ -20,21 +20,15 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(path = "api/public")
 @AllArgsConstructor
-public class AuthController {
+public class AuthorizeController {
 
     private final AuthenticationProvider authenticationProvider;
     private final TokenProvider jwtTokenProvider;
     private final RefreshTokenService refreshTokenService;
     private final ModelMapper mapper;
 
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/test")
-    public String test(){
-        return "Ok";
-    }
-
     @PostMapping("login")
-    public ResponseEntity login(@Valid @RequestBody AuthRequest request) {
+    public ResponseEntity<?> login(@Valid @RequestBody AuthRequest request) {
         try {
             Authentication authenticate = authenticationProvider.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -54,7 +48,7 @@ public class AuthController {
     }
 
     @PostMapping("refresh")
-    public ResponseEntity refresh(@Valid @RequestBody RefreshTokenInput refreshTokenInput) {
+    public ResponseEntity<?> refresh(@Valid @RequestBody RefreshTokenInput refreshTokenInput) {
         try {
             AccessToken accessToken = refreshTokenService.createAccessToken(refreshTokenInput);
             return ResponseEntity.ok().body(accessToken);

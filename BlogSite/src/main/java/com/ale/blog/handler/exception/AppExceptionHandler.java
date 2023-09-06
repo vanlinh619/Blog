@@ -32,6 +32,7 @@ public class AppExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler({AccessDeniedException.class})
     public void handleAccessDeniedException(Exception ex) {
+        ex.printStackTrace();
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -1,7 +1,6 @@
 package com.ale.blog.service;
 
 import com.ale.blog.entity.User;
-import com.ale.blog.repository.EntityRepository;
 import com.ale.blog.repository.UserRepository;
 import com.ale.blog.security.UserAccessDetails;
 import lombok.AllArgsConstructor;
@@ -16,9 +15,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @AllArgsConstructor
-public class UserServiceImpl implements UserService, EntityService<User, UUID> {
+public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
-    private EntityRepository<User, UUID> entityRepository;
     private PasswordEncoder passwordEncoder;
 
     @Override
@@ -45,8 +43,22 @@ public class UserServiceImpl implements UserService, EntityService<User, UUID> {
         return atomicReference.get();
     }
 
+    /**
+     * throw AppException if can't find id
+     */
     @Override
-    public User findById(UUID uuid) {
-        return defaultFindById(uuid, entityRepository);
+    public User getById(UUID uuid) {
+        return defaultGetById(uuid, userRepository);
+    }
+
+    @Override
+    public Optional<User> findFistUser() {
+        return userRepository.findFirstByOrderByUuid();
+    }
+
+    @Override
+    public User create(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
     }
 }
