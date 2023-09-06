@@ -1,5 +1,6 @@
 package com.ale.blog.entity;
 
+import com.ale.blog.entity.state.PostState;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,17 +21,17 @@ public class Post {
     private String title;
     @Column(length = 160)
     private String metaTitle;
-    @Column(unique = true, length = 60)
+    @Column(unique = true, length = 100)
     private String slug;
-    private Boolean published;
-    private Instant createAt;
-    private Instant updateAt;
-    private Instant publishedAt;
+    private PostState state;
+    private Instant createDate;
+    private Instant updateDate;
+    private Instant publishedDate;
     @Column(columnDefinition = "TEXT")
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    private User author;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -39,4 +40,10 @@ public class Post {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private List<Tag> tags;
+
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+    private List<Comment> comments;
+
+    @ManyToMany(mappedBy = "posts", fetch = FetchType.LAZY)
+    private List<Category> categories;
 }

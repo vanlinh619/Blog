@@ -11,9 +11,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Tag {
+public class Category {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(length = 60)
     private String title;
@@ -24,6 +23,17 @@ public class Tag {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "category_post",
+            joinColumns = @JoinColumn(name = "category_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id")
+    )
     private List<Post> posts;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Category parent;
+
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
+    private List<Category> categories;
 }
