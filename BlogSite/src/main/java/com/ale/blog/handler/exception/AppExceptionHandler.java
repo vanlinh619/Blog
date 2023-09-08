@@ -35,14 +35,14 @@ public class AppExceptionHandler {
         ex.printStackTrace();
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({ PropertyReferenceException.class, IllegalArgumentException.class})
-    public Map<String, String> handleRequest(Exception e) {
-        e.printStackTrace();
-        Map<String, String> errors = new HashMap<>();
-        errors.put("message", e.getMessage());
-        return errors;
-    }
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    @ExceptionHandler({ PropertyReferenceException.class, IllegalArgumentException.class})
+//    public Map<String, String> handleRequest(Exception e) {
+//        e.printStackTrace();
+//        Map<String, String> errors = new HashMap<>();
+//        errors.put("message", e.getMessage());
+//        return errors;
+//    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({ AppException.class})

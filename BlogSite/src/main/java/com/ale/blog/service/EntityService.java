@@ -4,6 +4,7 @@ import com.ale.blog.handler.exception.AppException;
 import com.ale.blog.handler.utils.MessageType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 public interface EntityService<T, ID> {
@@ -13,5 +14,9 @@ public interface EntityService<T, ID> {
             throw new AppException(MessageType.ID_DOES_NOT_EXIST);
         });
         return atomicReference.get();
+    }
+
+    default Optional<T> defaultFindById(ID id, JpaRepository<T, ID> entityRepository) {
+        return entityRepository.findById(id);
     }
 }

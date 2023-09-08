@@ -1,4 +1,4 @@
-package com.ale.blog.handler.mapper;
+package com.ale.blog.handler.mapper.pojo;
 
 import com.ale.blog.entity.state.UserRole;
 import lombok.AllArgsConstructor;

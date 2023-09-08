@@ -1,6 +1,7 @@
 package com.ale.blog.handler.mapper;
 
 import com.ale.blog.entity.User;
+import com.ale.blog.handler.mapper.pojo.UserView;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
