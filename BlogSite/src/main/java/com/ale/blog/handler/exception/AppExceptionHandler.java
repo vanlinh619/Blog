@@ -1,6 +1,9 @@
 package com.ale.blog.handler.exception;
 
+import com.ale.blog.handler.mapper.response.ResponseData;
 import com.ale.blog.handler.utils.MessageType;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -35,14 +38,15 @@ public class AppExceptionHandler {
         ex.printStackTrace();
     }
 
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler({ PropertyReferenceException.class, IllegalArgumentException.class})
-//    public Map<String, String> handleRequest(Exception e) {
-//        e.printStackTrace();
-//        Map<String, String> errors = new HashMap<>();
-//        errors.put("message", e.getMessage());
-//        return errors;
-//    }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({ PropertyReferenceException.class, IllegalArgumentException.class})
+    public ResponseData handleRequest(Exception e) {
+        e.printStackTrace();
+        return ResponseData.builder()
+                .status(ResponseData.ResponseStatus.FAILED)
+                .message(e.getMessage())
+                .build();
+    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({ AppException.class})
@@ -62,6 +66,22 @@ public class AppExceptionHandler {
         return errors;
     }
 
+    /**
+     * Exception for unique field
+    */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({DataIntegrityViolationException.class})
+    public ResponseData handleAccessDeniedException(DataIntegrityViolationException ex) {
+        ex.printStackTrace();
+        return ResponseData.builder()
+                .status(ResponseData.ResponseStatus.FAILED)
+                .message(MessageType.DUPLICATE_ENTRY.name())
+                .build();
+    }
+
+    /**
+     * Exception for Unknown
+    */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({ Exception.class })
     public Map<String, String> handleException(Exception e) {

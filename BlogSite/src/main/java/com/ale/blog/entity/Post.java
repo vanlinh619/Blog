@@ -1,9 +1,7 @@
 package com.ale.blog.entity;
 
 import com.ale.blog.entity.state.PostState;
-import com.ale.blog.handler.utils.MessageType;
 import com.ale.blog.handler.utils.MessageValidate;
-import com.ale.blog.handler.validation.ValueOfEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.internal.engine.messageinterpolation.parser.MessageState;
 
 import java.time.Instant;
 import java.util.List;
@@ -36,13 +33,13 @@ public class Post {
     private String metaTitle;
 
     @Column(unique = true, length = 100)
+    @NotBlank(message = MessageValidate.NOT_BLANK)
     @Pattern(regexp = "^(?:[a-zA-Z0-9]+(?:-[a-zA-Z0-9])*)+$")
     private String slug;
 
-    @ValueOfEnum(enumClazz = PostState.class)
     private PostState state;
 
-    @NotNull(message = MessageValidate.NOT_NULL)
+    @NotNull
     private Instant createDate;
 
     private Instant updateDate;
@@ -54,7 +51,7 @@ public class Post {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull(message = MessageValidate.NOT_NULL)
+    @NotNull
     private User author;
 
     @ManyToMany(fetch = FetchType.LAZY)

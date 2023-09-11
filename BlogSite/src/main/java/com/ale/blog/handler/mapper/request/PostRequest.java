@@ -1,4 +1,4 @@
-package com.ale.blog.handler.mapper.pojo;
+package com.ale.blog.handler.mapper.request;
 
 import com.ale.blog.handler.utils.MessageValidate;
 import jakarta.validation.constraints.NotBlank;
