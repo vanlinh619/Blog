@@ -1,14 +1,11 @@
 <script setup>
-import './style.css'
+import './assets/style.css'
+import './assets/ckeditor-reset.css'
 </script>
 
 <template>
-  <router-link to="/">home</router-link>
-  <br/>
-  <router-link to="/login">login</router-link>
   <router-view></router-view>
 </template>
-
 
 <style scoped>
 </style>

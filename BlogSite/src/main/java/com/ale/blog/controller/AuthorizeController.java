@@ -60,4 +60,10 @@ public class AuthorizeController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+
+    @GetMapping("test")
+    @ResponseStatus(HttpStatus.OK)
+    public String test() {
+        return "Ok";
+    }
 }
