@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "vite --port 3000",
     "build": "vite run",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "watch": "tailwindcss -i ./src/assets/style.css -o ./dist/output.css --watch"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-alignment": "^39.0.2",

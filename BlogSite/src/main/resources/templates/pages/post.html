@@ -8,15 +8,15 @@
 <body>
 <header th:replace="components/header::header"></header>
 <div class="max-w-8xl mx-auto px-4">
-    <nav th:replace="components/nav::nav"></nav>
-    <main>
-        <article>
-
+    <aside th:replace="components/aside::aside"></aside>
+    <main class="mt-10">
+        <article class="pl-[19.5rem]">
+            <div th:replace="components/detail::detail"></div>
         </article>
     </main>
-    <aside th:replace="components/aside::aside"></aside>
+    <div th:replace="components/index-page::index"></div>
 </div>
 
-<!--<footer th:replace="components/footer::footer"></footer>-->
+<footer th:replace="components/footer::footer"></footer>
 </body>
 </html>

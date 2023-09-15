@@ -6,10 +6,12 @@ import CKEditor from '@ckeditor/ckeditor5-vue';
 import App from './App.vue'
 import LoginPage from "./pages/LoginPage.vue";
 import HomePage from "./pages/HomePage.vue";
+import Post from "@/design/Post.vue";
 
 const routes = [
-    { path: '/login', name: 'login', component: LoginPage },
     { path: '/', name: 'home', component: HomePage },
+    { path: '/login', name: 'login', component: LoginPage },
+    { path: '/design', name: 'design', component: Post },
 ]
 
 const router = createRouter({
