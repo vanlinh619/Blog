@@ -2,8 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
-    <link rel="stylesheet" th:href="@{/main.css}" />
+    <title>Post</title>
+    <link rel="stylesheet" th:href="@{/main.css}"/>
 </head>
 <body>
 <header th:replace="components/header::header"></header>
@@ -11,7 +11,24 @@
     <aside th:replace="components/aside::aside"></aside>
     <main class="mt-10">
         <article class="pl-[19.5rem]">
-            <div th:replace="components/detail::detail"></div>
+            <div class="mx-auto max-w-none ml-0 mr-[15.5rem] pr-16 text-slate-700">
+                <h1 class="font-bold text-4xl" th:text="${post.getTitle()}"></h1>
+                <div class="mt-3">
+                    <label>
+                        <span class="text-slate-500">Ngày đăng: </span>
+                        <span th:text="${T(com.ale.blog.handler.utils.Format).toLocalDate(post.getCreateDate())}"></span>
+                    </label>
+                    <label class="ml-3">
+                        <span class="text-slate-500">Tác giả: </span>
+                        <span th:text="${post.getAuthor().getLastName() + ' ' + post.getAuthor().getLastName()}"></span>
+                    </label>
+                    <label class="ml-3">
+                        <span class="text-slate-500">Lượt xem: </span>
+                        <span>0</span>
+                    </label>
+                </div>
+                <div class="mt-8" th:utext="${post.getContent()}"></div>
+            </div>
         </article>
     </main>
     <div th:replace="components/index-page::index"></div>

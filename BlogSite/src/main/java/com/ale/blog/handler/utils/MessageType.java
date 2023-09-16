@@ -5,5 +5,6 @@ public enum MessageType {
     UNKNOWN_ERROR,
     ID_DOES_NOT_EXIST,
     ACCESS_DENIED,
-    DUPLICATE_ENTRY
+    DUPLICATE_ENTRY,
+    PAGE_NOT_FOUND
 }

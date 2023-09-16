@@ -5,4 +5,5 @@ import com.ale.blog.handler.mapper.request.PostRequest;
 
 public interface PostService extends EntityService<Post, Long> {
     Post createPostArticle(PostRequest postRequest);
+    Post getPostBySlug(String slug);
 }

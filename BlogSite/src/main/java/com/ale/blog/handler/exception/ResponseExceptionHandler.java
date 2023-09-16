@@ -2,7 +2,6 @@ package com.ale.blog.handler.exception;
 
 import com.ale.blog.handler.mapper.response.ResponseData;
 import com.ale.blog.handler.utils.MessageType;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
@@ -18,7 +17,7 @@ import java.util.Map;
 import java.util.concurrent.CompletionException;
 
 @RestControllerAdvice
-public class AppExceptionHandler {
+public class ResponseExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
