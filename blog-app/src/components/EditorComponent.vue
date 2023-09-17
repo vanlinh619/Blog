@@ -1,7 +1,13 @@
 <script setup>
 </script>
 <template>
-  <div>
+  <div class="
+    [&>h2]:text-3xl [&>h2]:mt-5 [&>h3]:text-2xl [&>h3]:mt-5
+    [&_a]:text-emerald-600 [&_a:hover]:text-emerald-800
+    [&_ul]:list-disc [&_ul]:ml-[1.1rem] [&>ul]:mt-4 [&>ul>li>ul]:ml-3
+    [&_ol]:list-decimal [&_ol]:ml-[1.1rem] [&>ol]:mt-4 [&>ol>li>ol]:ml-3 [&>ol>li>ol]:list-disc
+    [&_li]:mt-3
+    [&_p]:mt-4">
     <ckeditor :editor="editor"
               :modelValue="editorData"
               @update:modelValue="newValue => $emit('update:modelValue', newValue)"
@@ -31,8 +37,6 @@ import {SourceEditing} from '@ckeditor/ckeditor5-source-editing';
 import {FindAndReplace} from '@ckeditor/ckeditor5-find-and-replace';
 import {SelectAll} from '@ckeditor/ckeditor5-select-all';
 import {RemoveFormat} from '@ckeditor/ckeditor5-remove-format';
-import {Style} from '@ckeditor/ckeditor5-style';
-import { GeneralHtmlSupport } from '@ckeditor/ckeditor5-html-support';
 
 export default {
   props: {
@@ -53,8 +57,6 @@ export default {
       editorData: '',
       editorConfig: {
         plugins: [
-          Style,
-          GeneralHtmlSupport,
           Alignment,  // Adding the package to the list of plugins.
           Autoformat,
           FindAndReplace,
@@ -89,7 +91,6 @@ export default {
         ],
         toolbar: {
           items: [
-            'style',
             'findAndReplace', 'SelectAll', '|',
             'heading', '|',
             'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript', 'removeFormat', '|',
@@ -109,20 +110,6 @@ export default {
             'redo',
             '|',
             'SourceEditing',
-          ]
-        },
-        style: {
-          definitions: [
-            {
-              name: 'Article category',
-              element: 'h2',
-              classes: [ 'text-2xl' ]
-            },
-            {
-              name: 'Info box',
-              element: 'p',
-              classes: [ 'text-cyan-500' ],
-            },
           ]
         },
         language: 'en',

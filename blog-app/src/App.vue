@@ -1,6 +1,5 @@
 <script setup>
 import './assets/style.css'
-import './assets/ckeditor-reset.css'
 </script>
 
 <template>

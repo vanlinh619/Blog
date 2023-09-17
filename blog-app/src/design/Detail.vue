@@ -4,391 +4,518 @@
 
 <template>
   <div class="mx-auto max-w-none ml-0 mr-[15.5rem] pr-16 text-slate-700">
-    <p>Có thể chúng ta đã gặp <a href="https://gpcoder.com/category/design-pattern/">Design patterns</a> ở đâu đó trong
-      các ứng dụng, cũng có thể chúng ta đã từng sử dụng những mẫu tương tự như Design pattern để giải quyết những tình
-      huống của mình, nhưng chúng ta không rõ hoặc không có một khái niệm gì về nó. Trong bài này, chúng ta sẽ cùng tìm
-      hiểu một số kiến thức tổng quan Design Pattern, sau đó sẽ tìm hiểu chi tiết về từng Design Pattern trong các bài
-      viết tiếp theo.</p>
-    <h3><strong>1. Design Patterns là gì?</strong></h3>
-    <p><a href="https://vi.wikipedia.org/wiki/Design_Patterns"><strong>Design Patterns</strong></a>&nbsp;(mẫu thiết kế)
-      là
-      một kỹ thuật trong lập trình hướng đối tượng, nó khá quan trọng và mọi lập trình viên muốn giỏi đều phải biết.
-      Design Pattern được sử dụng thường xuyên trong các ngôn ngữ <a href="https://gpcoder.com/category/java-core/oop/">OOP</a>.
-      Nó cung cấp cho bạn các “mẫu thiết kế”, giải pháp để giải quyết các vấn đề chung, thường gặp trong lập trình. Các
-      vấn đề mà bạn gặp phải có thể bạn sẽ tự nghĩ ra cách giải quyết nhưng có thể nó chưa phải là tối ưu. Design
-      Pattern
-      giúp bạn giải quyết vấn đề một cách tối ưu nhất, cung cấp cho bạn các giải pháp trong lập trình OOP.</p>
-    <p><strong>Design Patterns</strong> không phải là ngôn ngữ cụ thể nào cả. Nó có thể thực hiện được ở phần lớn các
-      ngôn
-      ngữ lập trình, chẳng hạn như Java, C#, thậm chí là Javascript hay bất kỳ ngôn ngữ lập trình nào khác.</p>
-    <blockquote><p>Mỗi pattern mô tả một vấn đề xảy ra lặp đi lặp lại, và trình bày trọng tâm của giải pháp cho vấn đề
-      đó,
-      theo cách mà bạn có thể dùng đi dùng lại hàng triệu lần mà không cần phải suy nghĩ.</p></blockquote>
-    <h3><strong>2. Tại sao phải sử dụng Design Patterns?</strong></h3>
-    <p>Design Pattern giúp bạn tái sử dụng mã lệnh và dẽ dàng mở rộng.</p>
-    <p>Nó là tập hơn những giải pháp đã được tối ưu hóa, đã được kiểm chứng để giải quyết các vấn đề trong software
-      engineering. Vậy khi bạn gặp bất kỳ khó khăn gì, design patterns là kim chỉ nam giúp bạn giải quyết vấn đề thay vì
-      tự tìm kiếm giải pháp cho một vấn đề đã được chứng minh.</p>
-    <p>Design pattern cung cấp giải pháp ở dạng tổng quát, giúp tăng tốc độ phát triển phần mềm bằng cách đưa ra các mô
-      hình test, mô hình phát triển đã qua kiểm nghiệm.</p>
-    <p>Dùng lại các design pattern giúp tránh được các vấn đề tiềm ẩn có thể gây ra những lỗi lớn, dễ dàng nâng cấp, bảo
-      trì về sau.</p>
-    <p>Giúp cho các lập trình viên có thể hiểu code của người khác 1 cách nhanh chóng (có thể hiểu là tính communicate).
-      Mọi thành viên trong team có thể dễ dàng trao đổi với nhau để cùng xây dựng dự án mà không mất quá nhiều thời
-      gian.</p>
-    <h3><strong>3. Khi nào nên sử dụng Design patterns?</strong></h3>
-    <p>Khi bạn muốn giữ cho chương trình của mình thực sự đơn giản. Việc sử dụng các design pattern sẽ giúp chúng ta
-      giảm
-      được thời gian và công sức suy nghĩ ra các cách giải quyết cho những vấn đề đã có lời giải.</p>
-    <h3><strong>4. Phân loại Design Patterns</strong></h3>
-    <p>Năm 1994, bốn tác giả <strong>Erich Gamma, Richard Helm, Ralph Johnson và John Vlissides</strong> đã cho xuất bản
-      một cuốn sách với tiêu đề <strong>Design Patterns – Elements of Reusable Object-Oriented Software</strong>, đây là
-      khởi nguồn của khái niệm design pattern trong lập trình phần mềm.</p>
-    <p>Bốn tác giả trên được biết đến rộng rãi dưới tên <strong>Gang of Four</strong> (bộ tứ). Theo quan điểm của bốn
-      người, design pattern chủ yếu được dựa theo những quy tắc sau đây về thiết kế hướng đối tượng.</p>
-    <ul>
-      <li><a href="http://stackoverflow.com/questions/2697783/what-does-program-to-interfaces-not-implementations-mean">Lập
-        trình cho interface chứ không phải để implement interface đó</a>.
-      </li>
-      <li><a href="http://stackoverflow.com/questions/49002/prefer-composition-over-inheritance">Ưu tiên object
-        composition (chứa trong) hơn là inheritance (thừa kế)</a>.
-      </li>
-    </ul>
-    <h2 style="text-align:center;">IMAGE</h2>
-    <p>Hệ thống các mẫu Design pattern hiện có&nbsp;<strong>23</strong>&nbsp;<strong>mẫu</strong> được định nghĩa trong
-      cuốn “<strong>Design patterns Elements of Reusable Object Oriented Software</strong>” và được chia thành <strong>3
-        nhóm</strong>:</p>
-    <ul>
-      <li><a href="https://gpcoder.com/category/design-pattern/creational-pattern/"><strong>Creational Pattern</strong>&nbsp;</a>(nhóm
-        khởi tạo – 5 mẫu) gồm: <i>Factory Method, Abstract Factory, Builder, Prototype, Singleton</i>. Những Design
-        pattern loại này cung cấp một giải pháp để tạo ra các object và che giấu được logic của việc tạo ra nó, thay vì
-        tạo ra object một cách trực tiếp bằng cách sử dụng method <strong>new</strong>. Điều này giúp cho chương trình
-        trở
-        nên mềm dẻo hơn trong việc quyết định object nào cần được tạo ra trong những tình huống được đưa ra.
-      </li>
-      <li><a href="https://gpcoder.com/category/design-pattern/structuaral-pattern/"><strong>Structural
-        Pattern</strong></a>&nbsp;(nhóm cấu trúc – 7 mẫu) gồm: <i>Adapter, Bridge, Composite, Decorator, Facade,
-        Flyweight
-        và&nbsp;Proxy</i>. Những Design pattern loại này liên quan tới <strong>class</strong> và các thành phần của
-        <strong>object</strong>.&nbsp;Nó dùng để thiết lập, định nghĩa quan hệ giữa các đối tượng.
-      </li>
-      <li><a href="https://gpcoder.com/category/design-pattern/behavior-pattern/"><strong>Behavioral
-        Pattern</strong></a>&nbsp;(nhóm
-        tương tác/ hành vi – 11 mẫu) gồm: <i>Interpreter, Template Method, Chain of Responsibility, Command, Iterator,
-          Mediator, Memento, Observer, State, Strategy và Visitor</i>. Nhóm này dùng trong thực hiện các hành vi của đối
-        tượng, sự giao tiếp giữa các <strong>object</strong> với nhau.
-      </li>
-    </ul>
-    <p>Hình dưới là mối quan hệ giữa 23 Design Pattern cơ bản (GoF):</p>
-    <h2 style="text-align:center;"><strong>IMAGE</strong></h2><h4><strong>4.1. Nhóm Creational (nhóm khởi tạo)</strong>
-  </h4>
-    <h2 style="text-align:center;"><strong>IMAGE</strong></h2>
-    <ul>
-      <li><a href="https://gpcoder.com/4190-huong-dan-java-design-pattern-singleton/"><strong>Singleton</strong></a>:
-        <ul>
-          <li>Đảm bảo 1 class chỉ có 1 instance và cung cấp 1 điểm truy xuất toàn cục đến nó.</li>
-          <li>Tần suất sử dụng:&nbsp;cao trung bình.</li>
-        </ul>
-      </li>
-      <li><a href="https://gpcoder.com/4365-huong-dan-java-design-pattern-abstract-factory/"><strong>Abstract
-        Factory</strong></a>:
-        <ul>
-          <li>Cung cấp một interface cho việc tạo lập các đối tượng (có liên hệ với nhau) mà không cần qui định lớp khi
-            hay xác định lớp cụ thể (concrete) tạo mỗi đối tượng.
-          </li>
-          <li>Tần suất sử dụng:&nbsp;cao.</li>
-        </ul>
-      </li>
-      <li><a href="https://gpcoder.com/4352-huong-dan-java-design-pattern-factory-method/"><strong>Factory
-        Method</strong></a>:
-        <ul>
-          <li>Định nghĩa Interface để sinh ra đối tượng nhưng để cho lớp con quyết định lớp nào được dùng để sinh ra đối
-            tượng Factory method cho phép một lớp chuyển quá trình khởi tạo đối tượng cho lớp con.
-          </li>
-          <li>Tần suất sử dụng:&nbsp;cao.</li>
-        </ul>
-      </li>
-      <li><a href="https://gpcoder.com/4434-huong-dan-java-design-pattern-builder/"><strong>Builder</strong></a>:
-        <ul>
-          <li>Tách rời việc xây dựng (construction) một đối tượng phức tạp khỏi biểu diễn của nó sao cho cùng một tiến
-            trình xây dựng có thể tạo được các biểu diễn khác nhau.
-          </li>
-          <li>Tần suất sử dụng:&nbsp;trung bình thấp.</li>
-        </ul>
-      </li>
-      <li><a href="https://gpcoder.com/4413-huong-dan-java-design-pattern-prototype/"><strong>Prototype</strong></a>:
-        <ul>
-          <li>Qui định loại của các đối tượng cần tạo bằng cách dùng một đối tượng mẫu, tạo mới nhờ vào sao chép đối
-            tượng
-            mẫu này.
-          </li>
-          <li>Tần suất sử dụng:&nbsp;trung bình.</li>
-        </ul>
-      </li>
-    </ul>
-    <h4><strong>4.2. Nhóm Structural (nhóm cấu trúc)</strong></h4>
-    <h2 style="text-align:center;"><strong>IMAGE</strong></h2>
-    <ul>
-      <li><a href="https://gpcoder.com/4483-huong-dan-java-design-pattern-adapter/"><strong>Adapter</strong></a>:
-        <ul>
-          <li>Do vấn đề tương thích, thay đổi interface của một lớp thành một interface khác phù hợp với yêu cầu người
-            sử
-            dụng lớp.
-          </li>
-          <li>Tần suất sử dụng:&nbsp;cao trung bình.</li>
-        </ul>
-      </li>
-      <li><a href="https://gpcoder.com/4520-huong-dan-java-design-pattern-bridge/"><strong>Bridge</strong></a>:
-        <ul>
-          <li>Tách rời ngữ nghĩa của một vấn đề khỏi việc cài đặt, mục đích để cả hai bộ phận (ngữ nghĩa và cài đặt) có
-            thể thay đổi độc lập nhau.
-          </li>
-          <li>Tần suất sử dụng:&nbsp;trung bình.</li>
-        </ul>
-      </li>
-      <li><a href="https://gpcoder.com/4554-huong-dan-java-design-pattern-composite/"><strong>Composite</strong></a>:
-        <ul>
-          <li>Tổ chức các đối tượng theo cấu trúc phân cấp dạng cây. Tất cả các đối tượng trong cấu trúc được thao tác
-            theo một cách thuần nhất như nhau.<br>Tạo quan hệ thứ bậc bao gộp giữa các đối tượng. Client có thể xem đối
-            tượng bao gộp và bị bao gộp như nhau -&gt; khả năng&nbsp;tổng quát hoá trong code của client -&gt; dễ phát
-            triển, nâng cấp, bảo trì.
-          </li>
-          <li>Tần suất sử dụng:&nbsp;cao trung bình.</li>
-        </ul>
-      </li>
-      <li><a href="https://gpcoder.com/4574-huong-dan-java-design-pattern-decorator/"><strong>Decorator</strong></a>:
-        <ul>
-          <li>Gán thêm trách nhiệm cho đối tượng (mở rộng chức năng) vào lúc chạy (dynamically).</li>
-          <li>Tần suất sử dụng:trung bình.</li>
-        </ul>
-      </li>
-      <li><a href="https://gpcoder.com/4604-huong-dan-java-design-pattern-facade/"><strong>Facade</strong></a>:
-        <ul>
-          <li>Cung cấp một interface thuần nhất cho một tập hợp các interface trong một “hệ thống con” (subsystem). Nó
-            định nghĩa 1 interface cao hơn các interface có sẵn để làm cho hệ thống con dễ sử dụng hơn.
-          </li>
-          <li>Tần suất sử dụng:&nbsp;cao.</li>
-        </ul>
-      </li>
-      <li><a href="https://gpcoder.com/4626-huong-dan-java-design-pattern-flyweight/"><strong>Flyweight</strong></a>:
-        <ul>
-          <li>Sử dụng việc chia sẻ để thao tác hiệu quả trên một số lượng lớn đối tượng “cở nhỏ” (chẳng hạn paragraph,
-            dòng, cột, ký tự…).
-          </li>
-          <li>Tần suất sử dụng:&nbsp;thấp.</li>
-        </ul>
-      </li>
-      <li><a href="https://gpcoder.com/4644-huong-dan-java-design-pattern-proxy/"><strong>Proxy</strong></a>:
-        <ul>
-          <li>Cung cấp đối tượng đại diện cho một đối tượng khác để hỗ trợ hoặc kiểm soát quá trình truy xuất đối tượng
-            đó. Đối tượng thay thế gọi là proxy.
-          </li>
-          <li>Tần suất sử dụng:&nbsp;cao trung bình.</li>
-        </ul>
-      </li>
-    </ul>
-    <h4><strong>4.3. Nhóm Behavioral (nhóm hành vi/ tương tác)</strong></h4>
-    <ul>
-      <li><a href="https://gpcoder.com/4665-huong-dan-java-design-pattern-chain-of-responsibility/"><strong>Chain of
-        Responsibility</strong></a><strong>:&nbsp;</strong>
-        <ul>
-          <li>Khắc phục việc ghép cặp giữa bộ gởi và bộ nhận thông điệp. Các đối tượng nhận thông điệp được kết nối
-            thành
-            một chuỗi và thông điệp được chuyển dọc theo chuỗi nầy đến khi gặp được đối tượng xử lý nó. Tránh việc gắn
-            kết
-            cứng giữa phần tử gởi request với phần tử nhận và xử lý request bằng cách cho phép hơn 1 đối tượng có có cơ
-            hội xử lý request. Liên kết các đối&nbsp;tượng nhận request thành 1 dây chuyền rồi gửi request xuyên qua
-            từng
-            đối tượng xử lý đến khi gặp đối tượng xử lý cụ thể.
-          </li>
-          <li>Tần suất sử dụng:&nbsp;trung bình thấp.</li>
-        </ul>
-      </li>
-      <li><a href="https://gpcoder.com/4686-huong-dan-java-design-pattern-command/"><strong>Command</strong></a><strong>:&nbsp;</strong>
-        <ul>
-          <li>Mỗi yêu cầu (thực hiện một thao tác nào đó) được bao bọc thành một đối tượng. Các yêu cầu sẽ được lưu trữ
-            và
-            gởi đi như các đối tượng.Đóng gói request vào trong một Object, nhờ đó có thể nthông số hoá chương trình
-            nhận
-            request và thực hiện các thao tác trên request: sắp xếp, log, undo…
-          </li>
-          <li>Tần suất sử dụng:&nbsp;cao trung bình.</li>
-        </ul>
-      </li>
-      <li><a
-          href="https://gpcoder.com/4702-huong-dan-java-design-pattern-interpreter/"><strong>Interpreter</strong></a><strong>:&nbsp;</strong>
-        <ul>
-          <li>Hỗ trợ việc định nghĩa biểu diễn văn phạm và bộ thông dịch cho một ngôn ngữ.</li>
-          <li>Tần suất sử dụng:&nbsp;thấp.</li>
-        </ul>
-      </li>
-      <li><a
-          href="https://gpcoder.com/4724-huong-dan-java-design-pattern-iterator/"><strong>Iterator</strong></a><strong>:&nbsp;</strong>
-        <ul>
-          <li>Truy xuất các phần tử của đối tượng dạng tập hợp tuần tự (list, array, …) mà không phụ thuộc vào biểu diễn
-            bên trong của các phần tử.
-          </li>
-          <li>Tần suất sử dụng:&nbsp;cao.</li>
-        </ul>
-      </li>
-      <li><a
-          href="https://gpcoder.com/4740-huong-dan-java-design-pattern-mediator/"><strong>Mediator</strong></a><strong>:&nbsp;</strong>
-        <ul>
-          <li>Định nghĩa một đối tượng để bao bọc việc giao tiếp giữa một số đối tượng với nhau.</li>
-          <li>Tần suất sử dụng:&nbsp;trung bình thấp.</li>
-        </ul>
-      </li>
-      <li><a href="https://gpcoder.com/4763-huong-dan-java-design-pattern-memento/"><strong>Memento</strong></a><strong>:&nbsp;</strong>
-        <ul>
-          <li>Hiệu chỉnh và trả lại như cũ trạng thái bên trong của đối tượng mà vẫn không vi phạm việc bao bọc dữ liệu.
-          </li>
-          <li>Tần suất sử dụng:&nbsp;thấp.</li>
-        </ul>
-      </li>
-      <li><a
-          href="https://gpcoder.com/4747-huong-dan-java-design-pattern-observer/"><strong>Observer</strong></a><strong>:&nbsp;</strong>
-        <ul>
-          <li>Định nghĩa sự phụ thuộc một-nhiều giữa các đối tượng sao cho khi một đối tượng thay đổi trạng thái thì tất
-            cả các đối tượng phụ thuộc nó cũng thay đổi theo.
-          </li>
-          <li>Tần suất sử dụng:&nbsp;cao.</li>
-        </ul>
-      </li>
-      <li><a href="https://gpcoder.com/4785-huong-dan-java-design-pattern-state/"><strong>State</strong></a><strong>:&nbsp;</strong>
-        <ul>
-          <li>Cho phép một đối tượng thay đổi hành vi khi trạng thái bên trong của nó thay đổi, ta có cảm giác như class
-            của đối tượng bị thay đổi.
-          </li>
-          <li>Tần suất sử dụng:&nbsp;trung bình.</li>
-        </ul>
-      </li>
-      <li><a
-          href="https://gpcoder.com/4796-huong-dan-java-design-pattern-strategy/"><strong>Strategy</strong></a><strong>:&nbsp;</strong>
-        <ul>
-          <li>Bao bọc một họ các thuật toán bằng các lớp đối tượng để thuật toán có thể thay đổi độc lập đối với chương
-            trình sử dụng thuật toán.Cung cấp một họ giải thuật cho phép client chọn lựa linh động một giải thuật cụ thể
-            khi sử dụng.
-          </li>
-          <li>Tần suất sử dụng:&nbsp;cao trung bình.</li>
-        </ul>
-      </li>
-      <li><a href="https://gpcoder.com/4810-huong-dan-java-design-pattern-template-method/"><strong>Template
-        method</strong></a><strong>:&nbsp;</strong>
-        <ul>
-          <li>Định nghĩa phần khung của một thuật toán, tức là một thuật toán tổng quát gọi đến một số phương thức chưa
-            được cài đặt trong lớp cơ sở; việc cài đặt các phương thức được ủy nhiệm cho các lớp kế thừa.
-          </li>
-          <li>Tần suất sử dụng:&nbsp;trung bình.</li>
-        </ul>
-      </li>
-      <li><a href="https://gpcoder.com/4813-huong-dan-java-design-pattern-visitor/"><strong>Visitor</strong></a><strong>:&nbsp;</strong>
-        <ul>
-          <li>Cho phép định nghĩa thêm phép toán mới tác động lên các phần tử của một cấu trúc đối tượng mà không cần
-            thay
-            đổi các lớp định nghĩa cấu trúc đó.
-          </li>
-          <li>Tần suất sử dụng:&nbsp;thấp.</li>
-        </ul>
-      </li>
-    </ul>
-    <h3><strong>5. Để học Design Patterns cần có gì?</strong></h3>
-    <p>Để học tốt Design Pattern bạn nắm vững được <a
-        href="https://gpcoder.com/2232-4-tinh-chat-cua-lap-trinh-huong-doi-tuong-trong-java/">Bốn đặc tính của OOP</a>:
-      <a
-          href="https://gpcoder.com/2376-tinh-ke-thua-inheritance-trong-java/">Kế thừa</a>, <a
-          href="https://gpcoder.com/2386-tinh-da-hinh-polymorphism-trong-java/">Đa hình</a>, <a
-          href="https://gpcoder.com/2388-tinh-truu-tuong-abstraction-trong-java/">Trừu tượng</a>, <a
-          href="https://gpcoder.com/2365-tinh-dong-goi-encapsulation-trong-java/">Bao đóng</a>.</p>
-    <p>Tiếp theo là hai khái niệm <a href="https://gpcoder.com/2295-abstract-class-va-interface-trong-java/">interface
-      và
-      abstract</a>&nbsp;: cái này cực kỳ quan trọng, để hiểu và áp dụng 2 khái niệm này có thể sẽ mất một thời gian,
-      nhưng
-      khi bạn nắm chắc nó bạn sẽ thấy nó thực sự cần thiết.</p>
-    <p>Bỏ tư duy theo lối cấu trúc, nâng tư duy hoàn toàn <a href="https://gpcoder.com/category/java-core/oop/">OOP</a>.
-    </p>
-    <p>Sau khi bạn đã nắm chắc các thứ kể trên, bạn nên bắt tay vào học Design Pattern càng sớm càng tốt. Design Pattern
-      giúp bạn đặt trình cao mới :).</p>
-    <h3>6. <strong>Học ở đâu?</strong></h3>
-    <p><strong>Sách:</strong></p>
-    <ul>
-      <li>Design Patterns: Elements of Reusable Object-Oriented Software</li>
-      <li>Head First Design Patterns</li>
-      <li>Design Patterns For Dummies</li>
-      <li>Pattern Hatching: Design Patterns Applied.</li>
-      <li>Refactoring to Patterns.</li>
-      <li>Patterns of Enterprise Application Architecture.</li>
-    </ul>
-    <p><strong>Các website viết về Design Pattern:</strong></p>
-    <ul>
-      <li><a href="https://sourcemaking.com/design_patterns">https://sourcemaking.com/design_patterns</a></li>
-      <li><a href="https://refactoring.guru/">https://refactoring.guru</a></li>
-      <li><a href="https://www.tutorialspoint.com/design_pattern/index.htm">https://www.tutorialspoint.com/design_pattern/index.htm</a>
-      </li>
-      <li><a
-          href="https://www.javatpoint.com/design-patterns-in-java">https://www.javatpoint.com/design-patterns-in-java</a>
-      </li>
-      <li><a href="http://www.oodesign.com/">http://www.oodesign.com/</a></li>
-      <li><a href="http://java-design-patterns.com/">http://java-design-patterns.com</a></li>
-      <li><a href="http://www.javacamp.org/designPattern/">http://www.javacamp.org/designPattern/</a></li>
-      <li><a href="http://www.thejavageek.com/design-patterns/">http://www.thejavageek.com/design-patterns/</a></li>
-      <li><a href="https://en.wikipedia.org/wiki/Software_design_pattern">https://en.wikipedia.org/wiki/Software_design_pattern</a>
-      </li>
-      <li>dotNet Design Patterns:&nbsp;<a href="https://www.dofactory.com/net/design-patterns">https://www.dofactory.com/net/design-patterns</a>
-      </li>
-      <li>Javascript Design Patterns:&nbsp;<a href="https://www.dofactory.com/javascript/design-patterns">https://www.dofactory.com/javascript/design-patterns</a>
-      </li>
-    </ul>
-    <p>Theo dõi các bài viết tiếp theo trên <a href="https://gpcoder.com/">GP Coder</a> :).</p>
-    <h3>7. <strong>Học Design Pattern như thế nào?</strong></h3>
-    <p>Để học tốt một Design Pattern bạn hãy tập trung&nbsp;chú&nbsp;ý&nbsp;vào 3 phần sau:</p>
-    <ul>
-      <li>Nó được sử dụng khi nào, vấn đề mà design pattern đó giải quyết là gì?</li>
-      <li>Sơ đồ UML mô tả design pattern.</li>
-      <li>Code minh họa, ứng dụng thực tiễn của nó là gì?</li>
-    </ul>
-    <h3>8. <strong>Lời kết</strong></h3>
-    <p><strong>Design pattern</strong> thể hiện tính kinh nghiệm của công việc lập trình, xây dựng và thiết kế phần mềm.
-      Người hiểu và vận dụng được Design Pattern thích hợp trong hệ thống sẽ tiết kiệm được rất nhiều thời gian, công
-      sức,
-      dễ phát triển, mở rộng, bảo trì. Tuy nhiên không nên quá lạm dụng nó.</p>
-    <p>Chúng ta nên nhớ rằng:</p>
-    <ul>
-      <li>Design patterns là 1 đoạn mô tả, hoặc 1 khuôn mẫu để giải quyết 1 vấn đề nào đó. Nó không phải là thiết kế
-        cuối
-        cùng.
-      </li>
-      <li>Design Pattern được tạo ra để giải quyết vấn đề, chứ không phải để phức tạp hóa nó.</li>
-      <li>Design Pattern giúp code được tối ưu hóa, dễ tái sử dụng, dễ hiểu, dễ nâng cấp sửa chữa.</li>
-    </ul>
-    <p>Qua bài này mình hi vọng mọi người có thể hiểu hơn về&nbsp;<strong>design pattern</strong>&nbsp;và ưu điểm của
-      nó.
-      Bài tiếp theo chúng ta sẽ đi vào tìm hiểu từng mẫu Design Patterns.&nbsp;Vào chi tiết, nội dung tôi sẽ sử dụng
-      thông
-      tin chủ yếu từ trang <a href="https://refactoring.guru/">Refactoring.guru</a>, <a
-          href="https://sourcemaking.com/design_patterns"><strong>SourceMaking</strong></a><strong>, </strong><a
-          href="https://www.tutorialspoint.com/design_pattern/index.htm"><strong>TutorialsPoint</strong></a>&nbsp;, sách
-      <strong>Design Patterns – Elements of Reusable Object-Oriented Software (GOF)</strong>, <strong>Design Pattern for
-        dummies</strong>&nbsp;và tìm hiểu thêm những kiến thức từ nhiều trang khác để các bạn dễ hiểu hơn. Vì đây là
-      những
-      kiến thức nâng cao nên tôi cũng phải tìm hiểu từ rất nhiều nguồn để tổng hợp lại, cũng như những kinh nghiệm trong
-      các dự án thực tế vào bài viết để giúp cho các bạn dễ tiếp cận nhất có thể. Mong nhận được sự phản hồi và góp ý
-      của
-      các bạn. <i>Thanks a lot</i>!!!</p>
-    <p><strong>Tài liệu tham khảo:</strong></p>
-    <ul>
-      <li><a href="https://toidicodedao.com/2016/03/01/nhap-mon-design-pattern-phong-cach-kiem-hiep/">https://toidicodedao.com/2016/03/01/nhap-mon-design-pattern-phong-cach-kiem-hiep/</a>
-      </li>
-      <li><a href="https://tuanitpro.com/design-pattern-la-gi">https://tuanitpro.com/design-pattern-la-gi</a></li>
-      <li><a href="https://blog.duyet.net/2015/02/oop-design-patterns-la-gi.html">https://blog.duyet.net/2015/02/oop-design-patterns-la-gi.html</a>
-      </li>
-      <li><a
-          href="https://refactoring.guru/design-patterns/catalog">https://refactoring.guru/design-patterns/catalog</a>
-      </li>
-      <li><a href="https://www.ibm.com/developerworks/java/tutorials/j-patterns/j-patterns.html">https://www.ibm.com/developerworks/java/tutorials/j-patterns/j-patterns.html</a>
-      </li>
-      <li><a href="https://www.journaldev.com/1827/java-design-patterns-example-tutorial">https://www.journaldev.com/1827/java-design-patterns-example-tutorial</a>
-      </li>
-    </ul>
+    <div class="
+    [&>h2]:text-3xl [&>h2]:mt-5 [&>h3]:text-2xl [&>h3]:mt-5
+    [&_a]:text-emerald-600 [&_a:hover]:text-emerald-800
+    [&_ul]:list-disc [&_ul]:ml-[1.1rem] [&>ul]:mt-4 [&>ul>li>ul]:ml-3
+    [&_ol]:list-decimal [&_ol]:ml-[1.1rem] [&>ol]:mt-4 [&>ol>li>ol]:ml-3 [&>ol>li>ol]:list-disc
+    [&_li]:mt-3
+    [&_code]:bg-slate-100 [&_code]:rounded [&_code]:p-[0.15rem]
+    [&_p]:mt-4">
+      <blockquote>
+        <p>
+          Có thể chúng ta đã gặp <a href="https://gpcoder.com/category/design-pattern/">Design patterns</a> ở đâu đó trong các ứng dụng, cũng có thể chúng ta đã từng sử dụng những mẫu tương tự như Design pattern để giải quyết những tình huống của mình, nhưng chúng ta không rõ hoặc không có một khái niệm gì về nó. Trong bài này, chúng ta sẽ cùng tìm hiểu một số kiến thức tổng quan Design Pattern, sau đó sẽ tìm hiểu chi tiết về từng Design Pattern trong các bài viết tiếp theo.
+        </p>
+      </blockquote>
+      <h3>
+        <strong>1. Design Patterns là gì?</strong>
+      </h3>
+      <p>
+        <a href="https://vi.wikipedia.org/wiki/Design_Patterns"><strong>Design Patterns</strong></a>&nbsp;(mẫu thiết kế) <strong>là một kỹ thuật trong lập</strong> trình hướng <i>đối tượng</i>, <s>nó khá quan trọng và mọi</s> lập trình <code>viên muốn giỏi</code> đều phải biết. Design <u>Pattern được</u> sử dụng thường<sub> xuyên trong</sub> các ngôn ngữ <a href="https://gpcoder.com/category/java-core/oop/">OOP</a>. Nó cung <sup>cấp cho</sup> bạn các “mẫu thiết kế”, giải pháp để giải quyết các vấn đề chung, thường gặp trong lập trình. Các vấn đề mà bạn gặp phải có thể bạn sẽ tự nghĩ ra cách giải quyết nhưng có thể nó chưa phải là tối ưu. Design Pattern giúp bạn giải quyết vấn đề một cách tối ưu nhất, cung cấp cho bạn các giải pháp trong lập trình OOP.
+      </p>
+      <p>
+        <strong>Design Patterns</strong> không phải là ngôn ngữ cụ thể nào cả. Nó có thể thực hiện được ở phần lớn các ngôn ngữ lập trình, chẳng hạn như Java, C#, thậm chí là Javascript hay bất kỳ ngôn ngữ lập trình nào khác.
+      </p>
+      <blockquote>
+        <p>
+          Mỗi pattern mô tả một vấn đề xảy ra lặp đi lặp lại, và trình bày trọng tâm của giải pháp cho vấn đề đó, theo cách mà bạn có thể dùng đi dùng lại hàng triệu lần mà không cần phải suy nghĩ.
+        </p>
+      </blockquote>
+      <h3>
+        <strong>2. Tại sao phải sử dụng Design Patterns?</strong>
+      </h3>
+      <p>
+        Design Pattern giúp bạn tái sử dụng mã lệnh và dẽ dàng mở rộng.
+      </p>
+      <p>
+        Nó là tập hơn những giải pháp đã được tối ưu hóa, đã được kiểm chứng để giải quyết các vấn đề trong software engineering. Vậy khi bạn gặp bất kỳ khó khăn gì, design patterns là kim chỉ nam giúp bạn giải quyết vấn đề thay vì tự tìm kiếm giải pháp cho một vấn đề đã được chứng minh.
+      </p>
+      <p>
+        Design pattern cung cấp giải pháp ở dạng tổng quát, giúp tăng tốc độ phát triển phần mềm bằng cách đưa ra các mô hình test, mô hình phát triển đã qua kiểm nghiệm.
+      </p>
+      <p>
+        Dùng lại các design pattern giúp tránh được các vấn đề tiềm ẩn có thể gây ra những lỗi lớn, dễ dàng nâng cấp, bảo trì về sau.
+      </p>
+      <p>
+        Giúp cho các lập trình viên có thể hiểu code của người khác 1 cách nhanh chóng (có thể hiểu là tính communicate). Mọi thành viên trong team có thể dễ dàng trao đổi với nhau để cùng xây dựng dự án mà không mất quá nhiều thời gian.
+      </p>
+      <h3>
+        <strong>3. Khi nào nên sử dụng Design patterns?</strong>
+      </h3>
+      <p>
+        Khi bạn muốn giữ cho chương trình của mình thực sự đơn giản. Việc sử dụng các design pattern sẽ giúp chúng ta giảm được thời gian và công sức suy nghĩ ra các cách giải quyết cho những vấn đề đã có lời giải.
+      </p>
+      <h3>
+        <strong>4. Phân loại Design Patterns</strong>
+      </h3>
+      <p>
+        Năm 1994, bốn tác giả <strong>Erich Gamma, Richard Helm, Ralph Johnson và John Vlissides</strong> đã cho xuất bản một cuốn sách với tiêu đề <strong>Design Patterns – Elements of Reusable Object-Oriented Software</strong>, đây là khởi nguồn của khái niệm design pattern trong lập trình phần mềm.
+      </p>
+      <p>
+        Bốn tác giả trên được biết đến rộng rãi dưới tên <strong>Gang of Four</strong> (bộ tứ). Theo quan điểm của bốn người, design pattern chủ yếu được dựa theo những quy tắc sau đây về thiết kế hướng đối tượng.
+      </p>
+      <ul>
+        <li>
+          <a href="http://stackoverflow.com/questions/2697783/what-does-program-to-interfaces-not-implementations-mean">Lập trình cho interface chứ không phải để implement interface đó</a>.
+        </li>
+        <li>
+          <a href="http://stackoverflow.com/questions/49002/prefer-composition-over-inheritance">Ưu tiên object composition (chứa trong) hơn là inheritance (thừa kế)</a>.
+        </li>
+      </ul>
+      <h2 style="text-align:center;">
+        IMAGE
+      </h2>
+      <p>
+        Hệ thống các mẫu Design pattern hiện có&nbsp;<strong>23</strong>&nbsp;<strong>mẫu</strong> được định nghĩa trong cuốn “<strong>Design patterns Elements of Reusable Object Oriented Software</strong>” và được chia thành <strong>3 nhóm</strong>:
+      </p>
+      <ul>
+        <li>
+          <a href="https://gpcoder.com/category/design-pattern/creational-pattern/"><strong>Creational Pattern</strong>&nbsp;</a>(nhóm khởi tạo – 5 mẫu) gồm: <i>Factory Method, Abstract Factory, Builder, Prototype, Singleton</i>. Những Design pattern loại này cung cấp một giải pháp để tạo ra các object và che giấu được logic của việc tạo ra nó, thay vì tạo ra object một cách trực tiếp bằng cách sử dụng method <strong>new</strong>. Điều này giúp cho chương trình trở nên mềm dẻo hơn trong việc quyết định object nào cần được tạo ra trong những tình huống được đưa ra.
+        </li>
+        <li>
+          <a href="https://gpcoder.com/category/design-pattern/structuaral-pattern/"><strong>Structural Pattern</strong></a>&nbsp;(nhóm cấu trúc – 7 mẫu) gồm: <i>Adapter, Bridge, Composite, Decorator, Facade, Flyweight và&nbsp;Proxy</i>. Những Design pattern loại này liên quan tới <strong>class</strong> và các thành phần của <strong>object</strong>.&nbsp;Nó dùng để thiết lập, định nghĩa quan hệ giữa các đối tượng.
+        </li>
+        <li>
+          <a href="https://gpcoder.com/category/design-pattern/behavior-pattern/"><strong>Behavioral Pattern</strong></a>&nbsp;(nhóm tương tác/ hành vi – 11 mẫu) gồm: <i>Interpreter, Template Method, Chain of Responsibility, Command, Iterator, Mediator, Memento, Observer, State, Strategy và Visitor</i>. Nhóm này dùng trong thực hiện các hành vi của đối tượng, sự giao tiếp giữa các <strong>object</strong> với nhau.
+        </li>
+      </ul>
+      <p>
+        Hình dưới là mối quan hệ giữa 23 Design Pattern cơ bản (GoF):
+      </p>
+      <h2 style="text-align:center;">
+        <strong>IMAGE</strong>
+      </h2>
+      <h4>
+        <strong>4.1. Nhóm Creational (nhóm khởi tạo)</strong>
+      </h4>
+      <h2 style="text-align:center;">
+        <strong>IMAGE</strong>
+      </h2>
+      <ul>
+        <li>
+          <a href="https://gpcoder.com/4190-huong-dan-java-design-pattern-singleton/"><strong>Singleton</strong></a>:
+          <ul>
+            <li>
+              Đảm bảo 1 class chỉ có 1 instance và cung cấp 1 điểm truy xuất toàn cục đến nó.
+            </li>
+            <li>
+              Tần suất sử dụng:&nbsp;cao trung bình.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="https://gpcoder.com/4365-huong-dan-java-design-pattern-abstract-factory/"><strong>Abstract Factory</strong></a>:
+          <ul>
+            <li>
+              Cung cấp một interface cho việc tạo lập các đối tượng (có liên hệ với nhau) mà không cần qui định lớp khi hay xác định lớp cụ thể (concrete) tạo mỗi đối tượng.
+            </li>
+            <li>
+              Tần suất sử dụng:&nbsp;cao.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="https://gpcoder.com/4352-huong-dan-java-design-pattern-factory-method/"><strong>Factory Method</strong></a>:
+          <ul>
+            <li>
+              Định nghĩa Interface để sinh ra đối tượng nhưng để cho lớp con quyết định lớp nào được dùng để sinh ra đối tượng Factory method cho phép một lớp chuyển quá trình khởi tạo đối tượng cho lớp con.
+            </li>
+            <li>
+              Tần suất sử dụng:&nbsp;cao.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="https://gpcoder.com/4434-huong-dan-java-design-pattern-builder/"><strong>Builder</strong></a>:
+          <ul>
+            <li>
+              Tách rời việc xây dựng (construction) một đối tượng phức tạp khỏi biểu diễn của nó sao cho cùng một tiến trình xây dựng có thể tạo được các biểu diễn khác nhau.
+            </li>
+            <li>
+              Tần suất sử dụng:&nbsp;trung bình thấp.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="https://gpcoder.com/4413-huong-dan-java-design-pattern-prototype/"><strong>Prototype</strong></a>:
+          <ul>
+            <li>
+              Qui định loại của các đối tượng cần tạo bằng cách dùng một đối tượng mẫu, tạo mới nhờ vào sao chép đối tượng mẫu này.
+            </li>
+            <li>
+              Tần suất sử dụng:&nbsp;trung bình.
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <h4>
+        <strong>4.2. Nhóm Structural (nhóm cấu trúc)</strong>
+      </h4>
+      <h2 style="text-align:center;">
+        <strong>IMAGE</strong>
+      </h2>
+      <ul>
+        <li>
+          <a href="https://gpcoder.com/4483-huong-dan-java-design-pattern-adapter/"><strong>Adapter</strong></a>:
+          <ul>
+            <li>
+              Do vấn đề tương thích, thay đổi interface của một lớp thành một interface khác phù hợp với yêu cầu người sử dụng lớp.
+            </li>
+            <li>
+              Tần suất sử dụng:&nbsp;cao trung bình.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="https://gpcoder.com/4520-huong-dan-java-design-pattern-bridge/"><strong>Bridge</strong></a>:
+          <ul>
+            <li>
+              Tách rời ngữ nghĩa của một vấn đề khỏi việc cài đặt, mục đích để cả hai bộ phận (ngữ nghĩa và cài đặt) có thể thay đổi độc lập nhau.
+            </li>
+            <li>
+              Tần suất sử dụng:&nbsp;trung bình.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="https://gpcoder.com/4554-huong-dan-java-design-pattern-composite/"><strong>Composite</strong></a>:
+          <ul>
+            <li>
+              Tổ chức các đối tượng theo cấu trúc phân cấp dạng cây. Tất cả các đối tượng trong cấu trúc được thao tác theo một cách thuần nhất như nhau.<br>
+              Tạo quan hệ thứ bậc bao gộp giữa các đối tượng. Client có thể xem đối tượng bao gộp và bị bao gộp như nhau -&gt; khả năng&nbsp;tổng quát hoá trong code của client -&gt; dễ phát triển, nâng cấp, bảo trì.
+            </li>
+            <li>
+              Tần suất sử dụng:&nbsp;cao trung bình.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="https://gpcoder.com/4574-huong-dan-java-design-pattern-decorator/"><strong>Decorator</strong></a>:
+          <ul>
+            <li>
+              Gán thêm trách nhiệm cho đối tượng (mở rộng chức năng) vào lúc chạy (dynamically).
+            </li>
+            <li>
+              Tần suất sử dụng:trung bình.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="https://gpcoder.com/4604-huong-dan-java-design-pattern-facade/"><strong>Facade</strong></a>:
+          <ul>
+            <li>
+              Cung cấp một interface thuần nhất cho một tập hợp các interface trong một “hệ thống con” (subsystem). Nó định nghĩa 1 interface cao hơn các interface có sẵn để làm cho hệ thống con dễ sử dụng hơn.
+            </li>
+            <li>
+              Tần suất sử dụng:&nbsp;cao.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="https://gpcoder.com/4626-huong-dan-java-design-pattern-flyweight/"><strong>Flyweight</strong></a>:
+          <ul>
+            <li>
+              Sử dụng việc chia sẻ để thao tác hiệu quả trên một số lượng lớn đối tượng “cở nhỏ” (chẳng hạn paragraph, dòng, cột, ký tự…).
+            </li>
+            <li>
+              Tần suất sử dụng:&nbsp;thấp.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="https://gpcoder.com/4644-huong-dan-java-design-pattern-proxy/"><strong>Proxy</strong></a>:
+          <ul>
+            <li>
+              Cung cấp đối tượng đại diện cho một đối tượng khác để hỗ trợ hoặc kiểm soát quá trình truy xuất đối tượng đó. Đối tượng thay thế gọi là proxy.
+            </li>
+            <li>
+              Tần suất sử dụng:&nbsp;cao trung bình.
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <h4>
+        <strong>4.3. Nhóm Behavioral (nhóm hành vi/ tương tác)</strong>
+      </h4>
+      <ul>
+        <li>
+          <a href="https://gpcoder.com/4665-huong-dan-java-design-pattern-chain-of-responsibility/"><strong>Chain of Responsibility</strong></a><strong>:&nbsp;</strong>
+          <ul>
+            <li>
+              Khắc phục việc ghép cặp giữa bộ gởi và bộ nhận thông điệp. Các đối tượng nhận thông điệp được kết nối thành một chuỗi và thông điệp được chuyển dọc theo chuỗi nầy đến khi gặp được đối tượng xử lý nó. Tránh việc gắn kết cứng giữa phần tử gởi request với phần tử nhận và xử lý request bằng cách cho phép hơn 1 đối tượng có có cơ hội xử lý request. Liên kết các đối&nbsp;tượng nhận request thành 1 dây chuyền rồi gửi request xuyên qua từng đối tượng xử lý đến khi gặp đối tượng xử lý cụ thể.
+            </li>
+            <li>
+              Tần suất sử dụng:&nbsp;trung bình thấp.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="https://gpcoder.com/4686-huong-dan-java-design-pattern-command/"><strong>Command</strong></a><strong>:&nbsp;</strong>
+          <ul>
+            <li>
+              Mỗi yêu cầu (thực hiện một thao tác nào đó) được bao bọc thành một đối tượng. Các yêu cầu sẽ được lưu trữ và gởi đi như các đối tượng.Đóng gói request vào trong một Object, nhờ đó có thể nthông số hoá chương trình nhận request và thực hiện các thao tác trên request: sắp xếp, log, undo…
+            </li>
+            <li>
+              Tần suất sử dụng:&nbsp;cao trung bình.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="https://gpcoder.com/4702-huong-dan-java-design-pattern-interpreter/"><strong>Interpreter</strong></a><strong>:&nbsp;</strong>
+          <ul>
+            <li>
+              Hỗ trợ việc định nghĩa biểu diễn văn phạm và bộ thông dịch cho một ngôn ngữ.
+            </li>
+            <li>
+              Tần suất sử dụng:&nbsp;thấp.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="https://gpcoder.com/4724-huong-dan-java-design-pattern-iterator/"><strong>Iterator</strong></a><strong>:&nbsp;</strong>
+          <ul>
+            <li>
+              Truy xuất các phần tử của đối tượng dạng tập hợp tuần tự (list, array, …) mà không phụ thuộc vào biểu diễn bên trong của các phần tử.
+            </li>
+            <li>
+              Tần suất sử dụng:&nbsp;cao.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="https://gpcoder.com/4740-huong-dan-java-design-pattern-mediator/"><strong>Mediator</strong></a><strong>:&nbsp;</strong>
+          <ul>
+            <li>
+              Định nghĩa một đối tượng để bao bọc việc giao tiếp giữa một số đối tượng với nhau.
+            </li>
+            <li>
+              Tần suất sử dụng:&nbsp;trung bình thấp.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="https://gpcoder.com/4763-huong-dan-java-design-pattern-memento/"><strong>Memento</strong></a><strong>:&nbsp;</strong>
+          <ul>
+            <li>
+              Hiệu chỉnh và trả lại như cũ trạng thái bên trong của đối tượng mà vẫn không vi phạm việc bao bọc dữ liệu.
+            </li>
+            <li>
+              Tần suất sử dụng:&nbsp;thấp.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="https://gpcoder.com/4747-huong-dan-java-design-pattern-observer/"><strong>Observer</strong></a><strong>:&nbsp;</strong>
+          <ul>
+            <li>
+              Định nghĩa sự phụ thuộc một-nhiều giữa các đối tượng sao cho khi một đối tượng thay đổi trạng thái thì tất cả các đối tượng phụ thuộc nó cũng thay đổi theo.
+            </li>
+            <li>
+              Tần suất sử dụng:&nbsp;cao.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="https://gpcoder.com/4785-huong-dan-java-design-pattern-state/"><strong>State</strong></a><strong>:&nbsp;</strong>
+          <ul>
+            <li>
+              Cho phép một đối tượng thay đổi hành vi khi trạng thái bên trong của nó thay đổi, ta có cảm giác như class của đối tượng bị thay đổi.
+            </li>
+            <li>
+              Tần suất sử dụng:&nbsp;trung bình.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="https://gpcoder.com/4796-huong-dan-java-design-pattern-strategy/"><strong>Strategy</strong></a><strong>:&nbsp;</strong>
+          <ul>
+            <li>
+              Bao bọc một họ các thuật toán bằng các lớp đối tượng để thuật toán có thể thay đổi độc lập đối với chương trình sử dụng thuật toán.Cung cấp một họ giải thuật cho phép client chọn lựa linh động một giải thuật cụ thể khi sử dụng.
+            </li>
+            <li>
+              Tần suất sử dụng:&nbsp;cao trung bình.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="https://gpcoder.com/4810-huong-dan-java-design-pattern-template-method/"><strong>Template method</strong></a><strong>:&nbsp;</strong>
+          <ul>
+            <li>
+              Định nghĩa phần khung của một thuật toán, tức là một thuật toán tổng quát gọi đến một số phương thức chưa được cài đặt trong lớp cơ sở; việc cài đặt các phương thức được ủy nhiệm cho các lớp kế thừa.
+            </li>
+            <li>
+              Tần suất sử dụng:&nbsp;trung bình.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="https://gpcoder.com/4813-huong-dan-java-design-pattern-visitor/"><strong>Visitor</strong></a><strong>:&nbsp;</strong>
+          <ul>
+            <li>
+              Cho phép định nghĩa thêm phép toán mới tác động lên các phần tử của một cấu trúc đối tượng mà không cần thay đổi các lớp định nghĩa cấu trúc đó.
+            </li>
+            <li>
+              Tần suất sử dụng:&nbsp;thấp.
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <h3>
+        <strong>5. Để học Design Patterns cần có gì?</strong>
+      </h3>
+      <p>
+        Để học tốt Design Pattern bạn nắm vững được <a href="https://gpcoder.com/2232-4-tinh-chat-cua-lap-trinh-huong-doi-tuong-trong-java/">Bốn đặc tính của OOP</a>: <a href="https://gpcoder.com/2376-tinh-ke-thua-inheritance-trong-java/">Kế thừa</a>, <a href="https://gpcoder.com/2386-tinh-da-hinh-polymorphism-trong-java/">Đa hình</a>, <a href="https://gpcoder.com/2388-tinh-truu-tuong-abstraction-trong-java/">Trừu tượng</a>, <a href="https://gpcoder.com/2365-tinh-dong-goi-encapsulation-trong-java/">Bao đóng</a>.
+      </p>
+      <p>
+        Tiếp theo là hai khái niệm <a href="https://gpcoder.com/2295-abstract-class-va-interface-trong-java/">interface và abstract</a>&nbsp;: cái này cực kỳ quan trọng, để hiểu và áp dụng 2 khái niệm này có thể sẽ mất một thời gian, nhưng khi bạn nắm chắc nó bạn sẽ thấy nó thực sự cần thiết.
+      </p>
+      <p>
+        Bỏ tư duy theo lối cấu trúc, nâng tư duy hoàn toàn <a href="https://gpcoder.com/category/java-core/oop/">OOP</a>.
+      </p>
+      <p>
+        Sau khi bạn đã nắm chắc các thứ kể trên, bạn nên bắt tay vào học Design Pattern càng sớm càng tốt. Design Pattern giúp bạn đặt trình cao mới :).
+      </p>
+      <h3>
+        6. <strong>Học ở đâu?</strong>
+      </h3>
+      <p>
+        <strong>Sách:</strong>
+      </p>
+      <ul>
+        <li>
+          Design Patterns: Elements of Reusable Object-Oriented Software
+        </li>
+        <li>
+          Head First Design Patterns
+        </li>
+        <li>
+          Design Patterns For Dummies
+        </li>
+        <li>
+          Pattern Hatching: Design Patterns Applied.
+        </li>
+        <li>
+          Refactoring to Patterns.
+        </li>
+        <li>
+          Patterns of Enterprise Application Architecture.
+        </li>
+      </ul>
+      <p>
+        <strong>Các website viết về Design Pattern:</strong>
+      </p>
+      <ul>
+        <li>
+          <a href="https://sourcemaking.com/design_patterns">https://sourcemaking.com/design_patterns</a>
+        </li>
+        <li>
+          <a href="https://refactoring.guru/">https://refactoring.guru</a>
+        </li>
+        <li>
+          <a href="https://www.tutorialspoint.com/design_pattern/index.htm">https://www.tutorialspoint.com/design_pattern/index.htm</a>
+        </li>
+        <li>
+          <a href="https://www.javatpoint.com/design-patterns-in-java">https://www.javatpoint.com/design-patterns-in-java</a>
+        </li>
+        <li>
+          <a href="http://www.oodesign.com/">http://www.oodesign.com/</a>
+        </li>
+        <li>
+          <a href="http://java-design-patterns.com/">http://java-design-patterns.com</a>
+        </li>
+        <li>
+          <a href="http://www.javacamp.org/designPattern/">http://www.javacamp.org/designPattern/</a>
+        </li>
+        <li>
+          <a href="http://www.thejavageek.com/design-patterns/">http://www.thejavageek.com/design-patterns/</a>
+        </li>
+        <li>
+          <a href="https://en.wikipedia.org/wiki/Software_design_pattern">https://en.wikipedia.org/wiki/Software_design_pattern</a>
+        </li>
+        <li>
+          dotNet Design Patterns:&nbsp;<a href="https://www.dofactory.com/net/design-patterns">https://www.dofactory.com/net/design-patterns</a>
+        </li>
+        <li>
+          Javascript Design Patterns:&nbsp;<a href="https://www.dofactory.com/javascript/design-patterns">https://www.dofactory.com/javascript/design-patterns</a>
+        </li>
+      </ul>
+      <p>
+        Theo dõi các bài viết tiếp theo trên <a href="https://gpcoder.com/">GP Coder</a> :).
+      </p>
+      <h3>
+        7. <strong>Học Design Pattern như thế nào?</strong>
+      </h3>
+      <p>
+        Để học tốt một Design Pattern bạn hãy tập trung&nbsp;chú&nbsp;ý&nbsp;vào 3 phần sau:
+      </p>
+      <ul>
+        <li>
+          Nó được sử dụng khi nào, vấn đề mà design pattern đó giải quyết là gì?
+        </li>
+        <li>
+          Sơ đồ UML mô tả design pattern.
+        </li>
+        <li>
+          Code minh họa, ứng dụng thực tiễn của nó là gì?
+        </li>
+      </ul>
+      <h3>
+        8. <strong>Lời kết</strong>
+      </h3>
+      <p>
+        <strong>Design pattern</strong> thể hiện tính kinh nghiệm của công việc lập trình, xây dựng và thiết kế phần mềm. Người hiểu và vận dụng được Design Pattern thích hợp trong hệ thống sẽ tiết kiệm được rất nhiều thời gian, công sức, dễ phát triển, mở rộng, bảo trì. Tuy nhiên không nên quá lạm dụng nó.
+      </p>
+      <p>
+        Chúng ta nên nhớ rằng:
+      </p>
+      <ul>
+        <li>
+          Design patterns là 1 đoạn mô tả, hoặc 1 khuôn mẫu để giải quyết 1 vấn đề nào đó. Nó không phải là thiết kế cuối cùng.
+        </li>
+        <li>
+          Design Pattern được tạo ra để giải quyết vấn đề, chứ không phải để phức tạp hóa nó.
+        </li>
+        <li>
+          Design Pattern giúp code được tối ưu hóa, dễ tái sử dụng, dễ hiểu, dễ nâng cấp sửa chữa.
+        </li>
+      </ul>
+      <p>
+        Qua bài này mình hi vọng mọi người có thể hiểu hơn về&nbsp;<strong>design pattern</strong>&nbsp;và ưu điểm của nó. Bài tiếp theo chúng ta sẽ đi vào tìm hiểu từng mẫu Design Patterns.&nbsp;Vào chi tiết, nội dung tôi sẽ sử dụng thông tin chủ yếu từ trang <a href="https://refactoring.guru/">Refactoring.guru</a>, <a href="https://sourcemaking.com/design_patterns"><strong>SourceMaking</strong></a><strong>, </strong><a href="https://www.tutorialspoint.com/design_pattern/index.htm"><strong>TutorialsPoint</strong></a>&nbsp;, sách <strong>Design Patterns – Elements of Reusable Object-Oriented Software (GOF)</strong>, <strong>Design Pattern for dummies</strong>&nbsp;và tìm hiểu thêm những kiến thức từ nhiều trang khác để các bạn dễ hiểu hơn. Vì đây là những kiến thức nâng cao nên tôi cũng phải tìm hiểu từ rất nhiều nguồn để tổng hợp lại, cũng như những kinh nghiệm trong các dự án thực tế vào bài viết để giúp cho các bạn dễ tiếp cận nhất có thể. Mong nhận được sự phản hồi và góp ý của các bạn. <i>Thanks a lot</i>!!!
+      </p>
+      <p>
+        <strong>Tài liệu tham khảo:</strong>
+      </p>
+      <ul>
+        <li>
+          <a href="https://toidicodedao.com/2016/03/01/nhap-mon-design-pattern-phong-cach-kiem-hiep/">https://toidicodedao.com/2016/03/01/nhap-mon-design-pattern-phong-cach-kiem-hiep/</a>
+        </li>
+        <li>
+          <a href="https://tuanitpro.com/design-pattern-la-gi">https://tuanitpro.com/design-pattern-la-gi</a>
+        </li>
+        <li>
+          <a href="https://blog.duyet.net/2015/02/oop-design-patterns-la-gi.html">https://blog.duyet.net/2015/02/oop-design-patterns-la-gi.html</a>
+        </li>
+        <li>
+          <a href="https://refactoring.guru/design-patterns/catalog">https://refactoring.guru/design-patterns/catalog</a>
+        </li>
+        <li>
+          <a href="https://www.ibm.com/developerworks/java/tutorials/j-patterns/j-patterns.html">https://www.ibm.com/developerworks/java/tutorials/j-patterns/j-patterns.html</a>
+        </li>
+        <li>
+          <a href="https://www.journaldev.com/1827/java-design-patterns-example-tutorial">https://www.journaldev.com/1827/java-design-patterns-example-tutorial</a>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
