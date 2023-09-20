@@ -1,13 +1,7 @@
 <script setup>
 </script>
 <template>
-  <div class="
-    [&>h2]:text-3xl [&>h2]:mt-5 [&>h3]:text-2xl [&>h3]:mt-5
-    [&_a]:text-emerald-600 [&_a:hover]:text-emerald-800
-    [&_ul]:list-disc [&_ul]:ml-[1.1rem] [&>ul]:mt-4 [&>ul>li>ul]:ml-3
-    [&_ol]:list-decimal [&_ol]:ml-[1.1rem] [&>ol]:mt-4 [&>ol>li>ol]:ml-3 [&>ol>li>ol]:list-disc
-    [&_li]:mt-3
-    [&_p]:mt-4">
+  <div>
     <ckeditor :editor="editor"
               :modelValue="editorData"
               @update:modelValue="newValue => $emit('update:modelValue', newValue)"
@@ -50,12 +44,19 @@ export default {
   },
   methods: {},
   mounted() {
+    this.editor.conversion?.for('downcast').add(dispatcher => {
+      dispatcher.on('element:h2', (evt, data, conversionApi) => {
+        const viewWriter = conversionApi.writer;
+        viewWriter.setAttribute('id', 'my_unique_id', conversionApi.mapper.toViewElement(data.item))
+      });
+    });
   },
   data() {
     return {
       editor: ClassicEditor,
-      editorData: '',
+      editorData: this.modelValue,
       editorConfig: {
+        removePlugins: ['stylesheetparser'],
         plugins: [
           Alignment,  // Adding the package to the list of plugins.
           Autoformat,
@@ -112,7 +113,14 @@ export default {
             'SourceEditing',
           ]
         },
-        language: 'en',
+        heading: {
+          options: [
+            {model: 'paragraph', title: 'Paragraph'},
+            {model: 'heading2', view: {name: 'h2', attributes: {id: 'my_heading'}}, title: 'Heading 1'},
+            {model: 'heading3', view: {name: 'h3', attributes: {id: 'my_heading'}}, title: 'Heading 2'},
+            {model: 'heading4', view: {name: 'h4', attributes: {id: 'my_heading'}}, title: 'Heading 3'},
+          ]
+        },
         image: {
           toolbar: [
             'imageTextAlternative',
@@ -133,4 +141,17 @@ export default {
     };
   }
 };
+
+const generateRandomString = () => {
+  const chars =
+      "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890";
+  const randomArray = Array.from(
+      { length: 18 },
+      (v, k) => chars[Math.floor(Math.random() * chars.length)]
+  );
+
+  const randomString = randomArray.join("");
+  return randomString;
+};
+
 </script>

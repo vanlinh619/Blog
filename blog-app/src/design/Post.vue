@@ -13,7 +13,9 @@ import Footer from "@/design/Footer.vue";
     <Aside></Aside>
     <main class="mt-10">
       <article class="pl-[19.5rem]">
-        <Detail></Detail>
+        <div class="mx-auto max-w-none ml-0 mr-[15.5rem] pr-16 text-slate-700">
+          <Detail></Detail>
+        </div>
       </article>
       <Index></Index>
     </main>
