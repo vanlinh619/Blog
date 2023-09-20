@@ -1,7 +1,7 @@
 package com.ale.blog.entity.state;
 
 public enum HtmlTag {
-    h1,
     h2,
-    h3
+    h3,
+    h4
 }
