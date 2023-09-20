@@ -7,7 +7,6 @@ import App from './App.vue'
 import LoginPage from "./pages/LoginPage.vue";
 import HomePage from "./pages/HomePage.vue";
 import Post from "@/design/Post.vue";
-import ElementTiptapPlugin from 'element-tiptap';
 
 const routes = [
     { path: '/', name: 'home', component: HomePage },
@@ -23,6 +22,5 @@ const router = createRouter({
 
 createApp(App)
     .use(CKEditor)
-    .use(ElementTiptapPlugin)
     .use(router)
     .mount('#app')

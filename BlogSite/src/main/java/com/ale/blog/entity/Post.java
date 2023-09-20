@@ -67,4 +67,7 @@ public class Post {
 
     @ManyToMany(mappedBy = "posts", fetch = FetchType.LAZY)
     private List<Category> categories;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<HeadTable> headTables;
 }

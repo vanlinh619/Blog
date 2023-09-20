@@ -31,8 +31,6 @@
   </div>
 </template>
 <script>
-import {list} from "postcss";
-
 export default {
   props: {
     listIndex: {

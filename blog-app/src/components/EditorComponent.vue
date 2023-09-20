@@ -116,9 +116,9 @@ export default {
         heading: {
           options: [
             {model: 'paragraph', title: 'Paragraph'},
-            {model: 'heading2', view: {name: 'h2', attributes: {id: 'my_heading'}}, title: 'Heading 1'},
-            {model: 'heading3', view: {name: 'h3', attributes: {id: 'my_heading'}}, title: 'Heading 2'},
-            {model: 'heading4', view: {name: 'h4', attributes: {id: 'my_heading'}}, title: 'Heading 3'},
+            {model: 'heading2', view: 'h2', title: 'Heading 1'},
+            {model: 'heading3', view: 'h3', title: 'Heading 2'},
+            {model: 'heading4', view: 'h4', title: 'Heading 3'},
           ]
         },
         image: {
@@ -141,17 +141,4 @@ export default {
     };
   }
 };
-
-const generateRandomString = () => {
-  const chars =
-      "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890";
-  const randomArray = Array.from(
-      { length: 18 },
-      (v, k) => chars[Math.floor(Math.random() * chars.length)]
-  );
-
-  const randomString = randomArray.join("");
-  return randomString;
-};
-
 </script>

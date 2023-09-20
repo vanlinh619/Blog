@@ -1,12 +1,10 @@
 <script setup>
 import EditorComponent from "../components/EditorComponent.vue";
-import NavigationComponent from "../components/NavigationComponent.vue";
 import InputView from "../components/InputView.vue";
 import Header from "@/design/Header.vue";
 import Index from "@/design/Index.vue";
 import Aside from "@/design/Aside.vue";
 import Detail from "@/design/Detail.vue";
-import Footer from "@/design/Footer.vue";
 </script>
 
 <template>
@@ -22,7 +20,9 @@ import Footer from "@/design/Footer.vue";
         <div class="mx-auto max-w-none ml-0 mr-[15.5rem] pr-16 text-slate-700">
           <button @click="preview=!preview">Preview</button>
           <div class="
-            [&_h2]:text-3xl [&_h2]:mt-5 [&_h3]:text-[1.65rem] [&_h3]:mt-5 [&_h4]:text-[1.4rem] [&_h4]:mt-5
+            [&_h2]:text-3xl [&_h2]:mt-10 [&_h2]:mb-3 [&_h2]:py-3 [&_h2]:scroll-mt-20
+            [&_h3]:text-[1.65rem] [&_h3]:mt-8 [&_h3]:mb-2 [&_h3]:py-3 [&_h3]:scroll-mt-20
+            [&_h4]:text-[1.4rem] [&_h4]:mt-5 [&_h4]:mb-2 [&_h4]:py-3 [&_h4]:scroll-mt-20
             [&_a]:text-emerald-600 [&_a:hover]:text-emerald-800
             [&_ul]:list-disc [&_ul]:ml-[1.1rem] [&>ul]:mt-4 [&>ul>li>ul]:ml-3
             [&_ol]:list-decimal [&_ol]:ml-[1.1rem] [&>ol]:mt-4 [&>ol>li>ol]:ml-3 [&>ol>li>ol]:list-disc
@@ -32,7 +32,7 @@ import Footer from "@/design/Footer.vue";
             [&_blockquote]:p-4 [&_blockquote]:mt-4 [&_blockquote_p]:mt-3
             [&_blockquote_:first-child]:mt-0
             [&_p]:mt-4">
-            <div v-if="preview" v-html="content"></div>
+            <Detail v-if="preview" :content="content" :list-index="listIndex"></Detail>
             <div id="editor" v-else>
               <div class="grid grid-cols-2 gap-2">
                 <InputView label="Title" v-model="title" class="mt-3"></InputView>

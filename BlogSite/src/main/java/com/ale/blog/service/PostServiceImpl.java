@@ -1,5 +1,6 @@
 package com.ale.blog.service;
 
+import com.ale.blog.entity.HeadTable;
 import com.ale.blog.entity.Post;
 import com.ale.blog.handler.exception.NotFoundException;
 import com.ale.blog.handler.mapper.PostMapper;
@@ -10,6 +11,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -19,6 +21,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final PostMapper postMapper;
     private final UserService userService;
+    private final HeadTableService headTableService;
 
     @Override
     public Post createPostArticle(PostRequest postRequest) {
@@ -26,6 +29,8 @@ public class PostServiceImpl implements PostService {
         post.setAuthor(userService.getById(UUID.fromString(postRequest.getAuthor())));
         String clean = Jsoup.clean(post.getContent(), Safelist.relaxed());
         post.setContent(clean);
+        List<HeadTable> headTables = headTableService.createHeaderTable(post);
+        post.setHeadTables(headTables);
         postRepository.save(post);
         return post;
     }
