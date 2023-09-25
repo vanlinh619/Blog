@@ -97,11 +97,13 @@ export default {
 
       this.listIndex.splice(0, this.listIndex.length)
       hTags?.forEach((tag, index) => {
-        this.listIndex.push({
-          tag: tag.nodeName.toLowerCase(),
-          content: tag.outerText,
-          id: toSlug(tag.outerText) + `_${index + 1}`
-        })
+        if(tag.outerText.trim()) {
+          this.listIndex.push({
+            tag: tag.nodeName.toLowerCase(),
+            content: tag.outerText,
+            id: toSlug(tag.outerText) + `-${index + 1}`
+          })
+        }
       })
       console.log('home: ', this.listIndex)
     },
@@ -112,13 +114,14 @@ export default {
 }
 
 let toSlug = (data) => {
-  return data.normalize('NFKD') // split accented characters into their base characters and diacritical marks
+  return data.normalize('NFD') // split accented characters into their base characters and diacritical marks
       .replace(/[\u0300-\u036f]/g, '') // remove all the accents, which happen to be all in the \u03xx UNICODE block.
       .trim() // trim leading or trailing whitespace
       .toLowerCase() // convert to lowercase
+      .replace(/đ+/g, 'd')
       .replace(/[^a-z0-9 -]/g, '') // remove non-alphanumeric characters
       .replace(/\s+/g, '-') // replace spaces with hyphens
-      .replace(/-+/g, '-')
+      .replace(/^[^a-z]+/g, '')
 }
 </script>
 

@@ -8,16 +8,11 @@ import com.ale.blog.repository.HeadTableRepository;
 import lombok.AllArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -32,14 +27,16 @@ public class HeadTableServiceImpl implements HeadTableService {
         List<HeadTable> headTables = new LinkedList<>();
         AtomicInteger integer = new AtomicInteger(1);
         elements.forEach(element -> {
-            String href = Format.toHref(element.text()) + "-" + integer.getAndIncrement();
-            headTables.add(HeadTable.builder()
-                    .tag(HtmlTag.valueOf(element.tagName()))
-                    .content(element.text())
-                    .href(href)
-                    .post(post)
-                    .build());
-            element.id(href);
+            if(!element.text().trim().isBlank()) {
+                String href = Format.toHref(element.text()) + "-" + integer.getAndIncrement();
+                headTables.add(HeadTable.builder()
+                        .tag(HtmlTag.valueOf(element.tagName()))
+                        .content(element.text())
+                        .href(href)
+                        .post(post)
+                        .build());
+                element.id(href);
+            }
         });
         post.setContent(document.body().html());
         return headTables;

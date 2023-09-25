@@ -1,10 +1,11 @@
 package com.ale.blog.handler.utils;
 
-public enum MessageType {
+public enum MessageCode {
     BAD_QUERY,
     UNKNOWN_ERROR,
     ID_DOES_NOT_EXIST,
     ACCESS_DENIED,
     DUPLICATE_ENTRY,
-    PAGE_NOT_FOUND
+    PAGE_NOT_FOUND,
+    BEYOND_THE_CATEGORY_LEVEL
 }

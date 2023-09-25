@@ -5,7 +5,7 @@ import Nav from "@/design/Nav.vue";
 
 <template>
   <div
-      class="lg:block fixed z-20 inset-0 top-20 left-[max(0px,calc(50%-45rem))] right-auto w-[19rem] pb-10 pl-8 pr-6 overflow-y-auto">
+      class="lg:block fixed z-20 inset-0 top-16 left-[max(0px,calc(50%-45rem))] right-auto w-[19rem] pb-10 pl-8 pr-6 overflow-y-auto">
     <div class="sticky top-0 -ml-0.5 pointer-events-none">
       <div class="h-10 bg-white dark:bg-slate-900"></div>
       <div class="bg-white dark:bg-slate-900 relative pointer-events-auto">

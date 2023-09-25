@@ -1,6 +1,6 @@
 package com.ale.blog.handler.exception;
 
-import com.ale.blog.handler.utils.MessageType;
+import com.ale.blog.handler.mapper.response.DataResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AppException extends RuntimeException{
-    private MessageType messageType;
+    private DataResponse response;
 }

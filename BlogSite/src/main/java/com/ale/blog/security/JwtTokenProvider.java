@@ -37,7 +37,7 @@ public class JwtTokenProvider implements TokenProvider {
                     .parseClaimsJws(token)
                     .getBody();
             return Optional.of(claims.getSubject());
-        } catch (MalformedJwtException ex) {
+        }catch (SignatureException | MalformedJwtException ex) {
             log.error("Invalid JWT token");
         } catch (ExpiredJwtException ex) {
             log.error("Expired JWT token");

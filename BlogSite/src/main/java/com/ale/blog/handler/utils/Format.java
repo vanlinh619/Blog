@@ -19,8 +19,9 @@ public class Format {
                 .replaceAll("[\\u0300-\\u036f]", "")
                 .trim()
                 .toLowerCase()
+                .replaceAll("đ", "d")
                 .replaceAll("[^a-z0-9 -]", "")
                 .replaceAll("\\s+", "-")
-                .replaceAll("-+", "-");
+                .replaceAll("^[^a-z]+", "");
     }
 }

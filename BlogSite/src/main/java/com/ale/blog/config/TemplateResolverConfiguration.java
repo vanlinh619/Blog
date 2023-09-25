@@ -9,7 +9,6 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 @Configuration
-@EnableAutoConfiguration(exclude = {ErrorMvcAutoConfiguration.class})
 public class TemplateResolverConfiguration {
 
     @Bean
@@ -28,7 +27,7 @@ public class TemplateResolverConfiguration {
     @Bean
     public ClassLoaderTemplateResolver thirdTemplateResolver() {
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setPrefix("templates/single-pages/");
+        templateResolver.setPrefix("templates/component/");
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode(TemplateMode.HTML);
         templateResolver.setCharacterEncoding("UTF-8");
@@ -37,18 +36,4 @@ public class TemplateResolverConfiguration {
 
         return templateResolver;
     }
-
-    @Bean
-    public ClassLoaderTemplateResolver secondTemplateResolver() {
-        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setPrefix("templates/components/");
-        templateResolver.setSuffix(".html");
-        templateResolver.setTemplateMode(TemplateMode.HTML);
-        templateResolver.setCharacterEncoding("UTF-8");
-        templateResolver.setOrder(2);
-        templateResolver.setCheckExistence(true);
-
-        return templateResolver;
-    }
-
 }

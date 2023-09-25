@@ -1,9 +1,14 @@
 package com.ale.blog.service;
 
+import com.ale.blog.entity.Category;
 import com.ale.blog.entity.User;
+import com.ale.blog.entity.state.CategoryLevel;
+import com.ale.blog.handler.mapper.request.CategoryRequest;
+import com.ale.blog.repository.CategoryRepository;
 import com.ale.blog.repository.UserRepository;
 import com.ale.blog.security.UserAccessDetails;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,10 +19,16 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
-@AllArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CategoryService categoryService;
+
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder,@Lazy CategoryService categoryService) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.categoryService = categoryService;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -59,6 +70,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        userRepository.save(user);
+
+        categoryService.createCategory(CategoryRequest.builder()
+                .title("All")
+                .slug("all")
+                .metaTitle("All")
+                .author(user.getUuid().toString())
+                .build());
+
+        return user;
     }
 }

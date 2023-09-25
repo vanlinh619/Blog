@@ -1,7 +1,6 @@
 package com.ale.blog.entity;
 
 import com.ale.blog.entity.state.PostState;
-import com.ale.blog.handler.utils.MessageValidate;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,17 +23,17 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @Column(length = 60)
-    @NotBlank(message = MessageValidate.NOT_BLANK)
     private String title;
 
+    @NotBlank
     @Column(length = 160)
-    @NotBlank(message = MessageValidate.NOT_BLANK)
     private String metaTitle;
 
+    @NotBlank
     @Column(unique = true, length = 100)
-    @NotBlank(message = MessageValidate.NOT_BLANK)
-    @Pattern(regexp = "^(?:[a-zA-Z0-9]+(?:-[a-zA-Z0-9])*)+$")
+    @Pattern(regexp = "^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])*$")
     private String slug;
 
     private PostState state;
@@ -46,12 +45,12 @@ public class Post {
 
     private Instant publishedDate;
 
+    @NotBlank
     @Column(columnDefinition = "TEXT")
-    @NotBlank(message = MessageValidate.NOT_BLANK)
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
     private User author;
 
     @ManyToMany(fetch = FetchType.LAZY)

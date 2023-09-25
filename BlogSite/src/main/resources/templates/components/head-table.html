@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="index" type="com.ale.blog.entity.HeadTable"*/-->
+<div th:fragment="heading(headTables)"
+     class="fixed z-20 top-16 bottom-0 right-[max(0px,calc(50%-45rem))] w-[19.5rem] py-10 overflow-y-auto block">
+  <span class="text-sm font-semibold px-8 text-cyan-950">NỘI DUNG</span>
+  <div class="px-8">
+    <ul class="space-y-0.5 mt-3 text-cyan-950">
+      <li th:each="index: ${headTables}"
+          class="block hover:text-cyan-950 hover:[&_a]:font-medium active:text-emerald-600 active:[&_a]:font-medium focus:text-emerald-600 focus:[&_a]:font-medium">
+        <a th:if="${index.getTag().name()}  == 'h2'" class="text-sm font-normal"
+           th:href="'#'+${index.getHref()}" th:text="${index.getContent()}"></a>
+        <ul th:if="${index.getTag().name()}  == 'h3'" class="ml-4">
+          <li class="block">
+            <a class="text-sm font-normal" th:href="'#'+${index.getHref()}"
+               th:text="${index.getContent()}"></a>
+          </li>
+        </ul>
+        <ul th:if="${index.getTag().name()} == 'h4'" class="ml-8">
+          <li class="block">
+            <a class="text-sm font-normal" th:href="'#'+${index.getHref()}"
+               th:text="${index.getContent()}"></a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+</html>

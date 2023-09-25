@@ -1,7 +1,6 @@
 package com.ale.blog.config;
 
-import com.ale.blog.handler.utils.MessageType;
-import com.ale.blog.security.TokenProvider;
+import com.ale.blog.handler.utils.MessageCode;
 import com.ale.blog.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,7 +19,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -53,14 +51,17 @@ public class SecurityConfiguration {
                         .authenticationEntryPoint((request, response, ex) -> {
                             response.sendError(
                                     HttpServletResponse.SC_UNAUTHORIZED,
-                                    MessageType.ACCESS_DENIED.name()
+                                    MessageCode.ACCESS_DENIED.name()
                             );
                         })
                 )
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/api/authorize/**").authenticated()
                         .requestMatchers("/api/public/**").permitAll()
-                        .anyRequest().permitAll()
+                        .requestMatchers("/post/**").permitAll()
+//                        .requestMatchers("/404/**").permitAll()
+                        .requestMatchers("/css/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(oncePerRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

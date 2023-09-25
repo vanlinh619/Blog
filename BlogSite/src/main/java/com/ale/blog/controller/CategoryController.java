@@ -1,10 +1,10 @@
 package com.ale.blog.controller;
 
-import com.ale.blog.entity.Tag;
+import com.ale.blog.entity.Category;
 import com.ale.blog.entity.state.UserRole;
-import com.ale.blog.handler.mapper.request.TagRequest;
+import com.ale.blog.handler.mapper.request.CategoryRequest;
 import com.ale.blog.handler.mapper.response.DataResponse;
-import com.ale.blog.service.TagService;
+import com.ale.blog.service.CategoryService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -16,15 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RolesAllowed({UserRole.Fields.ADMIN, UserRole.Fields.CONTENT_CREATOR})
 @AllArgsConstructor
-@RequestMapping("api/authorize/tag")
-public class TagController {
-    private final TagService tagService;
+@RequestMapping("api/authorize/category")
+public class CategoryController {
+    private final CategoryService service;
 
     @PostMapping
-    public DataResponse createTag(@Valid @RequestBody TagRequest tagRequest) {
-        Tag tag = tagService.createTag(tagRequest);
+    public DataResponse createCategory(@Valid @RequestBody CategoryRequest categoryRequest){
+        Category category = service.createCategory(categoryRequest);
         return DataResponse.builder()
-                .id(tag.getId())
+                .id(category.getId())
                 .status(DataResponse.ResponseStatus.CREATED)
                 .build();
     }

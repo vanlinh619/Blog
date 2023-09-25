@@ -1,5 +1,6 @@
 package com.ale.blog.service;
 
+import com.ale.blog.entity.Category;
 import com.ale.blog.entity.HeadTable;
 import com.ale.blog.entity.Post;
 import com.ale.blog.handler.exception.NotFoundException;
@@ -11,8 +12,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
@@ -22,6 +25,7 @@ public class PostServiceImpl implements PostService {
     private final PostMapper postMapper;
     private final UserService userService;
     private final HeadTableService headTableService;
+    private final CategoryService categoryService;
 
     @Override
     public Post createPostArticle(PostRequest postRequest) {
@@ -31,6 +35,17 @@ public class PostServiceImpl implements PostService {
         post.setContent(clean);
         List<HeadTable> headTables = headTableService.createHeaderTable(post);
         post.setHeadTables(headTables);
+
+        Category defaultCategory = categoryService.getDefaultCategory();
+        post.setCategories(List.of(defaultCategory));
+        if (postRequest.getCategories() != null) {
+            postRequest.getCategories().forEach(id -> {
+                if(!defaultCategory.getId().equals(id)) {
+                    post.getCategories().add(categoryService.getCategory(id));
+                }
+            });
+        }
+
         postRepository.save(post);
         return post;
     }

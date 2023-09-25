@@ -2,25 +2,21 @@
 </script>
 
 <template>
-  <div class="fixed z-20 top-20 bottom-0 right-[max(0px,calc(50%-45rem))] w-[19.5rem] py-10 overflow-y-auto block">
+  <div class="fixed z-20 top-16 bottom-0 right-[max(0px,calc(50%-45rem))] w-[19.5rem] py-10 overflow-y-auto block">
     <span class="text-sm font-semibold px-8 text-cyan-950">NỘI DUNG</span>
     <div class="px-8">
       <ul class="space-y-0.5 mt-3 text-cyan-950">
         <li v-for="index in list" class="block hover:text-cyan-950 hover:[&_a]:font-medium">
-          <a v-if="index.tag === 'h2'" class="text-sm font-normal"
-             :href="'#'+index.id">{{ index.content }}</a>
+            <a v-if="index.tag === 'h2'" class="text-sm font-normal"
+               :href="'#'+index.id">{{ index.content }}</a>
           <ul v-else-if="index.tag === 'h3'" class="ml-4">
             <li class="block">
-              <a class="text-sm font-normal" :href="'#'+index.id">{{
-                  index.content
-                }}</a>
+                <a class="text-sm font-normal" :href="'#'+index.id">{{ index.content }}</a>
             </li>
           </ul>
           <ul v-else class="ml-8">
             <li class="block">
-              <a class="text-sm font-normal" :href="'#'+index.id">{{
-                  index.content
-                }}</a>
+                <a class="text-sm font-normal" :href="'#'+index.id">{{ index.content }}</a>
             </li>
           </ul>
         </li>

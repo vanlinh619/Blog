@@ -1,5 +1,6 @@
 package com.ale.blog.handler.mapper.response;
 
+import com.ale.blog.handler.utils.MessageCode;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,13 +11,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseData {
+public class DataResponse {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Long id;
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String uuid;
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private ResponseStatus status;
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private MessageCode code;
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String message;
 
@@ -25,6 +28,5 @@ public class ResponseData {
         FAILED,
         UPDATED,
         DELETED
-
     }
 }

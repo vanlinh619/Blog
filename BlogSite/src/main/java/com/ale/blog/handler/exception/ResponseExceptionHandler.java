@@ -1,7 +1,7 @@
 package com.ale.blog.handler.exception;
 
-import com.ale.blog.handler.mapper.response.ResponseData;
-import com.ale.blog.handler.utils.MessageType;
+import com.ale.blog.handler.mapper.response.DataResponse;
+import com.ale.blog.handler.utils.MessageCode;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
@@ -39,21 +39,19 @@ public class ResponseExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({ PropertyReferenceException.class, IllegalArgumentException.class})
-    public ResponseData handleRequest(Exception e) {
+    public DataResponse handleRequest(Exception e) {
         e.printStackTrace();
-        return ResponseData.builder()
-                .status(ResponseData.ResponseStatus.FAILED)
+        return DataResponse.builder()
+                .status(DataResponse.ResponseStatus.FAILED)
                 .message(e.getMessage())
                 .build();
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({ AppException.class})
-    public Map<String, String> handleAppException(AppException e) {
+    public DataResponse handleAppException(AppException e) {
         e.printStackTrace();
-        Map<String, String> errors = new HashMap<>();
-        errors.put("message", e.getMessageType().name());
-        return errors;
+        return e.getResponse();
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -70,11 +68,11 @@ public class ResponseExceptionHandler {
     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({DataIntegrityViolationException.class})
-    public ResponseData handleAccessDeniedException(DataIntegrityViolationException ex) {
+    public DataResponse handleAccessDeniedException(DataIntegrityViolationException ex) {
         ex.printStackTrace();
-        return ResponseData.builder()
-                .status(ResponseData.ResponseStatus.FAILED)
-                .message(MessageType.DUPLICATE_ENTRY.name())
+        return DataResponse.builder()
+                .status(DataResponse.ResponseStatus.FAILED)
+                .code(MessageCode.DUPLICATE_ENTRY)
                 .build();
     }
 
@@ -86,7 +84,7 @@ public class ResponseExceptionHandler {
     public Map<String, String> handleException(Exception e) {
         e.printStackTrace();
         Map<String, String> errors = new HashMap<>();
-        errors.put("message", MessageType.UNKNOWN_ERROR.name());
+        errors.put("message", MessageCode.UNKNOWN_ERROR.name());
         return errors;
     }
 }
