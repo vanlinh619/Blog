@@ -63,6 +63,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findFirstByUsername(username);
+    }
+
+    @Override
     public Optional<User> findFistUser() {
         return userRepository.findFirstByOrderByUuid();
     }

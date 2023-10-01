@@ -59,7 +59,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/authorize/**").authenticated()
                         .requestMatchers("/api/public/**").permitAll()
                         .requestMatchers("/post/**").permitAll()
-//                        .requestMatchers("/404/**").permitAll()
+                        .requestMatchers("/category/**").permitAll()
                         .requestMatchers("/css/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -68,7 +68,7 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(UserService userService){
+    public AuthenticationProvider authenticationProvider(UserService userService) {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userService);
         authenticationProvider.setPasswordEncoder(passwordEncoder());

@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(path = "api/public")
 @AllArgsConstructor
-public class AuthorizeController {
+public class ApiAuthorizeController {
 
     private final AuthenticationProvider authenticationProvider;
     private final TokenProvider jwtTokenProvider;

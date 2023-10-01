@@ -8,22 +8,24 @@
 <body>
 <header th:replace="components/header::header"></header>
 <div class="max-w-8xl mx-auto px-4">
-  <aside th:replace="components/aside::aside(${categories})"></aside>
+  <div class="lg:block fixed z-20 inset-0 top-16 left-[max(0px,calc(50%-45rem))] right-auto w-[19rem] pb-10 pl-8 pr-6 overflow-y-auto">
+    <aside th:replace="components/aside::aside(${categories})"></aside>
+  </div>
   <main class="mt-10">
     <article class="pl-[19.5rem]">
       <div class="mx-auto max-w-none ml-0 mr-[15.5rem] pr-16 text-slate-700">
         <h1 class="font-bold text-4xl" th:text="${post.getTitle()}"></h1>
         <div class="mt-3">
           <label>
-            <span class="text-slate-500">Ngày đăng: </span>
+            <span class="text-emerald-600 font-light">Ngày đăng: </span>
             <span th:text="${T(com.ale.blog.handler.utils.Format).toLocalDate(post.getCreateDate())}"></span>
           </label>
           <label class="ml-3">
-            <span class="text-slate-500">Tác giả: </span>
-            <span th:text="${post.getAuthor().getLastName() + ' ' + post.getAuthor().getLastName()}"></span>
+            <span class="text-emerald-600 font-light">Tác giả: </span>
+            <span class="text-emerald-600 font-semibold" th:text="${post.getAuthor().getLastName() + ' ' + post.getAuthor().getLastName()}"></span>
           </label>
           <label class="ml-3">
-            <span class="text-slate-500">Lượt xem: </span>
+            <span class="text-emerald-600 font-light">Lượt xem: </span>
             <span>0</span>
           </label>
         </div>
@@ -44,7 +46,9 @@
       </div>
     </article>
   </main>
-  <div th:replace="components/head-table::heading(${post.getHeadTables()})"></div>
+  <div class="fixed z-20 top-16 bottom-0 right-[max(0px,calc(50%-45rem))] w-[19.5rem] py-10 overflow-y-auto block">
+    <div th:replace="components/head-table::heading(${post.getHeadTables()})"></div>
+  </div>
 </div>
 
 <footer th:replace="components/footer::footer"></footer>

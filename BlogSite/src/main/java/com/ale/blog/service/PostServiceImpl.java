@@ -3,9 +3,13 @@ package com.ale.blog.service;
 import com.ale.blog.entity.Category;
 import com.ale.blog.entity.HeadTable;
 import com.ale.blog.entity.Post;
+import com.ale.blog.entity.User;
 import com.ale.blog.handler.exception.NotFoundException;
 import com.ale.blog.handler.mapper.PostMapper;
 import com.ale.blog.handler.mapper.request.PostRequest;
+import com.ale.blog.handler.mapper.request.QueryRequest;
+import com.ale.blog.handler.mapper.response.DataResponse;
+import com.ale.blog.handler.utils.Convert;
 import com.ale.blog.repository.PostRepository;
 import lombok.AllArgsConstructor;
 import org.jsoup.Jsoup;
@@ -37,11 +41,14 @@ public class PostServiceImpl implements PostService {
         post.setHeadTables(headTables);
 
         Category defaultCategory = categoryService.getDefaultCategory();
+        defaultCategory.getPosts().add(post);
         post.setCategories(List.of(defaultCategory));
         if (postRequest.getCategories() != null) {
             postRequest.getCategories().forEach(id -> {
-                if(!defaultCategory.getId().equals(id)) {
-                    post.getCategories().add(categoryService.getCategory(id));
+                if (!defaultCategory.getId().equals(id)) {
+                    Category category = categoryService.getCategory(id);
+                    category.getPosts().add(post);
+                    post.getCategories().add(category);
                 }
             });
         }
@@ -54,7 +61,20 @@ public class PostServiceImpl implements PostService {
     public Post getPostBySlug(String slug) {
         AtomicReference<Post> reference = new AtomicReference<>();
         postRepository.findFirstBySlug(slug).ifPresentOrElse(reference::set, () -> {
-            throw new NotFoundException();
+            throw new NotFoundException(DataResponse.builder().build());
+        });
+        return reference.get();
+    }
+
+    @Override
+    public List<Post> findAllByUsername(String username, QueryRequest queryRequest) {
+        AtomicReference<List<Post>> reference = new AtomicReference<>();
+        userService.findByUsername(username).ifPresentOrElse(user -> {
+            reference.set(postRepository.findAllByAuthor(user, Convert.pageRequest(queryRequest))
+                    .map(post -> post)
+                    .toList());
+        }, () -> {
+            throw new NotFoundException(DataResponse.builder().build());
         });
         return reference.get();
     }

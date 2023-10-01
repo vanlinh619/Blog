@@ -1,31 +1,33 @@
 package com.ale.blog.controller;
 
-import com.ale.blog.entity.Category;
-import com.ale.blog.entity.state.UserRole;
-import com.ale.blog.handler.mapper.request.CategoryRequest;
-import com.ale.blog.handler.mapper.response.DataResponse;
+import com.ale.blog.entity.Post;
+import com.ale.blog.handler.mapper.request.QueryRequest;
 import com.ale.blog.service.CategoryService;
-import jakarta.annotation.security.RolesAllowed;
-import jakarta.validation.Valid;
+import com.ale.blog.service.PostService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RolesAllowed({UserRole.Fields.ADMIN, UserRole.Fields.CONTENT_CREATOR})
+import java.util.List;
+
+@Controller
+@RequestMapping("category")
 @AllArgsConstructor
-@RequestMapping("api/authorize/category")
 public class CategoryController {
     private final CategoryService service;
+    private final PostService postService;
 
-    @PostMapping
-    public DataResponse createCategory(@Valid @RequestBody CategoryRequest categoryRequest){
-        Category category = service.createCategory(categoryRequest);
-        return DataResponse.builder()
-                .id(category.getId())
-                .status(DataResponse.ResponseStatus.CREATED)
-                .build();
+    @GetMapping("{username}")
+    public String getAllPost(@PathVariable String username, Model model) {
+        List<Post> posts = postService.findAllByUsername(username, QueryRequest.builder()
+                .page(0)
+                .size(10)
+                .sortBy(Post.Fields.createDate)
+                .build());
+        model.addAttribute("posts", posts);
+        return "category";
     }
 }

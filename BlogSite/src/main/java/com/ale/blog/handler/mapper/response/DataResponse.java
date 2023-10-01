@@ -17,6 +17,8 @@ public class DataResponse {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String uuid;
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String username;
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private ResponseStatus status;
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private MessageCode code;

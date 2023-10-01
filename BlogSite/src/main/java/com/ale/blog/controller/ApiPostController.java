@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RolesAllowed({UserRole.Fields.ADMIN, UserRole.Fields.CONTENT_CREATOR})
 @AllArgsConstructor
 @RequestMapping("api/authorize/post-article")
-public class PostArticleController {
+public class ApiPostController {
     private final PostService postService;
     private final PostMapper postMapper;
 

@@ -39,6 +39,12 @@ import Detail from "@/design/Detail.vue";
                 <InputView label="Slug" v-model="slug" class="mt-3"></InputView>
               </div>
               <InputView label="Meta Title" v-model="metaTitle" class="mt-3"></InputView>
+              <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2 mt-3" for="introduction">Introduction {{introduction.trim().length}}/1000</label>
+                <textarea v-model="introduction" id="introduction" placeholder="Introduction" type="text"
+                          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+              </div>
+
               <editor-component v-model="content" class="mt-10 mb-10"></editor-component>
               <button @click="save">Save</button>
             </div>
@@ -50,7 +56,7 @@ import Detail from "@/design/Detail.vue";
       <Index :list-index="listIndex"></Index>
     </main>
   </div>
-<!--  <Footer></Footer>-->
+  <!--  <Footer></Footer>-->
 </template>
 <script>
 import axios from "axios";
@@ -63,6 +69,7 @@ export default {
       title: '',
       slug: '',
       metaTitle: '',
+      introduction: '',
       content: '',
       listIndex: [],
       preview: false,
@@ -75,6 +82,7 @@ export default {
         title: this.title,
         slug: this.slug,
         metaTitle: this.metaTitle,
+        introduction: this.introduction,
         content: this.content,
         author: localStorage.getItem(Key.uuid)
       }, {
@@ -84,9 +92,11 @@ export default {
         }
       })
           .then(response => {
+            alert(response.data.status)
             console.log(response)
           })
           .catch(error => {
+            alert(error.response.data.code)
             console.log(error)
           })
     },
@@ -97,7 +107,7 @@ export default {
 
       this.listIndex.splice(0, this.listIndex.length)
       hTags?.forEach((tag, index) => {
-        if(tag.outerText.trim()) {
+        if (tag.outerText.trim()) {
           this.listIndex.push({
             tag: tag.nodeName.toLowerCase(),
             content: tag.outerText,

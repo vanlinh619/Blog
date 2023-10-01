@@ -35,8 +35,8 @@ public class Category {
     @Column(length = 100)
     private String slug;
 
-    @Column(columnDefinition = "TEXT")
-    private String content;
+    @Column(length = 1000)
+    private String introduction;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

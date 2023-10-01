@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldNameConstants;
 
 import java.time.Instant;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@FieldNameConstants(onlyExplicitlyIncluded = true)
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +33,9 @@ public class Post {
     @Column(length = 160)
     private String metaTitle;
 
+    @Column(length = 1000)
+    private String introduction;
+
     @NotBlank
     @Column(unique = true, length = 100)
     @Pattern(regexp = "^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])*$")
@@ -39,6 +44,7 @@ public class Post {
     private PostState state;
 
     @NotNull
+    @FieldNameConstants.Include
     private Instant createDate;
 
     private Instant updateDate;

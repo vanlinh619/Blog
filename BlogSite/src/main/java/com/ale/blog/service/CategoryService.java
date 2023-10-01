@@ -6,7 +6,6 @@ import com.ale.blog.entity.state.CategoryLevel;
 import com.ale.blog.handler.mapper.request.CategoryRequest;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CategoryService extends EntityService<Category, Long>{
     Category createCategory(CategoryRequest categoryRequest);

@@ -34,9 +34,6 @@ public class Tag {
     @Pattern(regexp = "^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])*$")
     private String slug;
 
-    @Column(columnDefinition = "TEXT")
-    private String content;
-
     @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
     private List<Post> posts;
 }

@@ -26,7 +26,7 @@ public class HeadTable {
     private String content;
 
     @NotBlank
-    @Column(unique = true, length = 100)
+    @Column(length = 100)
     @Pattern(regexp = "^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])*$")
     private String href;
 
