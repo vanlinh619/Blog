@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -30,6 +31,7 @@ public class PostServiceImpl implements PostService {
     private final UserService userService;
     private final HeadTableService headTableService;
     private final CategoryService categoryService;
+    private final ExecutorService executorService;
 
     @Override
     public Post createPostArticle(PostRequest postRequest) {
@@ -63,7 +65,10 @@ public class PostServiceImpl implements PostService {
         postRepository.findFirstBySlug(slug).ifPresentOrElse(reference::set, () -> {
             throw new NotFoundException(DataResponse.builder().build());
         });
-        return reference.get();
+        Post post = reference.get();
+        post.setView(post.getView() + 1);
+        increaseView(post.getId());
+        return post;
     }
 
     @Override
@@ -77,5 +82,9 @@ public class PostServiceImpl implements PostService {
             throw new NotFoundException(DataResponse.builder().build());
         });
         return reference.get();
+    }
+
+    private void increaseView(Long id) {
+        executorService.execute(() -> postRepository.increaseView(id));
     }
 }

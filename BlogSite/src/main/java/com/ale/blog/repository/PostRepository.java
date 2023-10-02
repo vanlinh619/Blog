@@ -5,7 +5,10 @@ import com.ale.blog.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -13,4 +16,8 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<Post> findFirstBySlug(String slug);
     Page<Post> findAllByAuthor(User author, Pageable pageable);
+    @Transactional
+    @Modifying
+    @Query("update Post p set p.view = p.view + 1 where p.id = :id")
+    int increaseView(Long id);
 }

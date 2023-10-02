@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
 import java.util.List;
@@ -54,6 +55,9 @@ public class Post {
     @NotBlank
     @Column(columnDefinition = "TEXT")
     private String content;
+
+    @Column(nullable = false, columnDefinition = "BIGINT(19) default 0")
+    private Long view;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
