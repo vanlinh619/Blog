@@ -57,7 +57,7 @@ public class Post {
     private String content;
 
     @Column(nullable = false, columnDefinition = "BIGINT(19) default 0")
-    private Long view;
+    private Long view = 0L;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

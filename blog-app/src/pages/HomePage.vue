@@ -3,8 +3,9 @@ import EditorComponent from "../components/EditorComponent.vue";
 import InputView from "../components/InputView.vue";
 import Header from "@/design/Header.vue";
 import Index from "@/design/Index.vue";
-import Aside from "@/design/Aside.vue";
 import Detail from "@/design/Detail.vue";
+import CategoryPicker from "@/components/CategoryPicker.vue";
+import AlertComponent from "@/components/AlertComponent.vue";
 </script>
 
 <template>
@@ -13,8 +14,11 @@ import Detail from "@/design/Detail.vue";
 
   <!--  </main>-->
   <Header></Header>
+  <AlertComponent v-if="alertType !== AlertType.HIDE" v-model="alertType" :code="alert.code" :description="alert.description"></AlertComponent>
   <div class="max-w-8xl mx-auto px-4">
-    <Aside></Aside>
+    <div class="lg:block fixed z-20 inset-0 top-16 left-[max(0px,calc(50%-45rem))] right-auto w-[19rem] pb-10 pl-8 pr-6 overflow-y-auto">
+      <CategoryPicker></CategoryPicker>
+    </div>
     <main class="mt-10">
       <article class="pl-[19.5rem]">
         <div class="mx-auto max-w-none ml-0 mr-[15.5rem] pr-16 text-slate-700">
@@ -62,6 +66,9 @@ import Detail from "@/design/Detail.vue";
 import axios from "axios";
 import Api from "@/utils/api";
 import Key from "@/utils/contain";
+import AlertType from "@/utils/alert-type";
+import AutoRequest from "@/utils/auto-request";
+import RequestApi from "@/utils/request-api";
 
 export default {
   data() {
@@ -73,30 +80,41 @@ export default {
       content: '',
       listIndex: [],
       preview: false,
-      autoSaveWord: null
+
+      // alert
+      alert: {
+        code: '',
+        description: '',
+      },
+      alertType: AlertType.HIDE
     }
   },
   methods: {
     save() {
-      axios.post(Api.postArticle, {
+      RequestApi.postRequest({
         title: this.title,
         slug: this.slug,
         metaTitle: this.metaTitle,
         introduction: this.introduction,
         content: this.content,
         author: localStorage.getItem(Key.uuid)
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem(Key.accessToken)}`
-        }
       })
           .then(response => {
-            alert(response.data.status)
+            this.alert.code = response?.data?.status
+            this.alert.description = response?.data?.id
+            this.alertType = AlertType.SUCCESS
             console.log(response)
           })
           .catch(error => {
-            alert(error.response.data.code)
+            if(error?.response?.status === 401) {
+              AutoRequest.refreshToken(this.save)
+              return
+            }
+            this.alert = {
+              code: error?.response?.data?.code,
+              description: error?.response?.data?.message
+            }
+            this.alertType = AlertType.ERROR
             console.log(error)
           })
     },
