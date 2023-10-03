@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <div class="fixed z-20 top-16 bottom-0 right-[max(0px,calc(50%-45rem))] w-[19.5rem] py-10 overflow-y-auto block">
+  <div>
     <span class="text-sm font-semibold px-8 text-cyan-950">NỘI DUNG</span>
     <div class="px-8">
       <ul class="space-y-0.5 mt-3 text-cyan-950">

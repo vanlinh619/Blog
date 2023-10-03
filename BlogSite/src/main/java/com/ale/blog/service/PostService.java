@@ -10,4 +10,5 @@ public interface PostService extends EntityService<Post, Long> {
     Post createPostArticle(PostRequest postRequest);
     Post getPostBySlug(String slug);
     List<Post> findAllByUsername(String username, QueryRequest queryRequest);
+    List<Post> findAllByUsernameAndCategory(String username, QueryRequest queryRequest);
 }

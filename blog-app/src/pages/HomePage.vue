@@ -14,15 +14,16 @@ import AlertComponent from "@/components/AlertComponent.vue";
 
   <!--  </main>-->
   <Header></Header>
-  <AlertComponent v-if="alertType !== AlertType.HIDE" v-model="alertType" :code="alert.code" :description="alert.description"></AlertComponent>
+  <AlertComponent v-if="alertType !== AlertType.HIDE" v-model="alertType" :code="alert.code"
+                  :description="alert.description"></AlertComponent>
   <div class="max-w-8xl mx-auto px-4">
-    <div class="lg:block fixed z-20 inset-0 top-16 left-[max(0px,calc(50%-45rem))] right-auto w-[19rem] pb-10 pl-8 pr-6 overflow-y-auto">
-      <CategoryPicker></CategoryPicker>
+    <div
+        class="lg:block fixed z-20 inset-0 top-16 left-[max(0px,calc(50%-45rem))] right-auto w-[19rem] pb-10 pl-8 pr-6 overflow-y-auto">
+      <CategoryPicker :category-ids="categories" @pick="pickCategory"></CategoryPicker>
     </div>
     <main class="mt-10">
       <article class="pl-[19.5rem]">
         <div class="mx-auto max-w-none ml-0 mr-[15.5rem] pr-16 text-slate-700">
-          <button @click="preview=!preview">Preview</button>
           <div class="
             [&_h2]:text-3xl [&_h2]:mt-10 [&_h2]:mb-3 [&_h2]:py-3 [&_h2]:scroll-mt-20
             [&_h3]:text-[1.65rem] [&_h3]:mt-8 [&_h3]:mb-2 [&_h3]:py-3 [&_h3]:scroll-mt-20
@@ -44,26 +45,36 @@ import AlertComponent from "@/components/AlertComponent.vue";
               </div>
               <InputView label="Meta Title" v-model="metaTitle" class="mt-3"></InputView>
               <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2 mt-3" for="introduction">Introduction {{introduction.trim().length}}/1000</label>
+                <label class="block text-gray-700 text-sm font-bold mb-2 mt-3" for="introduction">Introduction
+                  {{ introduction.trim().length }}/1000</label>
                 <textarea v-model="introduction" id="introduction" placeholder="Introduction" type="text"
                           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
               </div>
 
               <editor-component v-model="content" class="mt-10 mb-10"></editor-component>
-              <button @click="save">Save</button>
             </div>
 
           </div>
 
         </div>
       </article>
-      <Index :list-index="listIndex"></Index>
+      <div class="fixed z-20 top-16 bottom-0 right-[max(0px,calc(50%-45rem))] w-[19.5rem] py-10 overflow-y-auto block">
+        <button class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-3 rounded"
+                @click="preview=!preview">
+          Preview
+        </button>
+        <button class="ml-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-3 rounded" @click="save">
+          Save
+        </button>
+        <div class="mt-5">
+          <Index :list-index="listIndex"></Index>
+        </div>
+      </div>
     </main>
   </div>
   <!--  <Footer></Footer>-->
 </template>
 <script>
-import axios from "axios";
 import Api from "@/utils/api";
 import Key from "@/utils/contain";
 import AlertType from "@/utils/alert-type";
@@ -78,6 +89,7 @@ export default {
       metaTitle: '',
       introduction: '',
       content: '',
+      categories: [],
       listIndex: [],
       preview: false,
 
@@ -91,12 +103,14 @@ export default {
   },
   methods: {
     save() {
-      RequestApi.postRequest({
+      RequestApi.postRequest(Api.postArticle, {
         title: this.title,
         slug: this.slug,
         metaTitle: this.metaTitle,
         introduction: this.introduction,
         content: this.content,
+        tags: [],
+        categories: this.categories,
         author: localStorage.getItem(Key.uuid)
       })
           .then(response => {
@@ -106,10 +120,7 @@ export default {
             console.log(response)
           })
           .catch(error => {
-            if(error?.response?.status === 401) {
-              AutoRequest.refreshToken(this.save)
-              return
-            }
+            if (!AutoRequest.hasAuthorize(error, this.save)) return
             this.alert = {
               code: error?.response?.data?.code,
               description: error?.response?.data?.message
@@ -118,9 +129,23 @@ export default {
             console.log(error)
           })
     },
+    pickCategory(id) {
+      let ind = 0;
+      console.log('id: ', id)
+      if (this.categories.find((value, index) => {
+        if (value === id) {
+          ind = index
+          return value
+        }
+      })) {
+        this.categories.splice(ind, 1)
+      } else {
+        this.categories.push(id)
+      }
+    },
   },
   watch: {
-    content(newData) {
+    content() {
       let hTags = [...document.getElementById('editor')?.querySelectorAll('h2, h3, h4')]
 
       this.listIndex.splice(0, this.listIndex.length)

@@ -1,5 +1,6 @@
 package com.ale.blog.repository;
 
+import com.ale.blog.entity.Category;
 import com.ale.blog.entity.Post;
 import com.ale.blog.entity.User;
 import org.springframework.data.domain.Page;
@@ -19,5 +20,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Transactional
     @Modifying
     @Query("update Post p set p.view = p.view + 1 where p.id = :id")
-    int increaseView(Long id);
+    void increaseView(Long id);
 }

@@ -1,6 +1,7 @@
 package com.ale.blog.handler.mapper.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -34,7 +35,9 @@ public class PostRequest {
     @NotBlank
     private String author;
 
+    @NotNull
     private List<Long> tags;
 
-    private List<Long> categories;
+    @NotNull
+    private List<@NotNull Long> categories;
 }

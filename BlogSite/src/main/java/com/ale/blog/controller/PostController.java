@@ -4,15 +4,15 @@ import com.ale.blog.entity.Category;
 import com.ale.blog.entity.Post;
 import com.ale.blog.entity.User;
 import com.ale.blog.entity.state.CategoryLevel;
-import com.ale.blog.handler.mapper.request.QueryRequest;
+import com.ale.blog.handler.exception.AppException;
 import com.ale.blog.service.CategoryService;
 import com.ale.blog.service.PostService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,8 +33,9 @@ public class PostController {
         return "post";
     }
 
-//    @GetMapping("{username}")
-//    public String getPosts(@PathVariable String username) {
-//        return "redirect:/category/" + username;
-//    }
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler({MethodArgumentNotValidException.class, AppException.class})
+    public String handleValidationExceptions(Exception ex) {
+        return "404";
+    }
 }

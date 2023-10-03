@@ -10,10 +10,6 @@ import java.util.List;
 public interface CategoryService extends EntityService<Category, Long>{
     Category createCategory(CategoryRequest categoryRequest);
     List<Category> getAllLevelByUser(CategoryLevel level, User user);
-    Category getCategory(Long id);
-
-    /**
-     * Always hava default category = all
-     * */
-    Category getDefaultCategory();
+    Category getCategoryById(Long id);
+    Category getCategoryBySlugAndAuthor(String slug, User author);
 }

@@ -10,11 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class QueryRequest {
-    @NotNull(message = "page not blank")
+public class PageRequest {
+    @NotNull
     private Integer page;
-    @NotNull(message = "size not blank")
-    private Integer size;
-    private String sortBy;
-    private String sortType;
 }

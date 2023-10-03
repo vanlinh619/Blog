@@ -4,6 +4,7 @@ import com.ale.blog.entity.Category;
 import com.ale.blog.entity.User;
 import com.ale.blog.entity.state.CategoryLevel;
 import com.ale.blog.handler.mapper.request.CategoryRequest;
+import com.ale.blog.handler.utils.StaticVariable;
 import com.ale.blog.repository.CategoryRepository;
 import com.ale.blog.repository.UserRepository;
 import com.ale.blog.security.UserAccessDetails;
@@ -78,9 +79,9 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         categoryService.createCategory(CategoryRequest.builder()
-                .title("All")
-                .slug("all")
-                .metaTitle("All")
+                .title(StaticVariable.ALL)
+                .slug(StaticVariable.ALL.toLowerCase())
+                .metaTitle(StaticVariable.ALL)
                 .author(user.getUuid().toString())
                 .build());
 

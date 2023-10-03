@@ -19,6 +19,9 @@ import java.util.concurrent.CompletionException;
 @RestControllerAdvice
 public class ResponseExceptionHandler {
 
+    /**
+     * Exception for valid field
+     * */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public DataResponse handleValidationExceptions(MethodArgumentNotValidException ex) {

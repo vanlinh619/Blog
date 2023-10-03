@@ -23,7 +23,8 @@
         </span>
         </div>
         <div th:unless="${posts.isEmpty()}" th:each="post: ${posts}" class="mt-10 pb-7 border-b">
-          <a class="font-bold text-4xl hover:text-emerald-600" th:text="${post.getTitle()}" th:href="@{'/post/'+${post.getSlug()}}"></a>
+          <a class="font-bold text-4xl hover:text-emerald-600" th:text="${post.getTitle()}"
+             th:href="@{'/post/'+${post.getSlug()}}"></a>
           <div class="mt-3">
             <label>
               <span class="text-emerald-600 font-light">Ngày đăng: </span>
@@ -31,15 +32,47 @@
             </label>
             <label class="ml-3">
               <span class="text-emerald-600 font-light">Tác giả: </span>
-              <span class="text-emerald-600 font-semibold" th:text="${post.getAuthor().getLastName() + ' ' + post.getAuthor().getLastName()}"></span>
+              <span class="text-emerald-600 font-semibold"
+                    th:text="${post.getAuthor().getLastName() + ' ' + post.getAuthor().getLastName()}"></span>
             </label>
             <label class="ml-3">
               <span class="text-emerald-600 font-light">Lượt xem: </span>
               <span th:text="${post.getView()}"></span>
             </label>
           </div>
-          <div th:if="${post.getIntroduction()} != null" class="mt-5 whitespace-pre-line" th:text="${post.getIntroduction()}"></div>
+          <div th:if="${post.getIntroduction()} != null" class="mt-5 whitespace-pre-line"
+               th:text="${post.getIntroduction()}">
+          </div>
         </div>
+        <nav class="flex justify-center mt-10">
+          <ul class="list-style-none mb-6 flex">
+            <li>
+              <a href="#" class="rounded px-3 py-1.5 text-sm hover:bg-slate-100">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="rounded px-3 py-1.5 text-sm hover:bg-slate-100 ">
+                1
+              </a>
+            </li>
+            <li aria-current="page">
+              <a href="#" class="rounded px-3 py-1.5 text-sm hover:bg-slate-100 ">
+                1
+              </a>
+            </li>
+            <li>
+              <a href="#" class="rounded px-3 py-1.5 text-sm hover:bg-slate-100 ">
+                1
+              </a>
+            </li>
+            <li>
+              <a href="#" class="rounded px-3 py-1.5 text-sm hover:bg-slate-100">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </article>
   </main>

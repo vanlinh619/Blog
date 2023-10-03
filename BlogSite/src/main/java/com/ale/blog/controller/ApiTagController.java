@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RolesAllowed({UserRole.Fields.ADMIN, UserRole.Fields.CONTENT_CREATOR})
 @AllArgsConstructor
 @RequestMapping("api/authorize/tag")
-public class TagController {
+public class ApiTagController {
     private final TagService tagService;
 
     @PostMapping
