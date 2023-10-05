@@ -24,7 +24,8 @@
         </div>
         <div th:unless="${posts.isEmpty()}" th:each="post: ${posts}" class="mt-10 pb-7 border-b">
           <a class="font-bold text-4xl hover:text-emerald-600" th:text="${post.getTitle()}"
-             th:href="@{'/post/'+${post.getSlug()}}"></a>
+             th:href="@{'/post/'+${post.getSlug()}}">
+          </a>
           <div class="mt-3">
             <label>
               <span class="text-emerald-600 font-light">Ngày đăng: </span>
@@ -47,28 +48,36 @@
         <nav class="flex justify-center mt-10">
           <ul class="list-style-none mb-6 flex">
             <li>
-              <a href="#" class="rounded px-3 py-1.5 text-sm hover:bg-slate-100">
+              <a th:if="${posts.getNumber() + 1 > 1}" th:href="${username + '?page=' + 1}"
+                 class="rounded px-3 py-1.5 text-sm hover:bg-slate-200">
                 <span aria-hidden="true">&laquo;</span>
               </a>
-            </li>
-            <li>
-              <a href="#" class="rounded px-3 py-1.5 text-sm hover:bg-slate-100 ">
-                1
+              <a th:unless="${posts.getNumber() + 1 > 1}" disabled
+                 class="rounded px-3 py-1.5 text-sm bg-slate-100 cursor-no-drop">
+                <span aria-hidden="true" class="text-slate-400">&laquo;</span>
               </a>
             </li>
-            <li aria-current="page">
-              <a href="#" class="rounded px-3 py-1.5 text-sm hover:bg-slate-100 ">
-                1
+            <li th:each="page: ${#numbers.sequence(1, posts.getTotalPages())}"
+                th:if="${page == 1 || page == posts.getTotalPages() || (page > posts.getNumber() - 2 && page < posts.getNumber() + 4)}">
+              <a th:if="${page == posts.getTotalPages() && posts.getNumber() < posts.getTotalPages() - 4} "
+                 class="rounded mx-0.5 py-1.5 text-xs">...</a>
+              <a th:if="${posts.getNumber() + 1 == page}" th:href="${username+'?page='+page}" th:text="${page}"
+                 class="rounded mx-0.5 px-2.5 py-1.5 text-sm bg-emerald-400">
               </a>
+              <a th:unless="${posts.getNumber() + 1 == page}" th:href="${username}+'?page='+${page}" th:text="${page}"
+                 class="rounded mx-0.5 px-2.5 py-1.5 text-sm hover:bg-slate-200 ">
+              </a>
+              <a th:if="${page == 1 && posts.getNumber() > 3} " class="rounded mx-0.5 py-1.5 text-xs">...</a>
             </li>
             <li>
-              <a href="#" class="rounded px-3 py-1.5 text-sm hover:bg-slate-100 ">
-                1
-              </a>
-            </li>
-            <li>
-              <a href="#" class="rounded px-3 py-1.5 text-sm hover:bg-slate-100">
+              <a th:if="${posts.getNumber() + 1 < posts.getTotalPages()}"
+                 th:href="${username + '?page=' + posts.getTotalPages()}"
+                 class="rounded px-3 py-1.5 text-sm hover:bg-slate-200">
                 <span aria-hidden="true">&raquo;</span>
+              </a>
+              <a th:unless="${posts.getNumber() + 1 < posts.getTotalPages()}" disabled
+                 class="rounded px-3 py-1.5 text-sm bg-slate-100 cursor-no-drop">
+                <span aria-hidden="true" class="text-slate-400">&raquo;</span>
               </a>
             </li>
           </ul>

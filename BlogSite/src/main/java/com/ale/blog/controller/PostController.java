@@ -34,8 +34,8 @@ public class PostController {
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler({MethodArgumentNotValidException.class, AppException.class})
-    public String handleValidationExceptions(Exception ex) {
+    @ExceptionHandler({Exception.class})
+    public String handleValidationExceptions() {
         return "404";
     }
 }

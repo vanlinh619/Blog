@@ -61,9 +61,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category getCategoryBySlugAndAuthor(String slug, User author) {
+    public Category getCategoryBySlugAndUsername(String slug, String username) {
         AtomicReference<Category> reference = new AtomicReference<>();
-        categoryRepository.findFirstBySlug(slug).ifPresentOrElse(reference::set, () -> {
+        categoryRepository.findFirstBySlugAndAuthor_Username(slug, username).ifPresentOrElse(reference::set, () -> {
             throw new AppException(DataResponse.builder()
                     .code(MessageCode.NOT_FOUND)
                     .status(DataResponse.ResponseStatus.FAILED)

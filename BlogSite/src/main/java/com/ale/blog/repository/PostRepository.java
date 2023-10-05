@@ -17,6 +17,7 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<Post> findFirstBySlug(String slug);
     Page<Post> findAllByAuthor(User author, Pageable pageable);
+    Page<Post> findAllByCategoriesContaining(Category category, Pageable pageable);
     @Transactional
     @Modifying
     @Query("update Post p set p.view = p.view + 1 where p.id = :id")

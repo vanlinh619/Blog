@@ -17,6 +17,7 @@ import com.ale.blog.repository.PostRepository;
 import lombok.AllArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -45,7 +46,7 @@ public class PostServiceImpl implements PostService {
         List<HeadTable> headTables = headTableService.createHeaderTable(post);
         post.setHeadTables(headTables);
 
-        Category defaultCategory = categoryService.getCategoryBySlugAndAuthor(StaticVariable.ALL.toLowerCase(), author);
+        Category defaultCategory = categoryService.getCategoryBySlugAndUsername(StaticVariable.ALL.toLowerCase(), author.getUsername());
         defaultCategory.getPosts().add(post);
         List<Category> categories = new LinkedList<>();
         categories.add(defaultCategory);
@@ -81,12 +82,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> findAllByUsername(String username, QueryRequest queryRequest) {
-        AtomicReference<List<Post>> reference = new AtomicReference<>();
+    public Page<Post> findAllByUsername(String username, QueryRequest queryRequest) {
+        AtomicReference<Page<Post>> reference = new AtomicReference<>();
         userService.findByUsername(username).ifPresentOrElse(user -> {
-            reference.set(postRepository.findAllByAuthor(user, Convert.pageRequest(queryRequest))
-                    .map(post -> post)
-                    .toList());
+            reference.set(postRepository.findAllByAuthor(user, Convert.pageRequest(queryRequest)));
         }, () -> {
             throw new AppException(DataResponse.builder()
                     .code(MessageCode.NOT_FOUND)
@@ -98,18 +97,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> findAllByUsernameAndCategory(String username, QueryRequest queryRequest) {
-        AtomicReference<List<Post>> reference = new AtomicReference<>();
-        userService.findByUsername(username).ifPresentOrElse(user -> {
-
-        }, () -> {
-            throw new AppException(DataResponse.builder()
-                    .code(MessageCode.NOT_FOUND)
-                    .status(DataResponse.ResponseStatus.FAILED)
-                    .message(StaticMessage.USERNAME_NOT_FOUND)
-                    .build());
-        });
-        return reference.get();
+    public Page<Post> findAllByCategory(Category category, QueryRequest queryRequest) {
+        return postRepository.findAllByCategoriesContaining(category, Convert.pageRequest(queryRequest));
     }
 
     private void increaseView(Long id) {
