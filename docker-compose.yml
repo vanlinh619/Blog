@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=12345678
+      - MYSQL_DATABASE=blog
+    networks:
+      - blog-net
+    ports:
+      - 3306:3306
+    volumes:
+      - db:/var/lib/mysql
+  spring:
+    container_name: spring-boot
+    depends_on:
+      - mysql
+    build: ./BlogSite
+    restart: on-failure
+    networks:
+      - blog-net
+    ports:
+      - 8080:8080
+    volumes:
+      - spring:/root/.m2
+    stdin_open: true
+    tty: true
+  vue:
+    container_name: vue-3
+    depends_on:
+      - spring
+    build: ./blog-app
+    restart: on-failure
+    networks:
+      - blog-net
+    ports:
+      - 3000:3000
+    volumes:
+      - vue:/app
+    tty: true
+volumes:
+  db:
+  spring:
+  vue:
+networks:
+  blog-net:
+    driver: bridge
