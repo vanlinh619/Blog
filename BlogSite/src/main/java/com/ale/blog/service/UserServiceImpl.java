@@ -1,14 +1,10 @@
 package com.ale.blog.service;
 
-import com.ale.blog.entity.Category;
 import com.ale.blog.entity.User;
-import com.ale.blog.entity.state.CategoryLevel;
-import com.ale.blog.handler.mapper.request.CategoryRequest;
+import com.ale.blog.handler.mapper.pojo.request.CategoryRequest;
 import com.ale.blog.handler.utils.StaticVariable;
-import com.ale.blog.repository.CategoryRepository;
 import com.ale.blog.repository.UserRepository;
 import com.ale.blog.security.UserAccessDetails;
-import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

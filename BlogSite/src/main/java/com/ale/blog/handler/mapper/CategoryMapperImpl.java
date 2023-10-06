@@ -1,7 +1,7 @@
 package com.ale.blog.handler.mapper;
 
 import com.ale.blog.entity.Category;
-import com.ale.blog.handler.mapper.response.CategoryResponse;
+import com.ale.blog.handler.mapper.pojo.response.CategoryResponse;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;

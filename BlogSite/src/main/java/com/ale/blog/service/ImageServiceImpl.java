@@ -5,7 +5,9 @@ import com.ale.blog.entity.User;
 import com.ale.blog.entity.state.ImageExtension;
 import com.ale.blog.entity.state.ImageState;
 import com.ale.blog.handler.exception.AppException;
-import com.ale.blog.handler.mapper.response.DataResponse;
+import com.ale.blog.handler.mapper.pojo.request.QueryRequest;
+import com.ale.blog.handler.mapper.pojo.response.DataResponse;
+import com.ale.blog.handler.utils.Convert;
 import com.ale.blog.handler.utils.MessageCode;
 import com.ale.blog.handler.utils.StaticMessage;
 import com.ale.blog.handler.utils.StaticVariable;
@@ -13,6 +15,7 @@ import com.ale.blog.repository.ImageRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -29,7 +32,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @AllArgsConstructor
@@ -87,6 +89,11 @@ public class ImageServiceImpl implements ImageService {
                 .code(MessageCode.NOT_FOUND)
                 .message(StaticMessage.FILE_NOT_FOUND)
                 .build());
+    }
+
+    @Override
+    public Page<Image> getAllByAuthor(User author, QueryRequest queryRequest) {
+        return imageRepository.findAllByAuthorAndState(author, ImageState.PERSIST, Convert.pageRequest(queryRequest));
     }
 
     private Optional<Resource> findImageResource(String id) {

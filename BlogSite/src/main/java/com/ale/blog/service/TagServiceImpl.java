@@ -2,7 +2,7 @@ package com.ale.blog.service;
 
 import com.ale.blog.entity.Tag;
 import com.ale.blog.handler.mapper.TagMapper;
-import com.ale.blog.handler.mapper.request.TagRequest;
+import com.ale.blog.handler.mapper.pojo.request.TagRequest;
 import com.ale.blog.repository.TagRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

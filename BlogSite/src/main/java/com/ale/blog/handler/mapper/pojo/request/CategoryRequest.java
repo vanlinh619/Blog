@@ -1,4 +1,4 @@
-package com.ale.blog.handler.mapper.request;
+package com.ale.blog.handler.mapper.pojo.request;
 
 import com.ale.blog.handler.utils.MessageValidate;
 import jakarta.validation.constraints.Max;

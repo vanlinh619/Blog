@@ -2,8 +2,8 @@ package com.ale.blog.controller;
 
 import com.ale.blog.entity.Category;
 import com.ale.blog.entity.Post;
-import com.ale.blog.handler.mapper.request.PageRequest;
-import com.ale.blog.handler.mapper.request.QueryRequest;
+import com.ale.blog.handler.mapper.pojo.request.PageRequest;
+import com.ale.blog.handler.mapper.pojo.request.QueryRequest;
 import com.ale.blog.handler.utils.SortType;
 import com.ale.blog.handler.utils.StaticVariable;
 import com.ale.blog.service.CategoryService;
@@ -15,8 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("category")

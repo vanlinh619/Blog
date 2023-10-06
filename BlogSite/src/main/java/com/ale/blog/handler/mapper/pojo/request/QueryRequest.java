@@ -1,4 +1,4 @@
-package com.ale.blog.handler.mapper.request;
+package com.ale.blog.handler.mapper.pojo.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

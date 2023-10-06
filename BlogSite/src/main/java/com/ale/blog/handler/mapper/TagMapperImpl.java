@@ -1,7 +1,7 @@
 package com.ale.blog.handler.mapper;
 
 import com.ale.blog.entity.Tag;
-import com.ale.blog.handler.mapper.request.TagRequest;
+import com.ale.blog.handler.mapper.pojo.request.TagRequest;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;

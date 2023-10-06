@@ -1,8 +1,8 @@
 package com.ale.blog.handler.utils;
 
 import com.ale.blog.handler.exception.AppException;
-import com.ale.blog.handler.mapper.request.QueryRequest;
-import com.ale.blog.handler.mapper.response.DataResponse;
+import com.ale.blog.handler.mapper.pojo.request.QueryRequest;
+import com.ale.blog.handler.mapper.pojo.response.DataResponse;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 

@@ -2,8 +2,8 @@ package com.ale.blog.controller;
 
 import com.ale.blog.entity.Tag;
 import com.ale.blog.entity.state.UserRole;
-import com.ale.blog.handler.mapper.request.TagRequest;
-import com.ale.blog.handler.mapper.response.DataResponse;
+import com.ale.blog.handler.mapper.pojo.request.TagRequest;
+import com.ale.blog.handler.mapper.pojo.response.DataResponse;
 import com.ale.blog.service.TagService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;

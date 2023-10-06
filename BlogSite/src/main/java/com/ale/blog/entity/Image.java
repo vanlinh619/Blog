@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldNameConstants;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -18,18 +19,23 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@FieldNameConstants(onlyExplicitlyIncluded = true)
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @NotNull
     private String folder;
 
     @NotNull
     private String name;
 
+    @NotNull
+    @FieldNameConstants.Include
     private Instant createDate;
 
+    @NotNull
     @Max(value = 4000000)
     private Long size;
 
@@ -39,6 +45,7 @@ public class Image {
     @NotNull
     private ImageState state;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private User author;
 }

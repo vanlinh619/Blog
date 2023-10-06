@@ -6,13 +6,10 @@ import Index from "@/design/Index.vue";
 import Detail from "@/design/Detail.vue";
 import CategoryPicker from "@/components/CategoryPicker.vue";
 import AlertComponent from "@/components/AlertComponent.vue";
+import ImagePicker from "@/components/ImagePicker.vue";
 </script>
 
 <template>
-  <!--  <navigation-component></navigation-component>-->
-  <!--  <main class="mt-5 mx-52">-->
-
-  <!--  </main>-->
   <Header></Header>
   <AlertComponent v-if="alertType !== AlertType.HIDE" v-model="alertType" :code="alert.code"
                   :description="alert.description"></AlertComponent>
@@ -20,6 +17,7 @@ import AlertComponent from "@/components/AlertComponent.vue";
     <div
         class="lg:block fixed z-20 inset-0 top-16 left-[max(0px,calc(50%-45rem))] right-auto w-[19rem] pb-10 pl-8 pr-6 overflow-y-auto">
       <CategoryPicker :category-ids="categories" @pick="pickCategory"></CategoryPicker>
+      <ImagePicker></ImagePicker>
     </div>
     <main class="mt-10">
       <article class="pl-[19.5rem]">

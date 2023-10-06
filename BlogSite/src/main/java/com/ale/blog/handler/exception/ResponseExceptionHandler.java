@@ -1,6 +1,6 @@
 package com.ale.blog.handler.exception;
 
-import com.ale.blog.handler.mapper.response.DataResponse;
+import com.ale.blog.handler.mapper.pojo.response.DataResponse;
 import com.ale.blog.handler.utils.MessageCode;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.mapping.PropertyReferenceException;

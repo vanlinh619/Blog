@@ -1,4 +1,4 @@
-package com.ale.blog.handler.mapper.request;
+package com.ale.blog.handler.mapper.pojo.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
