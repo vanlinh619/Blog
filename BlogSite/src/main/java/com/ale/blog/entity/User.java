@@ -58,4 +58,7 @@ public class User {
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     private List<Category> categories;
+
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
+    private List<Image> images;
 }

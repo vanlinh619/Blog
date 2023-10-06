@@ -3,7 +3,7 @@ package com.ale.blog.controller;
 import com.ale.blog.entity.RefreshToken;
 import com.ale.blog.handler.exception.AppException;
 import com.ale.blog.handler.mapper.*;
-import com.ale.blog.handler.mapper.pojo.AccessToken;
+import com.ale.blog.handler.mapper.response.AccessTokenResponse;
 import com.ale.blog.handler.mapper.request.AuthRequest;
 import com.ale.blog.handler.mapper.request.RefreshTokenInput;
 import com.ale.blog.handler.mapper.response.UserView;
@@ -54,8 +54,8 @@ public class ApiAuthorizeController {
     @PostMapping("refresh")
     public ResponseEntity<?> refresh(@Valid @RequestBody RefreshTokenInput refreshTokenInput) {
         try {
-            AccessToken accessToken = refreshTokenService.createAccessToken(refreshTokenInput);
-            return ResponseEntity.ok().body(accessToken);
+            AccessTokenResponse accessTokenResponse = refreshTokenService.createAccessToken(refreshTokenInput);
+            return ResponseEntity.ok().body(accessTokenResponse);
         } catch (AppException e){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

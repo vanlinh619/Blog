@@ -7,10 +7,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.SpringServletContainerInitializer;
-
+import java.io.IOException;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @SpringBootApplication
 public class BlogApplication extends SpringServletContainerInitializer {

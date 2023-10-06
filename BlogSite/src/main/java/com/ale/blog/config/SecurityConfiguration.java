@@ -60,6 +60,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/public/**").permitAll()
                         .requestMatchers("/post/**").permitAll()
                         .requestMatchers("/category/**").permitAll()
+                        .requestMatchers("/image/**").permitAll()
                         .requestMatchers("/css/**").permitAll()
                         .anyRequest().authenticated()
                 )

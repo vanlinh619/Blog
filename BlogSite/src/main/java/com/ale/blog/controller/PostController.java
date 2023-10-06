@@ -35,7 +35,8 @@ public class PostController {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler({Exception.class})
-    public String handleValidationExceptions() {
+    public String handleValidationExceptions(Exception e) {
+        e.printStackTrace();
         return "404";
     }
 }

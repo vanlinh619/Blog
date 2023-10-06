@@ -3,6 +3,7 @@ package com.ale.blog.service;
 import com.ale.blog.handler.exception.AppException;
 import com.ale.blog.handler.mapper.response.DataResponse;
 import com.ale.blog.handler.utils.MessageCode;
+import com.ale.blog.handler.utils.StaticMessage;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
@@ -14,6 +15,7 @@ public interface EntityService<T, ID> {
         entityRepository.findById(id).ifPresentOrElse(atomicReference::set, () -> {
             throw new AppException(DataResponse.builder()
                     .code(MessageCode.ID_DOES_NOT_EXIST)
+                    .message(StaticMessage.ID_DOES_NOT_EXIST)
                     .build());
         });
         return atomicReference.get();

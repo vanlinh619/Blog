@@ -3,7 +3,7 @@ package com.ale.blog.service;
 import com.ale.blog.entity.RefreshToken;
 import com.ale.blog.entity.User;
 import com.ale.blog.handler.exception.AppException;
-import com.ale.blog.handler.mapper.pojo.AccessToken;
+import com.ale.blog.handler.mapper.response.AccessTokenResponse;
 import com.ale.blog.handler.mapper.request.RefreshTokenInput;
 import com.ale.blog.repository.RefreshTokenRepository;
 import com.ale.blog.security.JwtTokenProvider;
@@ -28,19 +28,19 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
-    public AccessToken createAccessToken(RefreshTokenInput refreshTokenInput) throws AppException {
-        AccessToken accessToken = new AccessToken();
+    public AccessTokenResponse createAccessToken(RefreshTokenInput refreshTokenInput) throws AppException {
+        AccessTokenResponse accessTokenResponse = new AccessTokenResponse();
         refreshTokenRepository.findFirstByToken(refreshTokenInput.getToken()).ifPresentOrElse(refreshToken -> {
             String token = jwtTokenProvider.generateToken(new UserAccessDetails(refreshToken.getUser()));
             if(refreshToken.getExpiration().compareTo(Instant.now()) < 0) {
                 refreshTokenRepository.delete(refreshToken);
                 throw new AppException();
             }
-            accessToken.setAccessToken(token);
+            accessTokenResponse.setAccessToken(token);
         }, () -> {
             throw new AppException();
         });
-        return accessToken;
+        return accessTokenResponse;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
             refreshToken.setExpiration(Instant.now().plusMillis(expirationRefresh));
             atomicReference.set(refreshToken);
         }, () -> {
-            RefreshToken refreshToken = new RefreshToken().builder()
+            RefreshToken refreshToken = RefreshToken.builder()
                     .token(UUID.randomUUID().toString())
                     .expiration(Instant.now().plusMillis(expirationRefresh))
                     .user(user)

@@ -1,4 +1,4 @@
-package com.ale.blog.handler.mapper.pojo;
+package com.ale.blog.handler.mapper.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccessToken {
+public class AccessTokenResponse {
     private String accessToken;
 }
