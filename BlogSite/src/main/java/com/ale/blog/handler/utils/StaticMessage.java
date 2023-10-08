@@ -7,4 +7,5 @@ public class StaticMessage {
     public static final String FILE_NOT_FOUND = "File not found";
     public static final String ID_DOES_NOT_EXIST = "Id does not exist";
     public static final String UNABLE_TO_SAVE_IMAGE = "Unable to save image";
+    public static final String ALREADY_USED = "Already used";
 }

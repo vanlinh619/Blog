@@ -37,9 +37,8 @@ public class PostServiceImpl implements PostService {
     private final ExecutorService executorService;
 
     @Override
-    public Post createPostArticle(PostRequest postRequest) {
+    public Post createPostArticle(PostRequest postRequest, User author) {
         Post post = postMapper.toPost(postRequest);
-        User author = userService.getById(UUID.fromString(postRequest.getAuthor()));
         post.setAuthor(author);
         String clean = Jsoup.clean(post.getContent(), Safelist.relaxed());
         post.setContent(clean);

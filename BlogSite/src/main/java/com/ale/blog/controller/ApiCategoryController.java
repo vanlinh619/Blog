@@ -8,11 +8,13 @@ import com.ale.blog.handler.mapper.CategoryMapper;
 import com.ale.blog.handler.mapper.pojo.request.CategoryRequest;
 import com.ale.blog.handler.mapper.pojo.response.CategoryResponse;
 import com.ale.blog.handler.mapper.pojo.response.DataResponse;
+import com.ale.blog.security.UserAccess;
 import com.ale.blog.service.CategoryService;
 import com.ale.blog.service.UserService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,16 +29,17 @@ public class ApiCategoryController {
     private final UserService userService;
     private final CategoryMapper categoryMapper;
 
-    @GetMapping ("{uuid}")
-    public List<CategoryResponse> getAllCategory(@PathVariable String uuid) {
-        User author = userService.getById(UUID.fromString(uuid));
-        List<Category> categories = categoryService.getAllLevelByUser(CategoryLevel.LEVEL_1, author);
+    @GetMapping
+    public List<CategoryResponse> getAllCategory(Authentication authentication) {
+        UserAccess userAccess = (UserAccess) authentication.getPrincipal();
+        List<Category> categories = categoryService.getAllLevelByUser(CategoryLevel.LEVEL_1, userAccess.getUser());
         return categoryMapper.toCategoryResponses(categories);
     }
 
     @PostMapping
-    public DataResponse createCategory(@Valid @RequestBody CategoryRequest categoryRequest){
-        Category category = categoryService.createCategory(categoryRequest);
+    public DataResponse createCategory(Authentication authentication, @Valid @RequestBody CategoryRequest categoryRequest){
+        UserAccess userAccess = (UserAccess) authentication.getPrincipal();
+        Category category = categoryService.createCategory(categoryRequest, userAccess.getUser());
         return DataResponse.builder()
                 .id(category.getId())
                 .status(DataResponse.ResponseStatus.CREATED)

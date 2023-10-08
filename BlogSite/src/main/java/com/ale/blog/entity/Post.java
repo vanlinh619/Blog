@@ -56,7 +56,7 @@ public class Post {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Column(nullable = false, columnDefinition = "BIGINT(19) default 0")
+    @Column(nullable = false)
     private Long view = 0L;
 
     @NotNull

@@ -28,9 +28,8 @@ public class CategoryServiceImpl implements CategoryService {
     private final ModelMapper mapper;
 
     @Override
-    public Category createCategory(CategoryRequest categoryRequest) {
+    public Category createCategory(CategoryRequest categoryRequest, User author) {
         Category category = mapper.map(categoryRequest, Category.class);
-        User author = userService.getById(UUID.fromString(categoryRequest.getAuthor()));
         category.setAuthor(author);
         category.setSlug(category.getSlug());
         if (categoryRequest.getParentId() != null) {

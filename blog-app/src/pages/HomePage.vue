@@ -5,18 +5,17 @@ import Header from "@/design/Header.vue";
 import Index from "@/design/Index.vue";
 import Detail from "@/design/Detail.vue";
 import CategoryPicker from "@/components/CategoryPicker.vue";
-import AlertComponent from "@/components/AlertComponent.vue";
 import ImagePicker from "@/components/ImagePicker.vue";
+import AlertComponent from "@/components/AlertComponent.vue";
 </script>
 
 <template>
   <Header></Header>
-  <AlertComponent v-if="alertType !== AlertType.HIDE" v-model="alertType" :code="alert.code"
-                  :description="alert.description"></AlertComponent>
+  <AlertComponent :message="message"/>
   <div class="max-w-8xl mx-auto px-4">
     <div
         class="lg:block fixed z-20 inset-0 top-16 left-[max(0px,calc(50%-45rem))] right-auto w-[19rem] pb-10 pl-8 pr-6 overflow-y-auto">
-      <CategoryPicker :category-ids="categories" @pick="pickCategory"></CategoryPicker>
+      <CategoryPicker v-model="categories"></CategoryPicker>
       <ImagePicker></ImagePicker>
     </div>
     <main class="mt-10">
@@ -76,7 +75,6 @@ import ImagePicker from "@/components/ImagePicker.vue";
 import Api from "@/utils/api";
 import Key from "@/utils/contain";
 import AlertType from "@/utils/alert-type";
-import AutoRequest from "@/utils/auto-request";
 import RequestApi from "@/utils/request-api";
 
 export default {
@@ -92,15 +90,12 @@ export default {
       preview: false,
 
       // alert
-      alert: {
-        code: '',
-        description: '',
-      },
-      alertType: AlertType.HIDE
+      message: Object,
     }
   },
   methods: {
     save() {
+      console.log('cate: ', this.categories)
       RequestApi.postRequest(Api.postArticle, {
         title: this.title,
         slug: this.slug,
@@ -112,34 +107,22 @@ export default {
         author: localStorage.getItem(Key.uuid)
       })
           .then(response => {
-            this.alert.code = response?.data?.status
-            this.alert.description = response?.data?.id
-            this.alertType = AlertType.SUCCESS
+            this.message = {
+              role: AlertType.SUCCESS,
+              code: response?.data?.status,
+              description: response?.data?.id
+            }
             console.log(response)
           })
           .catch(error => {
-            if (!AutoRequest.hasAuthorize(error, this.save)) return
-            this.alert = {
+            if (!RequestApi.hasAuthorize(error, this.save)) return
+            this.message = {
               code: error?.response?.data?.code,
-              description: error?.response?.data?.message
+              description: error?.response?.data?.message,
+              role: AlertType.ERROR
             }
-            this.alertType = AlertType.ERROR
             console.log(error)
           })
-    },
-    pickCategory(id) {
-      let ind = 0;
-      console.log('id: ', id)
-      if (this.categories.find((value, index) => {
-        if (value === id) {
-          ind = index
-          return value
-        }
-      })) {
-        this.categories.splice(ind, 1)
-      } else {
-        this.categories.push(id)
-      }
     },
   },
   watch: {

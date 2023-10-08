@@ -10,7 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.UUID;
 
 public interface ImageService extends EntityService<Image, UUID> {
-    Image saveImage(MultipartFile image, String uuid);
+    Image saveImage(MultipartFile image, User author);
     Resource getImageResource(String id);
     Page<Image> getAllByAuthor(User author, QueryRequest queryRequest);
+    Boolean deleteImageById(String id, User author);
 }

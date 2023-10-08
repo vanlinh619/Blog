@@ -30,7 +30,4 @@ public class CategoryRequest {
     private String content;
 
     private Long parentId;
-
-    @NotBlank
-    private String author;
 }

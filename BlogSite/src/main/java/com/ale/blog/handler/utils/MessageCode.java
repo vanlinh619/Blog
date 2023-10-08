@@ -1,6 +1,7 @@
 package com.ale.blog.handler.utils;
 
 public enum MessageCode {
+    SUCCESS,
     NOT_FOUND,
     BAD_QUERY,
     UNKNOWN_ERROR,
@@ -10,5 +11,6 @@ public enum MessageCode {
     PAGE_NOT_FOUND,
     BEYOND_THE_CATEGORY_LEVEL,
     ARGUMENT_NOT_VALID,
-    ERROR_IMAGE
+    ERROR_IMAGE,
+    NOT_SUPPORT
 }

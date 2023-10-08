@@ -40,7 +40,7 @@ public class CategoryController {
     public String getAllPostOfCategory(@PathVariable String categoryUrl, @PathVariable String username, @Valid PageRequest pageRequest, Model model) {
         Category category = categoryService.getCategoryBySlugAndUsername(categoryUrl, username);
         Page<Post> posts = postService.findAllByCategory(category, QueryRequest.builder()
-                .page(pageRequest.getPage() - 1)
+                .page(pageRequest.getPage())
                 .size(StaticVariable.PAGE_SIZE)
                 .sortBy(Post.Fields.createDate)
                 .sortType(SortType.DESC.name())

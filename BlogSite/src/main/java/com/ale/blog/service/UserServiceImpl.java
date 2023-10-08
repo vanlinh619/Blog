@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final CategoryService categoryService;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder,@Lazy CategoryService categoryService) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, @Lazy CategoryService categoryService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.categoryService = categoryService;
@@ -74,12 +74,14 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 
-        categoryService.createCategory(CategoryRequest.builder()
-                .title(StaticVariable.ALL)
-                .slug(StaticVariable.ALL.toLowerCase())
-                .metaTitle(StaticVariable.ALL)
-                .author(user.getUuid().toString())
-                .build());
+        categoryService.createCategory(
+                CategoryRequest.builder()
+                        .title(StaticVariable.ALL)
+                        .slug(StaticVariable.ALL.toLowerCase())
+                        .metaTitle(StaticVariable.ALL)
+                        .build(),
+                user
+        );
 
         return user;
     }

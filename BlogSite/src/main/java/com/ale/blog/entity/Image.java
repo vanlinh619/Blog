@@ -3,7 +3,7 @@ package com.ale.blog.entity;
 import com.ale.blog.entity.state.ImageExtension;
 import com.ale.blog.entity.state.ImageState;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +15,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"folder", "hash"}) )
 @Data
 @Builder
 @AllArgsConstructor
@@ -25,18 +26,27 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @NotNull
+    @NotBlank
+    private String hash;
+
+    /**
+     * Use username as folder
+     * */
+    @NotBlank
+    @Column(length = 50)
     private String folder;
 
-    @NotNull
+    @NotBlank
     private String name;
+
+    @Column(nullable = false)
+    private Integer used = 0;
 
     @NotNull
     @FieldNameConstants.Include
     private Instant createDate;
 
     @NotNull
-    @Max(value = 4000000)
     private Long size;
 
     @NotNull

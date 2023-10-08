@@ -41,7 +41,7 @@
               <span th:text="${post.getView()}"></span>
             </label>
           </div>
-          <div th:if="${post.getIntroduction()} != null" class="mt-5 whitespace-pre-line"
+          <div th:if="${not #strings.isEmpty(post.getIntroduction())}" class="mt-5 whitespace-pre-line"
                th:text="${post.getIntroduction()}">
           </div>
         </div>

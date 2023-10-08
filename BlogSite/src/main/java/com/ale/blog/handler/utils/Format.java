@@ -1,10 +1,7 @@
 package com.ale.blog.handler.utils;
 
 import java.text.Normalizer;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 
 public class Format {
@@ -12,6 +9,12 @@ public class Format {
         if(instant == null) return "";
         LocalDate localDate = LocalDate.ofInstant(instant, ZoneId.systemDefault());
         return localDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+    }
+
+    public static LocalDateTime toLocalDateTime(Instant instant) {
+        if(instant == null) return null;
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+        return localDateTime;
     }
 
     public static String toHref(String content) {

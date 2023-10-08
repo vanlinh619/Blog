@@ -12,6 +12,7 @@ import com.ale.blog.handler.utils.MessageCode;
 import com.ale.blog.handler.utils.StaticMessage;
 import com.ale.blog.handler.utils.StaticVariable;
 import com.ale.blog.repository.ImageRepository;
+import com.google.common.hash.Hashing;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -28,51 +29,68 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.Instant;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 @Service
 @AllArgsConstructor
 public class ImageServiceImpl implements ImageService {
     private final ExecutorService executorService;
     private final ImageRepository imageRepository;
-    private final UserService userService;
 
-    @Transactional(rollbackFor = {Exception.class, RuntimeException.class})
     @Override
-    public Image saveImage(MultipartFile image, String uuid) {
-        User author = userService.getById(UUID.fromString(uuid));
-        Path path = Paths.get(String.format("%s/%s", StaticVariable.IMAGE_DIRECTORY, author.getUsername()));
-
+    public Image saveImage(MultipartFile multipartFile, User author) {
         try {
-            if (!Files.exists(path)) {
-                Files.createDirectories(path);
-            }
-            String fileName = StringUtils.cleanPath(Objects.requireNonNull(image.getOriginalFilename()));
+            String hash = Hashing.sha256().hashBytes(multipartFile.getBytes()).toString();
+            String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
             String type = StringUtils.getFilenameExtension(fileName);
+            ImageExtension extension = ImageExtension.valueOf(Objects.requireNonNull(type).toUpperCase());
 
-            Image newImage = new Image();
-            newImage.setName(fileName);
-            newImage.setFolder(author.getUsername());
-            newImage.setExtension(ImageExtension.valueOf(Objects.requireNonNull(type).toUpperCase()));
-            newImage.setSize(image.getSize());
-            newImage.setAuthor(author);
-            newImage.setCreateDate(Instant.now());
-            newImage.setState(ImageState.PERSIST);
-
-            imageRepository.save(newImage);
-            InputStream inputStream = image.getInputStream();
-            Path filePath = path.resolve(String.format("%s.%s", newImage.getId(), newImage.getExtension().toString().toLowerCase()));
-            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-            inputStream.close();
-
-            return newImage;
+            var optional = imageRepository.findFirstByHashAndAuthor(hash, author).map(image -> {
+                if (image.getState() == ImageState.DELETED) {
+                    image.setState(ImageState.PERSIST);
+                    image.setName(fileName);
+                    image.setCreateDate(Instant.now());
+                    image.setExtension(extension);
+                    imageRepository.save(image);
+                } else if (image.getState() == ImageState.ERROR) {
+                    image.setState(ImageState.PERSIST);
+                    image.setName(fileName);
+                    image.setHash(hash);
+                    image.setCreateDate(Instant.now());
+                    image.setExtension(extension);
+                    image.setSize(multipartFile.getSize());
+                    imageRepository.save(image);
+                    saveToFile(multipartFile, image, author);
+                } else {
+                    throw new AppException(DataResponse.builder()
+                            .code(MessageCode.DUPLICATE_ENTRY)
+                            .message(image.getId().toString())
+                            .build());
+                }
+                return image;
+            }).or(() -> {
+                Image image = new Image();
+                image.setName(fileName);
+                image.setHash(hash);
+                image.setFolder(author.getUsername());
+                image.setExtension(extension);
+                image.setSize(multipartFile.getSize());
+                image.setAuthor(author);
+                image.setCreateDate(Instant.now());
+                image.setState(ImageState.PERSIST);
+                imageRepository.save(image);
+                saveToFile(multipartFile, image, author);
+                return Optional.of(image);
+            });
+            return optional.get();
         } catch (IOException e) {
             throw new AppException(DataResponse.builder()
                     .code(MessageCode.ERROR_IMAGE)
-                    .status(DataResponse.ResponseStatus.FAILED)
                     .message(StaticMessage.UNABLE_TO_SAVE_IMAGE)
                     .build());
         }
@@ -96,6 +114,26 @@ public class ImageServiceImpl implements ImageService {
         return imageRepository.findAllByAuthorAndState(author, ImageState.PERSIST, Convert.pageRequest(queryRequest));
     }
 
+    @Override
+    public Boolean deleteImageById(String id, User author) {
+        UUID uuid = UUID.fromString(id);
+        imageRepository.findFirstByIdAndStateAndAuthor(uuid, ImageState.PERSIST, author).ifPresentOrElse(image -> {
+            int delete = imageRepository.deleteImage(uuid, ImageState.DELETED);
+            if (delete == 0) {
+                throw new AppException(DataResponse.builder()
+                        .code(MessageCode.NOT_SUPPORT)
+                        .message(StaticMessage.ALREADY_USED)
+                        .build());
+            }
+        }, () -> {
+            throw new AppException(DataResponse.builder()
+                    .code(MessageCode.NOT_FOUND)
+                    .message(StaticMessage.FILE_NOT_FOUND)
+                    .build());
+        });
+        return true;
+    }
+
     private Optional<Resource> findImageResource(String id) {
         return imageRepository.findFirstByIdAndState(UUID.fromString(id), ImageState.PERSIST)
                 .map(image -> {
@@ -116,5 +154,22 @@ public class ImageServiceImpl implements ImageService {
                         return null;
                     }
                 });
+    }
+
+    private void saveToFile(MultipartFile multipartFile, Image image, User author) {
+        try (InputStream inputStream = multipartFile.getInputStream()) {
+            Path path = Paths.get(String.format("%s/%s", StaticVariable.IMAGE_DIRECTORY, author.getUsername()));
+            if (!Files.exists(path)) {
+                Files.createDirectories(path);
+            }
+            Path filePath = path.resolve(String.format("%s.%s", image.getId(), image.getExtension().toString().toLowerCase()));
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new AppException(DataResponse.builder()
+                    .code(MessageCode.ERROR_IMAGE)
+                    .status(DataResponse.ResponseStatus.FAILED)
+                    .message(StaticMessage.UNABLE_TO_SAVE_IMAGE)
+                    .build());
+        }
     }
 }

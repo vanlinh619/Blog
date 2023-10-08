@@ -49,6 +49,7 @@ public class ResponseExceptionHandler {
     public DataResponse handleRequest(Exception e) {
         e.printStackTrace();
         return DataResponse.builder()
+                .code(MessageCode.BAD_QUERY)
                 .status(DataResponse.ResponseStatus.FAILED)
                 .message(e.getMessage())
                 .build();

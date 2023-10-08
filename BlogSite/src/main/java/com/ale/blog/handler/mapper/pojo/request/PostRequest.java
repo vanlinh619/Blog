@@ -32,9 +32,6 @@ public class PostRequest {
     @NotBlank
     private String content;
 
-    @NotBlank
-    private String author;
-
     @NotNull
     private List<Long> tags;
 
