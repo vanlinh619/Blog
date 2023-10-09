@@ -21,7 +21,7 @@ public interface ImageRepository extends JpaRepository<Image, UUID> {
     Optional<Image> findFirstByIdAndStateAndAuthor(UUID id, ImageState state, User author);
     @Transactional
     @Modifying
-    @Query("update Image i set i.state = :state where i.id = :id and i.used = 0")
-    int deleteImage(UUID id, ImageState state);
+    @Query("update Image i set i.state = :state where i.id = :id")
+    void updateStateById(UUID id, ImageState state);
     Optional<Image> findFirstByHashAndAuthor(String hash, User author);
 }

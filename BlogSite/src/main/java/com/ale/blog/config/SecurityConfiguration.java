@@ -1,6 +1,6 @@
 package com.ale.blog.config;
 
-import com.ale.blog.handler.utils.MessageCode;
+import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
 import com.ale.blog.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Qualifier;

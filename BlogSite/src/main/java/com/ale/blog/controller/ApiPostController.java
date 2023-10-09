@@ -2,9 +2,10 @@ package com.ale.blog.controller;
 
 import com.ale.blog.entity.Post;
 import com.ale.blog.entity.state.UserRole;
-import com.ale.blog.handler.mapper.PostMapper;
 import com.ale.blog.handler.mapper.pojo.request.PostRequest;
 import com.ale.blog.handler.mapper.pojo.response.DataResponse;
+import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
+import com.ale.blog.handler.mapper.pojo.response.state.Status;
 import com.ale.blog.security.UserAccess;
 import com.ale.blog.service.PostService;
 import jakarta.annotation.security.RolesAllowed;
@@ -27,8 +28,9 @@ public class ApiPostController {
         UserAccess userAccess = (UserAccess) authentication.getPrincipal();
         Post post = postService.createPostArticle(postRequest, userAccess.getUser());
         return DataResponse.builder()
-                .id(post.getId())
-                .status(DataResponse.ResponseStatus.CREATED)
+                .status(Status.SUCCESS)
+                .code(MessageCode.SUCCESS)
+                .message(post.getId().toString())
                 .build();
     }
 }

@@ -50,6 +50,14 @@ const RequestApi = {
             }
         })
     },
+    postFormRequest: (postUrl, form) => {
+            return axios.postForm(postUrl, form, {
+            headers: {
+                'Content-Type': "multipart/form-data",
+                'Authorization': `Bearer ${localStorage.getItem(Key.accessToken)}`
+            }
+        })
+    },
     getRequest: (getUrl) => {
         return axios.get(getUrl, {
             headers: {

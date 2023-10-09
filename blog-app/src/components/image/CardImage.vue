@@ -5,13 +5,12 @@
 <template>
   <div class="m-2 p-2 rounded-lg shadow-md border">
     <img :src="src" class="rounded border object-cover h-48 w-full">
-    <div class="grid grid-cols-2 mt-2">
-      <label class="truncate text-xs">{{ dateFormat(date) }}</label>
-      <label class="truncate text-xs text-right">Sử dụng: {{ used }}</label>
+    <div class="grid grid-cols-3 mt-2">
+      <label class="truncate text-xs col-span-2 font-semibold">{{ name }}</label>
+      <label class="truncate text-xs text-right">{{ dateFormat(date) }}</label>
     </div>
-    <label class="truncate text-xs font-semibold">{{ name }}</label>
-    <div class="flex justify-between mt-2">
-      <button v-if="used === 0" @click="$emit('click', {id, name})"
+    <div class="flex justify-between mt-3">
+      <button @click="$emit('click', {id, name})"
               class="order-first font-semibold stroke-slate-700 fill-slate-700 hover:text-emerald-600 hover:stroke-emerald-600 hover:fill-emerald-600">
         <svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24" fill="none"
              class="w-4 h-4 min-w-[1rem] min-h-[1rem]">
@@ -48,7 +47,6 @@ export default {
     id: String,
     src: String,
     name: String,
-    used: Number,
     date: String
   },
   emits: ['click'],

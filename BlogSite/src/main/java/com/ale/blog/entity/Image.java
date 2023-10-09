@@ -39,9 +39,6 @@ public class Image {
     @NotBlank
     private String name;
 
-    @Column(nullable = false)
-    private Integer used = 0;
-
     @NotNull
     @FieldNameConstants.Include
     private Instant createDate;

@@ -9,8 +9,9 @@ import com.ale.blog.handler.mapper.PostMapper;
 import com.ale.blog.handler.mapper.pojo.request.PostRequest;
 import com.ale.blog.handler.mapper.pojo.request.QueryRequest;
 import com.ale.blog.handler.mapper.pojo.response.DataResponse;
+import com.ale.blog.handler.mapper.pojo.response.state.Status;
 import com.ale.blog.handler.utils.Convert;
-import com.ale.blog.handler.utils.MessageCode;
+import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
 import com.ale.blog.handler.utils.StaticMessage;
 import com.ale.blog.handler.utils.StaticVariable;
 import com.ale.blog.repository.PostRepository;
@@ -22,7 +23,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -70,7 +70,7 @@ public class PostServiceImpl implements PostService {
         postRepository.findFirstBySlug(slug).ifPresentOrElse(reference::set, () -> {
             throw new AppException(DataResponse.builder()
                     .code(MessageCode.NOT_FOUND)
-                    .status(DataResponse.ResponseStatus.FAILED)
+                    .status(Status.FAILED)
                     .message(StaticMessage.SLUG_NOT_FOUND)
                     .build());
         });
@@ -88,7 +88,7 @@ public class PostServiceImpl implements PostService {
         }, () -> {
             throw new AppException(DataResponse.builder()
                     .code(MessageCode.NOT_FOUND)
-                    .status(DataResponse.ResponseStatus.FAILED)
+                    .status(Status.FAILED)
                     .message(StaticMessage.USERNAME_NOT_FOUND)
                     .build());
         });

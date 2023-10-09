@@ -1,22 +1,28 @@
 <script setup>
-import EditorComponent from "../components/EditorComponent.vue";
+import EditorComponent from "../components/home/EditorComponent.vue";
 import InputView from "../components/InputView.vue";
 import Header from "@/design/Header.vue";
 import Index from "@/design/Index.vue";
 import Detail from "@/design/Detail.vue";
-import CategoryPicker from "@/components/CategoryPicker.vue";
-import ImagePicker from "@/components/ImagePicker.vue";
+import CategoryPicker from "@/components/home/CategoryPicker.vue";
+import ImagePicker from "@/components/image/ImagePicker.vue";
 import AlertComponent from "@/components/AlertComponent.vue";
+import SectionItem from "@/components/SectionItem.vue";
 </script>
 
 <template>
   <Header></Header>
-  <AlertComponent :message="message"/>
+  <AlertComponent :response="response"/>
   <div class="max-w-8xl mx-auto px-4">
     <div
         class="lg:block fixed z-20 inset-0 top-16 left-[max(0px,calc(50%-45rem))] right-auto w-[19rem] pb-10 pl-8 pr-6 overflow-y-auto">
-      <CategoryPicker v-model="categories"></CategoryPicker>
-      <ImagePicker></ImagePicker>
+      <SectionItem title="Bộ sưu tập" url="/category" expand="true">
+        <CategoryPicker v-model="categories"></CategoryPicker>
+      </SectionItem>
+
+      <SectionItem title="Ảnh" url="/image">
+        <ImagePicker></ImagePicker>
+      </SectionItem>
     </div>
     <main class="mt-10">
       <article class="pl-[19.5rem]">
@@ -33,6 +39,8 @@ import AlertComponent from "@/components/AlertComponent.vue";
             [&_blockquote]:bg-slate-100 [&_blockquote]:rounded [&_blockquote]:border [&_blockquote]:border-emerald-300
             [&_blockquote]:p-4 [&_blockquote]:mt-4 [&_blockquote_p]:mt-3
             [&_blockquote_:first-child]:mt-0
+            [&_pre]:rounded-lg [&_pre]:border [&_pre]:px-5 [&_pre]:py-2 [&_pre]:bg-slate-800 [&_pre]:text-slate-200
+            [&_pre]:mt-4 [&_pre]:overflow-x-auto [&_pre_code]:bg-slate-800 [&_pre_code]:p-0
             [&_p]:mt-4">
             <Detail v-if="preview" :content="content" :list-index="listIndex"></Detail>
             <div id="editor" v-else>
@@ -90,7 +98,7 @@ export default {
       preview: false,
 
       // alert
-      message: Object,
+      response: {},
     }
   },
   methods: {
@@ -107,20 +115,12 @@ export default {
         author: localStorage.getItem(Key.uuid)
       })
           .then(response => {
-            this.message = {
-              role: AlertType.SUCCESS,
-              code: response?.data?.status,
-              description: response?.data?.id
-            }
+            this.response = response.data
             console.log(response)
           })
           .catch(error => {
             if (!RequestApi.hasAuthorize(error, this.save)) return
-            this.message = {
-              code: error?.response?.data?.code,
-              description: error?.response?.data?.message,
-              role: AlertType.ERROR
-            }
+            this.response = error?.response.data
             console.log(error)
           })
     },

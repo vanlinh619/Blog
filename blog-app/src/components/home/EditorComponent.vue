@@ -18,7 +18,7 @@ import {BlockQuote} from '@ckeditor/ckeditor5-block-quote';
 import {CloudServices} from '@ckeditor/ckeditor5-cloud-services';
 import {Essentials} from '@ckeditor/ckeditor5-essentials';
 import {Heading} from '@ckeditor/ckeditor5-heading';
-import {Image, ImageCaption, ImageStyle, ImageToolbar, ImageUpload} from '@ckeditor/ckeditor5-image';
+import {Image, ImageCaption, ImageToolbar, ImageUpload, ImageInsert} from '@ckeditor/ckeditor5-image';
 import {Indent} from '@ckeditor/ckeditor5-indent';
 import {Link} from '@ckeditor/ckeditor5-link';
 import {List} from '@ckeditor/ckeditor5-list';
@@ -31,6 +31,7 @@ import {SourceEditing} from '@ckeditor/ckeditor5-source-editing';
 import {FindAndReplace} from '@ckeditor/ckeditor5-find-and-replace';
 import {SelectAll} from '@ckeditor/ckeditor5-select-all';
 import {RemoveFormat} from '@ckeditor/ckeditor5-remove-format';
+import { CodeBlock } from '@ckeditor/ckeditor5-code-block';
 
 export default {
   props: {
@@ -58,59 +59,40 @@ export default {
       editorConfig: {
         removePlugins: ['stylesheetparser'],
         plugins: [
-          Alignment,  // Adding the package to the list of plugins.
-          Autoformat,
-          FindAndReplace,
-          Code,
-          Subscript,
-          Superscript,
-          RemoveFormat,
-          SelectAll,
-          Strikethrough,
-          BlockQuote,
-          Bold,
-          SourceEditing,
-          Underline,
-          CloudServices,
-          Essentials,
-          Heading,
-          Image,
-          ImageCaption,
-          ImageStyle,
-          ImageToolbar,
-          ImageUpload,
-          Indent,
-          Italic,
-          Link,
-          List,
-          MediaEmbed,
-          Paragraph,
-          PasteFromOffice,
-          Table,
-          TableToolbar,
-          TextTransformation
+          Alignment, Autoformat, FindAndReplace, Code, Subscript, Superscript, RemoveFormat, SelectAll, Strikethrough,
+          BlockQuote, Bold, SourceEditing, Underline, CloudServices, Essentials, Heading, Image, ImageCaption, ImageToolbar,
+          ImageInsert, Indent, Italic, Link, List, MediaEmbed, Paragraph, PasteFromOffice, Table, TableToolbar,
+          TextTransformation,
+          CodeBlock
         ],
         toolbar: {
           items: [
             'findAndReplace', 'SelectAll', '|',
             'heading', '|',
-            'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript', 'removeFormat', '|',
-            'alignment',
-            'bulletedList',
-            'numberedList',
-            '|',
-            'outdent',
-            'indent',
-            '|',
-            'link',
-            'imageUpload',
-            'blockQuote',
-            'insertTable',
-            'mediaEmbed',
-            'undo',
-            'redo',
-            '|',
+            'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript', 'removeFormat', 'codeBlock', '|',
+            'alignment', 'bulletedList', 'numberedList', '|',
+            'outdent', 'indent', '|',
+            'link', 'imageInsert', 'blockQuote', 'insertTable', 'mediaEmbed', '|',
+            'undo', 'redo', '|',
             'SourceEditing',
+          ],
+          shouldNotGroupWhenFull: true
+        },
+        codeBlock: {
+          languages: [
+            { language: 'plaintext', label: 'Plain text', class: 'text' }, // The default language.
+            { language: 'c', label: 'C', class: 'c' },
+            { language: 'cs', label: 'C#', class: 'c#' },
+            { language: 'cpp', label: 'C++', class: 'c++' },
+            { language: 'css', label: 'CSS', class: 'css' },
+            { language: 'html', label: 'HTML', class: 'html' },
+            { language: 'java', label: 'Java', class: 'java' },
+            { language: 'javascript', label: 'JavaScript', class: 'javascript' },
+            { language: 'php', label: 'PHP', class: 'PHP' },
+            { language: 'python', label: 'Python', class: 'python' },
+            { language: 'ruby', label: 'Ruby', class: 'ruby' },
+            { language: 'typescript', label: 'TypeScript', class: 'typescript' },
+            { language: 'xml', label: 'XML', class: 'xml' }
           ]
         },
         heading: {

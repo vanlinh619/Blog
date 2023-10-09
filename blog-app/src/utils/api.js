@@ -15,5 +15,6 @@ const Api = {
     getImages: `${baseUrl}/api/authorize/image?page={0}`,
     image: `${baseUrl}/image/{0}`,
     deleteImage: `${baseUrl}/api/authorize/image/{0}`,
+    uploadImage: `${baseUrl}/api/authorize/image`,
 }
 export default Api

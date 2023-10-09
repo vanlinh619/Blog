@@ -4,9 +4,6 @@
 
 <template>
   <nav class="text-cyan-950">
-    <div class="mt-5 pb-3 border-b mb-2">
-      <span>Categories</span>
-    </div>
     <ul class="space-y-1.5">
       <li v-for="categoryL1 in categories">
         <a href="#" @click="pickCategory(categoryL1.id)" v-if="categoryL1.slug !== 'all'"
@@ -85,7 +82,7 @@ export default {
     getCategories() {
       RequestApi.getRequest(Api.getCategories)
           .then(response => {
-            this.categories.push(...response?.data)
+            this.categories.push(...response?.data?.data)
             console.log(response?.data)
           })
           .catch(error => {

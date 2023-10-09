@@ -16,5 +16,4 @@ public class ImageResponse {
     private String id;
     private String name;
     private Instant date;
-    private Integer used;
 }

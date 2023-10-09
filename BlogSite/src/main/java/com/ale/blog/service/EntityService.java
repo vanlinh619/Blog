@@ -2,7 +2,7 @@ package com.ale.blog.service;
 
 import com.ale.blog.handler.exception.AppException;
 import com.ale.blog.handler.mapper.pojo.response.DataResponse;
-import com.ale.blog.handler.utils.MessageCode;
+import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
 import com.ale.blog.handler.utils.StaticMessage;
 import org.springframework.data.jpa.repository.JpaRepository;
 

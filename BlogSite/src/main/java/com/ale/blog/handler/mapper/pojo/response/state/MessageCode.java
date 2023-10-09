@@ -1,9 +1,10 @@
-package com.ale.blog.handler.utils;
+package com.ale.blog.handler.mapper.pojo.response.state;
 
 public enum MessageCode {
     SUCCESS,
     NOT_FOUND,
     BAD_QUERY,
+    BAD_REQUEST,
     UNKNOWN_ERROR,
     ID_DOES_NOT_EXIST,
     ACCESS_DENIED,

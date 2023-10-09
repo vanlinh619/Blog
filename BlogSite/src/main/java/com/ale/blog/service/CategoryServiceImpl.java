@@ -6,7 +6,8 @@ import com.ale.blog.entity.state.CategoryLevel;
 import com.ale.blog.handler.exception.AppException;
 import com.ale.blog.handler.mapper.pojo.request.CategoryRequest;
 import com.ale.blog.handler.mapper.pojo.response.DataResponse;
-import com.ale.blog.handler.utils.MessageCode;
+import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
+import com.ale.blog.handler.mapper.pojo.response.state.Status;
 import com.ale.blog.handler.utils.StaticMessage;
 import com.ale.blog.handler.utils.StaticVariable;
 import com.ale.blog.repository.CategoryRepository;
@@ -16,7 +17,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
@@ -36,7 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
             Category parent = defaultGetById(categoryRequest.getParentId(), categoryRepository);
             if (parent.getSlug().equals(StaticVariable.ALL.toLowerCase())) {
                 throw new AppException(DataResponse.builder()
-                        .status(DataResponse.ResponseStatus.FAILED)
+                        .status(Status.FAILED)
                         .code(MessageCode.ARGUMENT_NOT_VALID)
                         .message(StaticMessage.INVALID_CATEGORY)
                         .build());
@@ -65,7 +65,7 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.findFirstBySlugAndAuthor_Username(slug, username).ifPresentOrElse(reference::set, () -> {
             throw new AppException(DataResponse.builder()
                     .code(MessageCode.NOT_FOUND)
-                    .status(DataResponse.ResponseStatus.FAILED)
+                    .status(Status.FAILED)
                     .message(StaticMessage.SLUG_NOT_FOUND)
                     .build());
         });
@@ -85,7 +85,7 @@ public class CategoryServiceImpl implements CategoryService {
             case LEVEL_3 -> {
                 throw new AppException(DataResponse.builder()
                         .code(MessageCode.BEYOND_THE_CATEGORY_LEVEL)
-                        .status(DataResponse.ResponseStatus.FAILED)
+                        .status(Status.FAILED)
                         .build());
             }
         }

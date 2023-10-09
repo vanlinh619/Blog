@@ -4,6 +4,8 @@ import com.ale.blog.entity.Tag;
 import com.ale.blog.entity.state.UserRole;
 import com.ale.blog.handler.mapper.pojo.request.TagRequest;
 import com.ale.blog.handler.mapper.pojo.response.DataResponse;
+import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
+import com.ale.blog.handler.mapper.pojo.response.state.Status;
 import com.ale.blog.service.TagService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
@@ -24,8 +26,9 @@ public class ApiTagController {
     public DataResponse createTag(@Valid @RequestBody TagRequest tagRequest) {
         Tag tag = tagService.createTag(tagRequest);
         return DataResponse.builder()
-                .id(tag.getId())
-                .status(DataResponse.ResponseStatus.CREATED)
+                .status(Status.SUCCESS)
+                .code(MessageCode.SUCCESS)
+                .message(tag.getId().toString())
                 .build();
     }
 }

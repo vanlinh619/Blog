@@ -1,6 +1,7 @@
 package com.ale.blog.handler.mapper.pojo.response;
 
-import com.ale.blog.handler.utils.MessageCode;
+import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
+import com.ale.blog.handler.mapper.pojo.response.state.Status;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,25 +14,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DataResponse {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private Long id;
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private String name;
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private String uuid;
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private String username;
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-
-    private ResponseStatus status;
+    private Status status;
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private MessageCode code;
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String message;
-
-    public enum ResponseStatus {
-        CREATED,
-        FAILED,
-        UPDATED,
-        DELETED
-    }
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Object data;
 }

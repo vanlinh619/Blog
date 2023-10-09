@@ -7,8 +7,9 @@ import com.ale.blog.entity.state.ImageState;
 import com.ale.blog.handler.exception.AppException;
 import com.ale.blog.handler.mapper.pojo.request.QueryRequest;
 import com.ale.blog.handler.mapper.pojo.response.DataResponse;
+import com.ale.blog.handler.mapper.pojo.response.state.Status;
 import com.ale.blog.handler.utils.Convert;
-import com.ale.blog.handler.utils.MessageCode;
+import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
 import com.ale.blog.handler.utils.StaticMessage;
 import com.ale.blog.handler.utils.StaticVariable;
 import com.ale.blog.repository.ImageRepository;
@@ -18,7 +19,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,10 +31,6 @@ import java.nio.file.StandardCopyOption;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 @Service
 @AllArgsConstructor
@@ -50,30 +46,22 @@ public class ImageServiceImpl implements ImageService {
             String type = StringUtils.getFilenameExtension(fileName);
             ImageExtension extension = ImageExtension.valueOf(Objects.requireNonNull(type).toUpperCase());
 
-            var optional = imageRepository.findFirstByHashAndAuthor(hash, author).map(image -> {
+            return imageRepository.findFirstByHashAndAuthor(hash, author).map(image -> {
                 if (image.getState() == ImageState.DELETED) {
                     image.setState(ImageState.PERSIST);
                     image.setName(fileName);
                     image.setCreateDate(Instant.now());
                     image.setExtension(extension);
                     imageRepository.save(image);
-                } else if (image.getState() == ImageState.ERROR) {
-                    image.setState(ImageState.PERSIST);
-                    image.setName(fileName);
-                    image.setHash(hash);
-                    image.setCreateDate(Instant.now());
-                    image.setExtension(extension);
-                    image.setSize(multipartFile.getSize());
-                    imageRepository.save(image);
-                    saveToFile(multipartFile, image, author);
                 } else {
                     throw new AppException(DataResponse.builder()
+                            .status(Status.FAILED)
                             .code(MessageCode.DUPLICATE_ENTRY)
                             .message(image.getId().toString())
                             .build());
                 }
                 return image;
-            }).or(() -> {
+            }).orElseGet(() -> {
                 Image image = new Image();
                 image.setName(fileName);
                 image.setHash(hash);
@@ -85,9 +73,8 @@ public class ImageServiceImpl implements ImageService {
                 image.setState(ImageState.PERSIST);
                 imageRepository.save(image);
                 saveToFile(multipartFile, image, author);
-                return Optional.of(image);
+                return image;
             });
-            return optional.get();
         } catch (IOException e) {
             throw new AppException(DataResponse.builder()
                     .code(MessageCode.ERROR_IMAGE)
@@ -118,15 +105,10 @@ public class ImageServiceImpl implements ImageService {
     public Boolean deleteImageById(String id, User author) {
         UUID uuid = UUID.fromString(id);
         imageRepository.findFirstByIdAndStateAndAuthor(uuid, ImageState.PERSIST, author).ifPresentOrElse(image -> {
-            int delete = imageRepository.deleteImage(uuid, ImageState.DELETED);
-            if (delete == 0) {
-                throw new AppException(DataResponse.builder()
-                        .code(MessageCode.NOT_SUPPORT)
-                        .message(StaticMessage.ALREADY_USED)
-                        .build());
-            }
+            imageRepository.updateStateById(uuid, ImageState.DELETED);
         }, () -> {
             throw new AppException(DataResponse.builder()
+                    .status(Status.FAILED)
                     .code(MessageCode.NOT_FOUND)
                     .message(StaticMessage.FILE_NOT_FOUND)
                     .build());
@@ -147,10 +129,6 @@ public class ImageServiceImpl implements ImageService {
                     if (Files.exists(path)) {
                         return UrlResource.from(path.toUri());
                     } else {
-                        executorService.execute(() -> {
-                            image.setState(ImageState.ERROR);
-                            imageRepository.save(image);
-                        });
                         return null;
                     }
                 });
@@ -167,7 +145,7 @@ public class ImageServiceImpl implements ImageService {
         } catch (IOException e) {
             throw new AppException(DataResponse.builder()
                     .code(MessageCode.ERROR_IMAGE)
-                    .status(DataResponse.ResponseStatus.FAILED)
+                    .status(Status.FAILED)
                     .message(StaticMessage.UNABLE_TO_SAVE_IMAGE)
                     .build());
         }

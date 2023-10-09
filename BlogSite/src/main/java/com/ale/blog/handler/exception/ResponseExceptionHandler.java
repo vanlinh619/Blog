@@ -1,7 +1,9 @@
 package com.ale.blog.handler.exception;
 
 import com.ale.blog.handler.mapper.pojo.response.DataResponse;
-import com.ale.blog.handler.utils.MessageCode;
+import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
+import com.ale.blog.handler.mapper.pojo.response.state.Status;
+import com.ale.blog.handler.utils.StaticMessage;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
@@ -33,7 +35,7 @@ public class ResponseExceptionHandler {
         });
         return DataResponse.builder()
                 .code(MessageCode.ARGUMENT_NOT_VALID)
-                .status(DataResponse.ResponseStatus.FAILED)
+                .status(Status.FAILED)
                 .message(errors.toString())
                 .build();
     }
@@ -50,7 +52,7 @@ public class ResponseExceptionHandler {
         e.printStackTrace();
         return DataResponse.builder()
                 .code(MessageCode.BAD_QUERY)
-                .status(DataResponse.ResponseStatus.FAILED)
+                .status(Status.FAILED)
                 .message(e.getMessage())
                 .build();
     }
@@ -64,11 +66,15 @@ public class ResponseExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({ CompletionException.class})
-    public Map<String, String> handleCompletionException(CompletionException e) {
+    public DataResponse handleCompletionException(CompletionException e) {
         e.printStackTrace();
         Map<String, String> errors = new HashMap<>();
         errors.put("message", e.getMessage());
-        return errors;
+        return DataResponse.builder()
+                .status(Status.FAILED)
+                .code(MessageCode.BAD_QUERY)
+                .message(errors.toString())
+                .build();
     }
 
     /**
@@ -79,7 +85,7 @@ public class ResponseExceptionHandler {
     public DataResponse handleAccessDeniedException(DataIntegrityViolationException ex) {
         ex.printStackTrace();
         return DataResponse.builder()
-                .status(DataResponse.ResponseStatus.FAILED)
+                .status(Status.FAILED)
                 .code(MessageCode.DUPLICATE_ENTRY)
                 .build();
     }

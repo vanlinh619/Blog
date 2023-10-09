@@ -3,6 +3,8 @@ package com.ale.blog.handler.utils;
 import com.ale.blog.handler.exception.AppException;
 import com.ale.blog.handler.mapper.pojo.request.QueryRequest;
 import com.ale.blog.handler.mapper.pojo.response.DataResponse;
+import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
+import com.ale.blog.handler.mapper.pojo.response.state.Status;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
@@ -16,7 +18,7 @@ public class Convert {
             direction = Sort.Direction.DESC;
         } else {
             throw new AppException(DataResponse.builder()
-                    .status(DataResponse.ResponseStatus.FAILED)
+                    .status(Status.FAILED)
                     .code(MessageCode.BAD_QUERY)
                     .build());
         }

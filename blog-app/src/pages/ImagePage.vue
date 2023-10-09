@@ -1,36 +1,32 @@
 <script setup>
 import Header from "@/design/Header.vue";
-import CardImage from "@/components/CardImage.vue";
+import CardImage from "@/components/image/CardImage.vue";
 import ModelConfirm from "@/components/ModelConfirm.vue";
 import Alert from "@/components/AlertComponent.vue";
+import ImageUpload from "@/components/image/ImageUpload.vue";
 </script>
 
 <template>
   <Header/>
-  <Alert :message="message"/>
+  <Alert :response="response"/>
   <ModelConfirm :modal="modal"/>
   <main class="mt-10">
     <article class="pl-[19.5rem]">
       <div class="mx-auto max-w-none ml-0 mr-[15.5rem] pr-16 text-slate-700">
-        <div class="m-2 pb-2 pt-5 font-semibold stroke-slate-700 hover:text-emerald-600 hover:stroke-emerald-600">
-          <label for="file" class="flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" focusable="false"
-                 fill="none" viewBox="0 0 24 24" class="w-6 h-6 min-w-[1rem] min-h-[1rem]">
-              <path stroke-width="2" stroke-linecap="round"
-                    d="M17 9.00195C19.175 9.01406 20.3529 9.11051 21.1213 9.8789C22 10.7576 22 12.1718 22 15.0002V16.0002C22 18.8286 22 20.2429 21.1213 21.1215C20.2426 22.0002 18.8284 22.0002 16 22.0002H8C5.17157 22.0002 3.75736 22.0002 2.87868 21.1215C2 20.2429 2 18.8286 2 16.0002L2 15.0002C2 12.1718 2 10.7576 2.87868 9.87889C3.64706 9.11051 4.82497 9.01406 7 9.00195"></path>
-              <path d="M12 15L12 2M12 2L15 5.5M12 2L9 5.5" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round"></path>
-            </svg>
-            <span class="ml-3">Tải ảnh lên</span>
-          </label>
-          <input type="file" id="file" hidden>
+        <div class="m-2 pb-2 pt-5">
+          <ImageUpload v-model="uploadResponse" :url-upload="urlUpload"></ImageUpload>
         </div>
         <div class="grid grid-cols-2 mb-10">
           <div v-for="image in images">
             <CardImage @click="data => deleteImage(data)" :id="image.id" :src="Api.image.format(image.id)"
-                       :name="image.name" :used="image.used"
-                       :date="image.date"></CardImage>
+                       :name="image.name" :date="image.date"></CardImage>
           </div>
+        </div>
+        <div class="flex justify-center mb-10">
+          <button v-if="page < totalPage - 1" @click="page = page + 1"
+                  class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-3 rounded">
+            Xem thêm
+          </button>
         </div>
       </div>
     </article>
@@ -46,21 +42,26 @@ export default {
   data() {
     return {
       modal: {},
-      message: {},
+      response: {},
       images: [],
+      page: 0,
+      totalPage: 0,
+      uploadResponse: null,
+      urlUpload: '',
     }
   },
   methods: {
     getImages() {
       RequestApi.executeRequest(
-          RequestApi.getRequest(Api.getImages.format(0)),
+          RequestApi.getRequest(Api.getImages.format(this.page)),
           this.getImages,
           (response) => {
-            this.images.push(...response?.data?.content)
+            this.images.push(...response?.data?.data?.content)
+            this.page = response?.data?.data?.page
+            this.totalPage = response?.data?.data?.totalPage
             console.log(response)
           },
           (error) => {
-            console.log('heo')
           }
       )
     },
@@ -71,11 +72,7 @@ export default {
             this.deleteRequest(id)
           },
           (response) => {
-            this.message = {
-              role: AlertType.SUCCESS,
-              code: response?.data?.code,
-              description: response?.data?.message
-            }
+            this.response = response?.data
             this.modal = {
               show: false
             }
@@ -91,11 +88,7 @@ export default {
             console.log(response)
           },
           (error) => {
-            this.message = {
-              code: error?.response?.data?.code,
-              description: error?.response?.data?.message,
-              role: AlertType.ERROR
-            }
+            this.response = error?.response
             this.modal = {
               show: false
             }
@@ -107,8 +100,8 @@ export default {
       this.modal = {
         show: true,
         id: id,
-        title: name,
-        message: 'Xóa hình ảnh này',
+        title: 'Xóa hình ảnh này',
+        message: name,
         callback: (id) => {
           this.deleteRequest(id)
         }
@@ -117,6 +110,19 @@ export default {
   },
   mounted() {
     this.getImages()
+    this.urlUpload = Api.uploadImage
+  },
+  watch: {
+    page(newData) {
+      this.getImages()
+    },
+    uploadResponse(response) {
+      if (response.code === 'SUCCESS') {
+        this.images.unshift(response?.data)
+      }
+      this.response = response
+      console.log('newData: ', response)
+    }
   }
 }
 </script>
