@@ -1,16 +1,94 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<!--/*@thymesVar id="pagePost" type="org.springframework.data.domain.Page"*/-->
+<!--/*@thymesVar id="pagePost" type="com.ale.blog.handler.mapper.pojo.response.PageResponse"*/-->
 <!--/*@thymesVar id="post" type="com.ale.blog.entity.Post"*/-->
 
-<aside th:fragment="referance(pagePost)">
-  <nav class="text-slate-700">
-    <ul class="space-y-1.5">
-      <li th:each="post: ${pagePost}">
-        <span th:text="${post.getTitle()}"></span>
-      </li>
-    </ul>
+<aside th:fragment="referance(pagePost, username, categoryUrl)">
+  <div id="reference">
+  </div>
+  <script th:inline="javascript" type="module">
+      /*<![CDATA[*/
+      let categoryUrl = /*[[${categoryUrl}]]*/ ''
+      let username = /*[[${username}]]*/ ''
+      let pagePost = /*[[${pagePost}]]*/ {}
+      let categoryLink = `/category/${username}/${categoryUrl}?page=0`
+      console.log(pagePost)
+      /*]]>*/
+      const {createApp} = Vue
+      createApp({
+          template: `
+            <div>
+              <div class="mt-5 pb-2 border-b mb-2">
+                <div class="grid grid-cols-5 items-center">
+                  <button @click="expanded = !expanded"
+                     class="col-span-4 flex items-center hover:text-emerald-600 stroke-slate-700 fill-slate-700 hover:stroke-emerald-600 hover:fill-emerald-600">
+                    <label>
+                       <svg v-if="expanded" xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24" class="min-w-[1rem] min-h-[1rem]">
+                         <path fill-rule="evenodd" clip-rule="evenodd"
+                               d="M4.29289 8.29289C4.68342 7.90237 5.31658 7.90237 5.70711 8.29289L12 14.5858L18.2929 8.29289C18.6834 7.90237 19.3166 7.90237 19.7071 8.29289C20.0976 8.68342 20.0976 9.31658 19.7071 9.70711L12.7071 16.7071C12.3166 17.0976 11.6834 17.0976 11.2929 16.7071L4.29289 9.70711C3.90237 9.31658 3.90237 8.68342 4.29289 8.29289Z"></path>
+                       </svg>
+                       <svg v-else xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24" class="min-w-[1rem] min-h-[1rem]">
+                         <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M8.29289 4.29289C8.68342 3.90237 9.31658 3.90237 9.70711 4.29289L16.7071 11.2929C17.0976 11.6834 17.0976 12.3166 16.7071 12.7071L9.70711 19.7071C9.31658 20.0976 8.68342 20.0976 8.29289 19.7071C7.90237 19.3166 7.90237 18.6834 8.29289 18.2929L14.5858 12L8.29289 5.70711C7.90237 5.31658 7.90237 4.68342 8.29289 4.29289Z"></path>
+                       </svg>
+                    </label>
+                    <span class="ml-1 truncate font-semibold">{{ title }}</span>
+                  </button>
+                  <a :href="url"
+                     class="flex justify-end hover:text-emerald-600 stroke-slate-700 fill-slate-700 hover:stroke-emerald-600 hover:fill-emerald-600">
+                    <div class="w-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" focusable="false" viewBox="0 0 24 24"
+                           class="min-w-[1rem] min-h-[1rem]">
+                        <path
+                            d="M14 7H16C18.7614 7 21 9.23858 21 12C21 14.7614 18.7614 17 16 17H14M10 7H8C5.23858 7 3 9.23858 3 12C3 14.7614 5.23858 17 8 17H10M8 12H16"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                      </svg>
+                    </div>
+                  </a>
+                </div>
 
-  </nav>
+              </div>
+              <div v-if="expanded" class="ml-2">
+                <ul>
+                  <template v-for="post in posts">
+                    <li class="pl-3 mt-1 font-semibold hover:border-emerald-600 border-l hover:text-emerald-600 active:text-emerald-600">
+                      <a :href="post.slug">{{post.title}}</a>
+                    </li>
+                  </template>
+                </ul>
+                <button v-if="page < totalPage - 1" @click="loadMore" class="mt-3 text-xs hover:text-emerald-600 active:text-emerald-600 italic border-b" >Xem Thêm</button>
+              </div>
+            </div>
+          `,
+          data() {
+              return {
+                  posts: pagePost.content,
+                  page: pagePost.page,
+                  totalPage: pagePost.totalPage,
+                  title: 'Bài Viết',
+                  url: categoryLink,
+                  expanded: true
+              }
+          },
+          methods: {
+              loadMore() {
+                  this.page = this.page + 1
+              }
+          },
+          watch: {
+              page(n) {
+                  axios.get(`/api/public/post/${username}/${categoryUrl}?page=${n}`)
+                      .then(response => {
+                          this.posts.push(...response?.data?.data?.content)
+                          console.log(response)
+                      })
+                      .catch(error => {
+                          console.log(error)
+                      })
+              }
+          }
+      }).mount('#reference')
+
+  </script>
 </aside>
 </html>

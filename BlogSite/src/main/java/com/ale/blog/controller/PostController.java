@@ -5,11 +5,17 @@ import com.ale.blog.entity.Post;
 import com.ale.blog.entity.User;
 import com.ale.blog.entity.state.CategoryLevel;
 import com.ale.blog.handler.exception.AppException;
+import com.ale.blog.handler.mapper.PageMapper;
+import com.ale.blog.handler.mapper.PostMapper;
+import com.ale.blog.handler.mapper.pojo.request.PageRequest;
 import com.ale.blog.handler.mapper.pojo.request.QueryRequest;
+import com.ale.blog.handler.mapper.pojo.response.DataResponse;
+import com.ale.blog.handler.mapper.pojo.response.PostResponse;
 import com.ale.blog.handler.utils.SortType;
 import com.ale.blog.handler.utils.StaticVariable;
 import com.ale.blog.service.CategoryService;
 import com.ale.blog.service.PostService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -25,7 +31,8 @@ import java.util.List;
 @RequestMapping("post")
 public class PostController {
     private final PostService postService;
-    private final CategoryService categoryService;
+    private final PageMapper<Post, PostResponse> pageMapper;
+    private final PostMapper postMapper;
 
     @GetMapping("{postUrl}")
     public String getPost(@PathVariable String postUrl, Model model) {
@@ -36,8 +43,10 @@ public class PostController {
                 .sortBy(Post.Fields.createDate)
                 .sortType(SortType.DESC.name())
                 .build());
+        model.addAttribute("username", post.getAuthor().getUsername());
+        model.addAttribute("categoryUrl", post.getCategory().getSlug());
         model.addAttribute("post", post);
-        model.addAttribute("pagePost", pagePost);
+        model.addAttribute("pagePost", pageMapper.toPageResponse(pagePost, postMapper::toPostResponse));
         return "post";
     }
 

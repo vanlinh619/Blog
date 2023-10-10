@@ -17,7 +17,7 @@ import SectionItem from "@/components/SectionItem.vue";
     <div
         class="lg:block fixed z-20 inset-0 top-16 left-[max(0px,calc(50%-45rem))] right-auto w-[19rem] pb-10 pl-8 pr-6 overflow-y-auto">
       <SectionItem title="Bộ sưu tập" url="/category" expand="true">
-        <CategoryPicker v-model="categories"></CategoryPicker>
+        <CategoryPicker @change="event => categoryId = event"></CategoryPicker>
       </SectionItem>
 
       <SectionItem title="Ảnh" url="/image">
@@ -48,14 +48,11 @@ import SectionItem from "@/components/SectionItem.vue";
             [&_p]:mt-4">
             <Detail v-if="preview" :content="content" :list-index="listIndex"></Detail>
             <div id="editor" v-else>
-              <div class="grid grid-cols-2 gap-2">
-                <InputView label="Title" v-model="title" class="mt-3"></InputView>
-                <InputView label="Slug" v-model="slug" class="mt-3"></InputView>
-              </div>
-              <InputView label="Meta Title" v-model="metaTitle" class="mt-3"></InputView>
+              <InputView label="Title" v-model="title" class="mt-3"></InputView>
               <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2 mt-3" for="introduction">Introduction
-                  {{ introduction.trim().length }}/1000</label>
+                <label class="block text-gray-700 text-sm font-bold mb-2 mt-3" for="introduction">
+                  Introduction {{ introduction.trim().length }}/1000
+                </label>
                 <textarea v-model="introduction" id="introduction" placeholder="Introduction" type="text"
                           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
               </div>
@@ -86,18 +83,15 @@ import SectionItem from "@/components/SectionItem.vue";
 <script>
 import Api from "@/utils/api";
 import Key from "@/utils/contain";
-import AlertType from "@/utils/alert-type";
 import RequestApi from "@/utils/request-api";
 
 export default {
   data() {
     return {
       title: '',
-      slug: '',
-      metaTitle: '',
       introduction: '',
       content: '',
-      categories: [],
+      categoryId: Number,
       listIndex: [],
       preview: false,
 
@@ -107,15 +101,13 @@ export default {
   },
   methods: {
     save() {
-      console.log('cate: ', this.categories)
+      console.log('cate: ', this.categoryId)
       RequestApi.postRequest(Api.postArticle, {
         title: this.title,
-        slug: this.slug,
-        metaTitle: this.metaTitle,
         introduction: this.introduction,
         content: this.content,
         tags: [],
-        categories: this.categories,
+        categoryId: this.categoryId,
         author: localStorage.getItem(Key.uuid)
       })
           .then(response => {
@@ -145,22 +137,19 @@ export default {
       })
       console.log('home: ', this.listIndex)
     },
-    title(newData) {
-      this.slug = toSlug(newData)
-    },
   },
 }
 
-let toSlug = (data) => {
-  return data.normalize('NFD') // split accented characters into their base characters and diacritical marks
-      .replace(/[\u0300-\u036f]/g, '') // remove all the accents, which happen to be all in the \u03xx UNICODE block.
-      .trim() // trim leading or trailing whitespace
-      .toLowerCase() // convert to lowercase
-      .replace(/đ+/g, 'd')
-      .replace(/[^a-z0-9 -]/g, '') // remove non-alphanumeric characters
-      .replace(/\s+/g, '-') // replace spaces with hyphens
-      .replace(/^[^a-z]+/g, '')
-}
+// let toSlug = (data) => {
+//   return data.normalize('NFD') // split accented characters into their base characters and diacritical marks
+//       .replace(/[\u0300-\u036f]/g, '') // remove all the accents, which happen to be all in the \u03xx UNICODE block.
+//       .trim() // trim leading or trailing whitespace
+//       .toLowerCase() // convert to lowercase
+//       .replace(/đ+/g, 'd')
+//       .replace(/[^a-z0-9 -]/g, '') // remove non-alphanumeric characters
+//       .replace(/\s+/g, '-') // replace spaces with hyphens
+//       .replace(/^[^a-z]+/g, '')
+// }
 </script>
 
 <style scoped>

@@ -4,13 +4,15 @@
   <meta charset="UTF-8">
   <title>Post</title>
   <link rel="stylesheet" th:href="@{/css/main.css}"/>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
 </head>
 <body>
 <header th:replace="components/header::header"></header>
 <div class="max-w-8xl mx-auto px-4">
   <div
       class="lg:block fixed z-20 inset-0 top-16 left-[max(0px,calc(50%-45rem))] right-auto w-[19rem] pb-10 pl-8 pr-6 overflow-y-auto">
-    <aside th:replace="components/reference::referance(${pagePost})"></aside>
+    <aside th:replace="components/reference::referance(${pagePost}, ${username}, ${categoryUrl})"></aside>
   </div>
   <main class="mt-10">
     <article class="pl-[19.5rem] min-h-screen">
@@ -31,7 +33,7 @@
             <span th:text="${post.getView()}"></span>
           </label>
         </div>
-        <div class="mt-8
+        <div class="mt-10
             [&_h2]:text-3xl [&_h2]:mt-10 [&_h2]:mb-3 [&_h2]:py-3 [&_h2]:scroll-mt-20 [&_h2]:font-semibold
             [&_h3]:text-[1.65rem] [&_h3]:mt-8 [&_h3]:mb-2 [&_h3]:py-3 [&_h3]:scroll-mt-20 [&_h3]:font-semibold
             [&_h4]:text-[1.4rem] [&_h4]:mt-5 [&_h4]:mb-2 [&_h4]:py-3 [&_h4]:scroll-mt-20 [&_h4]:font-semibold
