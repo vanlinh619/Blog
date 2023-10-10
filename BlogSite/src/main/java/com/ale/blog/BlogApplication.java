@@ -2,6 +2,7 @@ package com.ale.blog;
 
 import com.ale.blog.entity.User;
 import com.ale.blog.entity.state.UserRole;
+import com.ale.blog.service.SlugIdService;
 import com.ale.blog.service.UserService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,6 +17,7 @@ public class BlogApplication extends SpringServletContainerInitializer {
         ApplicationContext context = SpringApplication.run(BlogApplication.class, args);
 
         UserService userService = context.getBean(UserService.class);
+        SlugIdService slugIdService = context.getBean(SlugIdService.class);
         userService.findFistUser().ifPresentOrElse(user -> {}, () -> {
             User userAD = User.builder()
                     .username("admin")
@@ -42,5 +44,6 @@ public class BlogApplication extends SpringServletContainerInitializer {
             userService.create(userAD);
             userService.create(userCT);
         });
+        slugIdService.createDefault();
     }
 }

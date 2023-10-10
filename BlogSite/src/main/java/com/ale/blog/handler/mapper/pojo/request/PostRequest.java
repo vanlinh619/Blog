@@ -15,26 +15,18 @@ import java.util.List;
 @NoArgsConstructor
 public class PostRequest {
     @NotBlank
-    @Size(min = 1, max = 60)
+    @Size(min = 1, max = 255)
     private String title;
 
-    @NotBlank
-    @Size(min = 1, max = 160)
-    private String metaTitle;
-
-    @Size(min = 0, max = 1000)
+    @Size(max = 2000)
     private String introduction;
-
-    @Pattern(regexp = "^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])*$")
-    @Size(min = 1, max = 100)
-    private String slug;
 
     @NotBlank
     private String content;
 
     @NotNull
-    private List<Long> tags;
+    private Long categoryId;
 
     @NotNull
-    private List<@NotNull Long> categories;
+    private List<Long> tags;
 }

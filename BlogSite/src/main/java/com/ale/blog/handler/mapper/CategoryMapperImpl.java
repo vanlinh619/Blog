@@ -14,9 +14,14 @@ public class CategoryMapperImpl implements CategoryMapper {
     private final ModelMapper mapper;
 
     @Override
-    public List<CategoryResponse> toCategoryResponses(List<Category> categories) {
+    public List<CategoryResponse> toCategoriesResponses(List<Category> categories) {
         return categories.stream()
                 .map(category -> mapper.map(category, CategoryResponse.class))
                 .toList();
+    }
+
+    @Override
+    public CategoryResponse toCategoryResponses(Category category) {
+        return mapper.map(category, CategoryResponse.class);
     }
 }

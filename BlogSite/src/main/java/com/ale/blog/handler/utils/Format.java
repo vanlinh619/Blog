@@ -24,7 +24,7 @@ public class Format {
                 .toLowerCase()
                 .replaceAll("đ", "d")
                 .replaceAll("[^a-z0-9 -]", "")
-                .replaceAll("\\s+", "-")
-                .replaceAll("^[^a-z]+", "");
+                .replaceAll("\\s+", "-");
+//                .replaceAll("^[^a-z]+", "");
     }
 }

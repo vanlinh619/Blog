@@ -6,5 +6,6 @@ import com.ale.blog.handler.mapper.pojo.response.CategoryResponse;
 import java.util.List;
 
 public interface CategoryMapper extends Mapper{
-    List<CategoryResponse> toCategoryResponses(List<Category> categories);
+    List<CategoryResponse> toCategoriesResponses(List<Category> categories);
+    CategoryResponse toCategoryResponses(Category category);
 }

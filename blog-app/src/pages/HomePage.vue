@@ -28,9 +28,9 @@ import SectionItem from "@/components/SectionItem.vue";
       <article class="pl-[19.5rem]">
         <div class="mx-auto max-w-none ml-0 mr-[15.5rem] pr-16 text-slate-700">
           <div class="
-            [&_h2]:text-3xl [&_h2]:mt-10 [&_h2]:mb-3 [&_h2]:py-3 [&_h2]:scroll-mt-20
-            [&_h3]:text-[1.65rem] [&_h3]:mt-8 [&_h3]:mb-2 [&_h3]:py-3 [&_h3]:scroll-mt-20
-            [&_h4]:text-[1.4rem] [&_h4]:mt-5 [&_h4]:mb-2 [&_h4]:py-3 [&_h4]:scroll-mt-20
+            [&_h2]:text-3xl [&_h2]:mt-10 [&_h2]:mb-3 [&_h2]:py-3 [&_h2]:scroll-mt-20 [&_h2]:font-semibold
+            [&_h3]:text-[1.65rem] [&_h3]:mt-8 [&_h3]:mb-2 [&_h3]:py-3 [&_h3]:scroll-mt-20 [&_h3]:font-semibold
+            [&_h4]:text-[1.4rem] [&_h4]:mt-5 [&_h4]:mb-2 [&_h4]:py-3 [&_h4]:scroll-mt-20 [&_h4]:font-semibold
             [&_a]:text-emerald-600 [&_a:hover]:text-emerald-800
             [&_ul]:list-disc [&_ul]:ml-[1.1rem] [&>ul]:mt-4 [&>ul>li>ul]:ml-3
             [&_ol]:list-decimal [&_ol]:ml-[1.1rem] [&>ol]:mt-4 [&>ol>li>ol]:ml-3 [&>ol>li>ol]:list-disc
@@ -41,6 +41,10 @@ import SectionItem from "@/components/SectionItem.vue";
             [&_blockquote_:first-child]:mt-0
             [&_pre]:rounded-lg [&_pre]:border [&_pre]:px-5 [&_pre]:py-2 [&_pre]:bg-slate-800 [&_pre]:text-slate-200
             [&_pre]:mt-4 [&_pre]:overflow-x-auto [&_pre_code]:bg-slate-800 [&_pre_code]:p-0
+            [&_figure]:grid [&_figure]:grid-cols-1 [&_figure]:justify-items-center [&_figure]:mt-5
+            [&_figure_figcaption]:text-sm [&_figure_figcaption]:italic [&_figure_figcaption]:mt-2
+            [&_th]:border [&_th]:p-2 [&_th]:bg-slate-100
+            [&_td]:border [&_td]:p-2
             [&_p]:mt-4">
             <Detail v-if="preview" :content="content" :list-index="listIndex"></Detail>
             <div id="editor" v-else>

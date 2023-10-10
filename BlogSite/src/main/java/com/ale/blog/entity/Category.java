@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"author_uuid", "slug"}) )
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"author_uuid", "title"}) )
 @Data
 @Builder
 @AllArgsConstructor
@@ -24,26 +24,17 @@ public class Category {
     private Long id;
 
     @NotBlank
-    @Column(length = 60)
     private String title;
 
-    @Column(length = 160)
-    private String metaTitle;
-
     @NotBlank
-    @Pattern(regexp = "^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])*$")
-    @Column(length = 100)
+    @Pattern(regexp = "^[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])*$")
+    @Column(length = 300)
     private String slug;
 
-    @Column(length = 1000)
+    @Column(length = 2000)
     private String introduction;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "category_post",
-            joinColumns = @JoinColumn(name = "category_id"),
-            inverseJoinColumns = @JoinColumn(name = "post_id")
-    )
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<Post> posts;
 
     private CategoryLevel level;

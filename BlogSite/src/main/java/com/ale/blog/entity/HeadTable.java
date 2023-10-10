@@ -26,8 +26,8 @@ public class HeadTable {
     private String content;
 
     @NotBlank
-    @Column(length = 100)
-    @Pattern(regexp = "^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])*$")
+    @Column(length = 300)
+    @Pattern(regexp = "^[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])*$")
     private String href;
 
     @ManyToOne(fetch = FetchType.LAZY)

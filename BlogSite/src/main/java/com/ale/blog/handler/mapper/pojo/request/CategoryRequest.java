@@ -16,16 +16,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CategoryRequest {
     @NotBlank
-    @Size(min = 1, max = 60)
+    @Size(min = 1, max = 255)
     private String title;
-
-    @Size(min = 1, max = 160)
-    private String metaTitle;
-
-    @NotBlank
-    @Size(min = 1, max = 100)
-    @Pattern(regexp = "^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])*$")
-    private String slug;
 
     private String content;
 

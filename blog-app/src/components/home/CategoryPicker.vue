@@ -6,7 +6,7 @@
   <nav class="text-cyan-950">
     <ul class="space-y-1.5">
       <li v-for="categoryL1 in categories">
-        <a href="#" @click="pickCategory(categoryL1.id)" v-if="categoryL1.slug !== 'all'"
+        <a href="#" @click="pickCategory(categoryL1.id)"
            class="flex items-center font-semibold stroke-slate-700 hover:text-emerald-600 hover:stroke-emerald-600">
           <svg xmlns="http://www.w3.org/2000/svg" focusable="false" fill="none"
                viewBox="0 0 24 24" class="absolute w-4 h-4 min-w-[1rem] min-h-[1rem]">
@@ -68,7 +68,8 @@ export default {
   props: {
     modelValue: {
       type: Array,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -86,7 +87,7 @@ export default {
             console.log(response?.data)
           })
           .catch(error => {
-            if(!RequestApi.hasAuthorize(error, this.getCategories)) return
+            if (!RequestApi.hasAuthorize(error, this.getCategories)) return
           })
     },
     pickCategory(id) {

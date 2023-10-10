@@ -21,7 +21,7 @@
     </div>
     <div class="h-8 bg-gradient-to-b from-white dark:from-slate-900"></div>
   </div>
-  <nav class="text-cyan-950">
+  <nav class="text-slate-700">
     <ul class="space-y-1.5">
       <li th:each="categoryL1: ${categories}">
           <span class="flex items-center font-semibold">
@@ -54,19 +54,19 @@
                   </span>
                 <ul class="mt-3 ml-4 space-y-1.5">
                   <li th:each="post: ${categoryL3.getPosts()}" class="ml-1">
-                    <a class="font-normal hover:text-cyan-950 hover:font-medium" th:href="${post.getSlug()}"
+                    <a class="hover:text-emerald-600 active:text-emerald-600" th:href="${post.getSlug()}"
                        th:text="${post.getTitle()}"></a>
                   </li>
                 </ul>
               </li>
               <li th:each="post: ${categoryL2.getPosts()}" class="ml-1">
-                <a class="font-normal hover:text-cyan-950 hover:font-medium" th:href="${post.getSlug()}"
+                <a class="hover:text-emerald-600 active:text-emerald-600" th:href="${post.getSlug()}"
                    th:text="${post.getTitle()}"></a>
               </li>
             </ul>
           </li>
           <li th:each="post: ${categoryL1.getPosts()}" class="ml-1">
-            <a class="font-normal hover:text-cyan-950 hover:font-medium" th:href="${post.getSlug()}"
+            <a class="hover:text-emerald-600 active:text-emerald-600" th:href="${post.getSlug()}"
                th:text="${post.getTitle()}"></a>
           </li>
         </ul>

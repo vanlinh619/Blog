@@ -36,8 +36,8 @@ public class CategoryController {
         return "category";
     }
 
-    @GetMapping("{categoryUrl}/{username}")
-    public String getAllPostOfCategory(@PathVariable String categoryUrl, @PathVariable String username, @Valid PageRequest pageRequest, Model model) {
+    @GetMapping("{username}/{categoryUrl}")
+    public String getAllPostOfCategory(@PathVariable String username, @PathVariable String categoryUrl, @Valid PageRequest pageRequest, Model model) {
         Category category = categoryService.getCategoryBySlugAndUsername(categoryUrl, username);
         Page<Post> posts = postService.findAllByCategory(category, QueryRequest.builder()
                 .page(pageRequest.getPage())

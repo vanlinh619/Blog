@@ -25,11 +25,10 @@ public class User {
     private UUID uuid;
 
     @NotBlank
-    @Column(length = 64)
     private String password;
 
     @NotBlank
-    @Pattern(regexp = "^[A-Za-z][A-Za-z0-9-]{4,50}$")
+    @Pattern(regexp = "^[a-zA-Z0-9-]{4,50}$")
     @Column(unique = true,length = 50)
     private String username;
 
@@ -40,9 +39,9 @@ public class User {
     private String lastName;
 
     @Column(length = 15)
+    @Pattern(regexp = "^[0-9+]{10,15}$")
     private String phoneNumber;
 
-    @Column(length = 50)
     private String email;
 
     private Instant registered;

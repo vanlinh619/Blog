@@ -36,7 +36,7 @@ public class ApiCategoryController {
         return DataResponse.builder()
                 .status(Status.SUCCESS)
                 .code(MessageCode.SUCCESS)
-                .data(categoryMapper.toCategoryResponses(categories))
+                .data(categoryMapper.toCategoriesResponses(categories))
                 .build();
     }
 
@@ -45,9 +45,10 @@ public class ApiCategoryController {
         UserAccess userAccess = (UserAccess) authentication.getPrincipal();
         Category category = categoryService.createCategory(categoryRequest, userAccess.getUser());
         return DataResponse.builder()
-                .status(Status.FAILED)
-                .code(MessageCode.NOT_FOUND)
+                .status(Status.SUCCESS)
+                .code(MessageCode.SUCCESS)
                 .message(category.getId().toString())
+                .data(categoryMapper.toCategoryResponses(category))
                 .build();
     }
 }

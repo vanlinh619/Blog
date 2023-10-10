@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="pagePost" type="org.springframework.data.domain.Page"*/-->
+<!--/*@thymesVar id="post" type="com.ale.blog.entity.Post"*/-->
+
+<aside th:fragment="referance(pagePost)">
+  <nav class="text-slate-700">
+    <ul class="space-y-1.5">
+      <li th:each="post: ${pagePost}">
+        <span th:text="${post.getTitle()}"></span>
+      </li>
+    </ul>
+
+  </nav>
+</aside>
+</html>

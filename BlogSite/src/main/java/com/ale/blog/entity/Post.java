@@ -16,6 +16,7 @@ import java.time.Instant;
 import java.util.List;
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"author_uuid", "title"}) )
 @Data
 @Builder
 @AllArgsConstructor
@@ -27,19 +28,14 @@ public class Post {
     private Long id;
 
     @NotBlank
-    @Column(length = 60)
     private String title;
 
-    @NotBlank
-    @Column(length = 160)
-    private String metaTitle;
-
-    @Column(length = 1000)
+    @Column(length = 2000)
     private String introduction;
 
     @NotBlank
-    @Column(unique = true, length = 100)
-    @Pattern(regexp = "^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])*$")
+    @Column(unique = true, length = 300)
+    @Pattern(regexp = "^[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])*$")
     private String slug;
 
     private PostState state;
@@ -63,6 +59,9 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     private User author;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Category category;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "post_tag",
@@ -73,9 +72,6 @@ public class Post {
 
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     private List<Comment> comments;
-
-    @ManyToMany(mappedBy = "posts", fetch = FetchType.LAZY)
-    private List<Category> categories;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<HeadTable> headTables;

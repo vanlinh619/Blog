@@ -22,7 +22,6 @@ import {Image, ImageCaption, ImageToolbar, ImageUpload, ImageInsert} from '@cked
 import {Indent} from '@ckeditor/ckeditor5-indent';
 import {Link} from '@ckeditor/ckeditor5-link';
 import {List} from '@ckeditor/ckeditor5-list';
-import {MediaEmbed} from '@ckeditor/ckeditor5-media-embed';
 import {Paragraph} from '@ckeditor/ckeditor5-paragraph';
 import {PasteFromOffice} from '@ckeditor/ckeditor5-paste-from-office';
 import {Table, TableToolbar} from '@ckeditor/ckeditor5-table';
@@ -61,7 +60,7 @@ export default {
         plugins: [
           Alignment, Autoformat, FindAndReplace, Code, Subscript, Superscript, RemoveFormat, SelectAll, Strikethrough,
           BlockQuote, Bold, SourceEditing, Underline, CloudServices, Essentials, Heading, Image, ImageCaption, ImageToolbar,
-          ImageInsert, Indent, Italic, Link, List, MediaEmbed, Paragraph, PasteFromOffice, Table, TableToolbar,
+          ImageInsert, Indent, Italic, Link, List, Paragraph, PasteFromOffice, Table, TableToolbar,
           TextTransformation,
           CodeBlock
         ],
@@ -72,7 +71,7 @@ export default {
             'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript', 'removeFormat', 'codeBlock', '|',
             'alignment', 'bulletedList', 'numberedList', '|',
             'outdent', 'indent', '|',
-            'link', 'imageInsert', 'blockQuote', 'insertTable', 'mediaEmbed', '|',
+            'link', 'imageInsert', 'blockQuote', 'insertTable', '|',
             'undo', 'redo', '|',
             'SourceEditing',
           ],

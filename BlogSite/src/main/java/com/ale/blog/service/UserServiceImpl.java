@@ -73,16 +73,6 @@ public class UserServiceImpl implements UserService {
     public User create(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
-
-        categoryService.createCategory(
-                CategoryRequest.builder()
-                        .title(StaticVariable.ALL)
-                        .slug(StaticVariable.ALL.toLowerCase())
-                        .metaTitle(StaticVariable.ALL)
-                        .build(),
-                user
-        );
-
         return user;
     }
 }

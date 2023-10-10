@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface CategoryService extends EntityService<Category, Long>{
     Category createCategory(CategoryRequest categoryRequest, User author);
-    List<Category> getAllLevelByUser(CategoryLevel level, User user);
-    Category getCategoryById(Long id);
+    List<Category> getAllLevelByUser(CategoryLevel level, User author);
     Category getCategoryBySlugAndUsername(String slug, String username);
+    Category getCategoryByIdAndAuthor(Long id, User author);
 }

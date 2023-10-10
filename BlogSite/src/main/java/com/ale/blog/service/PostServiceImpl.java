@@ -4,6 +4,7 @@ import com.ale.blog.entity.Category;
 import com.ale.blog.entity.HeadTable;
 import com.ale.blog.entity.Post;
 import com.ale.blog.entity.User;
+import com.ale.blog.entity.state.SlugType;
 import com.ale.blog.handler.exception.AppException;
 import com.ale.blog.handler.mapper.PostMapper;
 import com.ale.blog.handler.mapper.pojo.request.PostRequest;
@@ -12,6 +13,7 @@ import com.ale.blog.handler.mapper.pojo.response.DataResponse;
 import com.ale.blog.handler.mapper.pojo.response.state.Status;
 import com.ale.blog.handler.utils.Convert;
 import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
+import com.ale.blog.handler.utils.Format;
 import com.ale.blog.handler.utils.StaticMessage;
 import com.ale.blog.handler.utils.StaticVariable;
 import com.ale.blog.repository.PostRepository;
@@ -30,6 +32,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @AllArgsConstructor
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
+    private final SlugIdService slugIdService;
     private final PostMapper postMapper;
     private final UserService userService;
     private final HeadTableService headTableService;
@@ -40,25 +43,15 @@ public class PostServiceImpl implements PostService {
     public Post createPostArticle(PostRequest postRequest, User author) {
         Post post = postMapper.toPost(postRequest);
         post.setAuthor(author);
-        String clean = Jsoup.clean(post.getContent(), Safelist.relaxed());
+        Safelist safelist = Safelist.relaxed();
+        safelist.addTags("figure", "figcaption");
+        String clean = Jsoup.clean(post.getContent(), safelist);
         post.setContent(clean);
+        post.setSlug(slugIdService.getId(SlugType.POST)+"-"+ Format.toHref(post.getTitle()));
+
         List<HeadTable> headTables = headTableService.createHeaderTable(post);
         post.setHeadTables(headTables);
-
-        Category defaultCategory = categoryService.getCategoryBySlugAndUsername(StaticVariable.ALL.toLowerCase(), author.getUsername());
-        defaultCategory.getPosts().add(post);
-        List<Category> categories = new LinkedList<>();
-        categories.add(defaultCategory);
-        if (postRequest.getCategories() != null) {
-            postRequest.getCategories().forEach(id -> {
-                if (!defaultCategory.getId().equals(id)) {
-                    Category category = categoryService.getCategoryById(id);
-                    category.getPosts().add(post);
-                    categories.add(category);
-                }
-            });
-        }
-        post.setCategories(categories);
+        post.setCategory(categoryService.getCategoryByIdAndAuthor(postRequest.getCategoryId(), author));
 
         postRepository.save(post);
         return post;
@@ -97,7 +90,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<Post> findAllByCategory(Category category, QueryRequest queryRequest) {
-        return postRepository.findAllByCategoriesContaining(category, Convert.pageRequest(queryRequest));
+        return postRepository.findAllByCategory(category, Convert.pageRequest(queryRequest));
     }
 
     private void increaseView(Long id) {
