@@ -55,6 +55,9 @@ public class SecurityConfiguration {
                             );
                         })
                 )
+                .requiresChannel(channelRequestMatcherRegistry ->
+                        channelRequestMatcherRegistry.anyRequest().requiresSecure()
+                )
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/api/authorize/**").authenticated()

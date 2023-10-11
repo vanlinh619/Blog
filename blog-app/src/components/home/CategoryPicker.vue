@@ -6,7 +6,7 @@
   <nav class="text-cyan-950">
     <ul class="space-y-1.5">
       <li v-for="categoryL1 in categories">
-        <a href="#" @click="pickCategory(categoryL1.id)"
+        <button @click="pickCategory(categoryL1.id)"
            class="flex items-center font-semibold stroke-slate-700 hover:text-emerald-600 hover:stroke-emerald-600">
           <svg xmlns="http://www.w3.org/2000/svg" focusable="false" fill="none"
                viewBox="0 0 24 24" class="absolute w-4 h-4 min-w-[1rem] min-h-[1rem]">
@@ -19,10 +19,10 @@
 
           </svg>
           <h5 class="ml-5">{{ categoryL1.title }}</h5>
-        </a>
+        </button>
         <ul v-if="categoryL1.children?.length !== 0" class="mt-3 ml-4 space-y-1.5">
           <li v-for="categoryL2 in categoryL1.children">
-            <a href="#" @click="pickCategory(categoryL2.id)"
+            <button @click="pickCategory(categoryL2.id)"
                class="flex items-center font-semibold stroke-slate-700 hover:text-emerald-600 hover:stroke-emerald-600">
               <svg xmlns="http://www.w3.org/2000/svg" focusable="false"
                    fill="none" viewBox="0 0 24 24" class="absolute w-4 h-4 min-w-[1rem] min-h-[1rem]">
@@ -35,10 +35,10 @@
 
               </svg>
               <h5 class="ml-5">{{ categoryL2.title }}</h5>
-            </a>
+            </button>
             <ul v-if="categoryL2.children?.length !== 0" class="mt-3 ml-4 space-y-1.5">
               <li v-for="categoryL3 in categoryL2.children">
-                <a href="#" @click="pickCategory(categoryL3.id)"
+                <button @click="pickCategory(categoryL3.id)"
                    class="flex items-center font-semibold stroke-slate-700 hover:text-emerald-600 hover:stroke-emerald-600">
                   <svg v-if="categoryL1.children?.length !== 0" xmlns="http://www.w3.org/2000/svg" focusable="false"
                        fill="none" viewBox="0 0 24 24" class="absolute w-4 h-4 min-w-[1rem] min-h-[1rem]">
@@ -51,7 +51,7 @@
 
                   </svg>
                   <h5 class="ml-5">{{ categoryL3.title }}</h5>
-                </a>
+                </button>
               </li>
             </ul>
           </li>

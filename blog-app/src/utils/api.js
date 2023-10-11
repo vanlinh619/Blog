@@ -6,7 +6,7 @@ String.prototype.format = function() {
     }
     return formatted;
 };
-const baseUrl = `http://localhost:8080`
+const baseUrl = `https://localhost:8443`
 const Api = {
     login: `${baseUrl}/api/public/login`,
     postArticle: `${baseUrl}/api/authorize/post-article`,
