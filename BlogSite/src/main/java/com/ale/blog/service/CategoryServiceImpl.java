@@ -33,7 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
     public Category createCategory(CategoryRequest categoryRequest, User author) {
         Category category = mapper.map(categoryRequest, Category.class);
         category.setAuthor(author);
-        category.setSlug(slugIdService.getId(SlugType.CATEGORY)+"-"+Format.toHref(categoryRequest.getTitle()));
+        category.setSlug(slugIdService.getId(SlugType.CATEGORY) + "-" + Format.toHref(categoryRequest.getTitle()));
         if (categoryRequest.getParentId() != null) {
             Category parent = getCategoryByIdAndAuthor(categoryRequest.getParentId(), author);
             addCategoryLevel(category, parent);
@@ -56,6 +56,16 @@ public class CategoryServiceImpl implements CategoryService {
             throw new AppException(DataResponse.builder().code(MessageCode.NOT_FOUND).status(Status.FAILED).message(StaticMessage.SLUG_NOT_FOUND).build());
         });
         return reference.get();
+    }
+
+    @Override
+    public Category getCategoryBySlugAndAuthor(String slug, User author) {
+        return categoryRepository.findFirstBySlugAndAuthor(slug, author).orElseThrow(() -> new AppException(DataResponse.builder()
+                .code(MessageCode.NOT_FOUND)
+                .status(Status.FAILED)
+                .message(StaticMessage.SLUG_NOT_FOUND)
+                .build())
+        );
     }
 
     @Override

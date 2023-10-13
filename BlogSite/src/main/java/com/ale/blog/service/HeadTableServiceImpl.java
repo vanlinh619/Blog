@@ -28,7 +28,7 @@ public class HeadTableServiceImpl implements HeadTableService {
         AtomicInteger integer = new AtomicInteger(1);
         elements.forEach(element -> {
             if(!element.text().trim().isBlank()) {
-                String href = Format.toHref(element.text()) + "-" + integer.getAndIncrement();
+                String href = integer.getAndIncrement() + "-" + Format.toHref(element.text());
                 headTables.add(HeadTable.builder()
                         .tag(HtmlTag.valueOf(element.tagName()))
                         .content(element.text())

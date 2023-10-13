@@ -66,6 +66,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/category/**").permitAll()
                         .requestMatchers("/image/**").permitAll()
                         .requestMatchers("/css/**").permitAll()
+                        .requestMatchers("/js/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(oncePerRequestFilter, UsernamePasswordAuthenticationFilter.class)

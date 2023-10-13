@@ -13,4 +13,5 @@ public interface UserService extends UserDetailsService, EntityService<User, UUI
     Optional<User> findByUsername(String username);
     Optional<User> findFistUser();
     User create(User user);
+    User getByUsername(String username);
 }

@@ -89,6 +89,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public Page<Post> findAllByAuthor(User author, QueryRequest queryRequest) {
+        return postRepository.findAllByAuthor(author, Convert.pageRequest(queryRequest));
+    }
+
+    @Override
     public Page<Post> findAllByCategory(Category category, QueryRequest queryRequest) {
         return postRepository.findAllByCategory(category, Convert.pageRequest(queryRequest));
     }

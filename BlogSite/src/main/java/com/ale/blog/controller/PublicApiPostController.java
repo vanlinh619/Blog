@@ -2,7 +2,6 @@ package com.ale.blog.controller;
 
 import com.ale.blog.entity.Category;
 import com.ale.blog.entity.Post;
-import com.ale.blog.entity.state.UserRole;
 import com.ale.blog.handler.mapper.PageMapper;
 import com.ale.blog.handler.mapper.PostMapper;
 import com.ale.blog.handler.mapper.pojo.request.PageRequest;
@@ -15,7 +14,6 @@ import com.ale.blog.handler.utils.SortType;
 import com.ale.blog.handler.utils.StaticVariable;
 import com.ale.blog.service.CategoryService;
 import com.ale.blog.service.PostService;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/public/post")
-public class PublicApiController {
+public class PublicApiPostController {
     private final PostService postService;
     private final CategoryService categoryService;
     private final PageMapper<Post, PostResponse> pageMapper;

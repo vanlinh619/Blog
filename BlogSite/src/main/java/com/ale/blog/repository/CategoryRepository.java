@@ -14,5 +14,6 @@ import java.util.Optional;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<Category> findAllByLevelAndAuthor(CategoryLevel level, User author);
     Optional<Category> findFirstBySlugAndAuthor_Username(String slug, String username);
+    Optional<Category> findFirstBySlugAndAuthor(String slug, User author);
     Optional<Category> findCategoryByIdAndAuthor(Long id, User author);
 }

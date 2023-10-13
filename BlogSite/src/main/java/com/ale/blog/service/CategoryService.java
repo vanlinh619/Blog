@@ -11,5 +11,6 @@ public interface CategoryService extends EntityService<Category, Long>{
     Category createCategory(CategoryRequest categoryRequest, User author);
     List<Category> getAllLevelByUser(CategoryLevel level, User author);
     Category getCategoryBySlugAndUsername(String slug, String username);
+    Category getCategoryBySlugAndAuthor(String slug, User author);
     Category getCategoryByIdAndAuthor(Long id, User author);
 }

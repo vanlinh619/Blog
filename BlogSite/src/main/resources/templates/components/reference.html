@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<!--/*@thymesVar id="pagePost" type="com.ale.blog.handler.mapper.pojo.response.PageResponse"*/-->
+<!--/*@thymesVar id="postPage" type="com.ale.blog.handler.mapper.pojo.response.PageResponse"*/-->
 <!--/*@thymesVar id="post" type="com.ale.blog.entity.Post"*/-->
+<!--/*@thymesVar id="author" type="com.ale.blog.entity.User"*/-->
+<!--/*@thymesVar id="category" type="com.ale.blog.entity.Category"*/-->
 
-<aside th:fragment="referance(pagePost, username, categoryUrl)">
+<aside th:fragment="referance(author, category)">
   <div id="reference">
   </div>
   <script th:inline="javascript" type="module">
       /*<![CDATA[*/
-      let categoryUrl = /*[[${categoryUrl}]]*/ ''
-      let username = /*[[${username}]]*/ ''
-      let pagePost = /*[[${pagePost}]]*/ {}
-      let categoryLink = `/category/${username}/${categoryUrl}?page=0`
-      console.log(pagePost)
+      let categoryUrl = /*[[${category.getSlug()}]]*/ ''
+      let username = /*[[${author.getUsername()}]]*/ ''
+      let categoryLink = `/category/${username}/${categoryUrl}?page=1`
+      let categoryName = /*[[${category.getTitle()}]]*/ ''
       /*]]>*/
       const {createApp} = Vue
       createApp({
@@ -48,11 +49,12 @@
                 </div>
 
               </div>
-              <div v-if="expanded" class="ml-2">
-                <ul>
-                  <template v-for="post in posts">
-                    <li class="pl-3 mt-1 font-semibold hover:border-emerald-600 border-l hover:text-emerald-600 active:text-emerald-600">
-                      <a :href="post.slug">{{post.title}}</a>
+              <div v-if="expanded">
+                <ul class="mt-1">
+                  <template v-if="posts" v-for="post in posts">
+                    <li class="mt-1">
+                      <a v-if="path === post.slug" :href="post.slug" class="pl-2 mt-1 border-emerald-600 border-l font-semibold text-emerald-600 -ml-[1px]">{{post.title}}</a>
+                      <a v-else :href="post.slug" class="text-slate-500 pl-2 mt-1 font-semibold hover:text-emerald-600 active:text-emerald-600">{{post.title}}</a>
                     </li>
                   </template>
                 </ul>
@@ -62,30 +64,47 @@
           `,
           data() {
               return {
-                  posts: pagePost.content,
-                  page: pagePost.page,
-                  totalPage: pagePost.totalPage,
-                  title: 'Bài Viết',
+                  posts: [],
+                  page: 0,
+                  totalPage: 0,
+                  title: categoryName,
                   url: categoryLink,
-                  expanded: true
+                  expanded: true,
+                  path: '',
               }
           },
           methods: {
               loadMore() {
                   this.page = this.page + 1
-              }
-          },
-          watch: {
-              page(n) {
-                  axios.get(`/api/public/post/${username}/${categoryUrl}?page=${n}`)
+              },
+              loadPage(page) {
+                  axios.get(`/api/public/post/${username}/${categoryUrl}?page=${page}`)
                       .then(response => {
+                          this.page = response?.data?.data?.page
+                          this.totalPage = response?.data?.data?.totalPage
+                          let hasPath = false
                           this.posts.push(...response?.data?.data?.content)
-                          console.log(response)
+                          this.posts.forEach(post => {
+                              if(post.slug === this.path) {
+                                  hasPath = true
+                              }
+                          })
+                          if (!hasPath && this.page < this.totalPage) this.page = this.page + 1
                       })
                       .catch(error => {
                           console.log(error)
                       })
+                  location.search
               }
+          },
+          watch: {
+              page(page) {
+                  this.loadPage(page)
+              }
+          },
+          mounted() {
+              this.path = location.pathname.substring(location.pathname.lastIndexOf("/") + 1)
+              this.loadPage(0)
           }
       }).mount('#reference')
 

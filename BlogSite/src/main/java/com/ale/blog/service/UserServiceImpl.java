@@ -1,7 +1,11 @@
 package com.ale.blog.service;
 
 import com.ale.blog.entity.User;
+import com.ale.blog.handler.exception.AppException;
 import com.ale.blog.handler.mapper.pojo.request.CategoryRequest;
+import com.ale.blog.handler.mapper.pojo.response.DataResponse;
+import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
+import com.ale.blog.handler.mapper.pojo.response.state.Status;
 import com.ale.blog.handler.utils.StaticVariable;
 import com.ale.blog.repository.UserRepository;
 import com.ale.blog.security.UserAccessDetails;
@@ -74,5 +78,15 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return user;
+    }
+
+    @Override
+    public User getByUsername(String username) {
+        return userRepository.findFirstByUsername(username).orElseThrow(() -> new AppException(DataResponse.builder()
+                .status(Status.FAILED)
+                .code(MessageCode.NOT_FOUND)
+                .message(username)
+                .build())
+        );
     }
 }

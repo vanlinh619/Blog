@@ -3,25 +3,16 @@
 <!--/*@thymesVar id="index" type="com.ale.blog.entity.HeadTable"*/-->
 
 <div th:fragment="heading(headTables)">
-  <span class="text-sm font-semibold px-8 text-slate-700">NỘI DUNG</span>
+  <span class="text-sm font-semibold px-10 text-slate-700">NỘI DUNG</span>
   <div class="px-8">
-    <ul class="space-y-0.5 mt-3 text-slate-700 font-semibold">
-      <li th:each="index: ${headTables}"
-          class="block hover:text-emerald-600 active:text-emerald-600 focus:text-emerald-600">
-        <a th:if="${index.getTag().name()}  == 'h2'" class="text-sm font-normal"
+    <ul class="space-y-0.5 mt-3 text-slate-700">
+      <li th:each="index: ${headTables}" class="hover:text-emerald-600 active:text-emerald-600">
+        <a th:if="${index.getTag().name()}  == 'h2'" class="block pl-2 text-sm font-medium mt-1"
            th:href="'#'+${index.getHref()}" th:text="${index.getContent()}"></a>
-        <ul th:if="${index.getTag().name()}  == 'h3'" class="ml-4">
-          <li class="block">
-            <a class="text-sm font-normal" th:href="'#'+${index.getHref()}"
-               th:text="${index.getContent()}"></a>
-          </li>
-        </ul>
-        <ul th:if="${index.getTag().name()} == 'h4'" class="ml-8">
-          <li class="block">
-            <a class="text-sm font-normal" th:href="'#'+${index.getHref()}"
-               th:text="${index.getContent()}"></a>
-          </li>
-        </ul>
+        <a th:if="${index.getTag().name()}  == 'h3'" class="block pl-6 text-sm font-medium mt-1"
+           th:href="'#'+${index.getHref()}" th:text="${index.getContent()}"></a>
+        <a th:if="${index.getTag().name()}  == 'h4'" class="block pl-10 text-sm font-medium mt-1"
+           th:href="'#'+${index.getHref()}" th:text="${index.getContent()}"></a>
       </li>
     </ul>
   </div>
