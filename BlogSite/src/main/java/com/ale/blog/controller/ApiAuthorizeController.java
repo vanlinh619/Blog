@@ -34,6 +34,7 @@ public class ApiAuthorizeController {
     @PostMapping("login")
     public ResponseEntity<?> login(@Valid @RequestBody AuthRequest request) {
         try {
+
             Authentication authenticate = authenticationProvider.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.getUsername(), request.getPassword()

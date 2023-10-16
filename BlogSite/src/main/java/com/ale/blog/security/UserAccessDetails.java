@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -12,7 +13,7 @@ import java.util.UUID;
 
 @Data
 @AllArgsConstructor
-public class UserAccessDetails implements UserAccess {
+public class UserAccessDetails implements UserAccess, UserDetails {
     private User user;
 
     @Override
@@ -49,10 +50,5 @@ public class UserAccessDetails implements UserAccess {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    @Override
-    public UUID getUuid() {
-        return user.getUuid();
     }
 }

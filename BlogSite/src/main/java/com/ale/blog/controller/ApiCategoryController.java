@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RolesAllowed({UserRole.Fields.ADMIN, UserRole.Fields.CONTENT_CREATOR})
+@RolesAllowed({UserRole.Fields.ADMIN})
 @AllArgsConstructor
 @RequestMapping("api/authorize/category")
 public class ApiCategoryController {

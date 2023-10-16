@@ -13,5 +13,5 @@ public enum MessageCode {
     BEYOND_THE_CATEGORY_LEVEL,
     ARGUMENT_NOT_VALID,
     ERROR_IMAGE,
-    NOT_SUPPORT
+    NOT_SUPPORT,
 }

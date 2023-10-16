@@ -1,6 +1,7 @@
 package com.ale.blog;
 
 import com.ale.blog.entity.User;
+import com.ale.blog.entity.state.OAuthProvider;
 import com.ale.blog.entity.state.UserRole;
 import com.ale.blog.service.SlugIdService;
 import com.ale.blog.service.UserService;
@@ -29,17 +30,19 @@ public class BlogApplication extends SpringServletContainerInitializer {
                     .intro("admin")
                     .registered(Instant.now())
                     .role(UserRole.ADMIN)
+                    .provider(OAuthProvider.LOCAL)
                     .build();
             User userCT = User.builder()
                     .username("content")
                     .password("content")
                     .lastName("content creator")
                     .firstName("content creator")
-                    .email("content creator@mail.com")
+                    .email("creator@mail.com")
                     .phoneNumber("0888888888")
                     .intro("content creator")
                     .registered(Instant.now())
                     .role(UserRole.CONTENT_CREATOR)
+                    .provider(OAuthProvider.LOCAL)
                     .build();
             userService.create(userAD);
             userService.create(userCT);

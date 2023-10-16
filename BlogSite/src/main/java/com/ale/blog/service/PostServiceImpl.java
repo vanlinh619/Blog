@@ -1,8 +1,8 @@
 package com.ale.blog.service;
 
 import com.ale.blog.entity.Category;
-import com.ale.blog.entity.HeadTable;
 import com.ale.blog.entity.Post;
+import com.ale.blog.entity.TableOfContent;
 import com.ale.blog.entity.User;
 import com.ale.blog.entity.state.SlugType;
 import com.ale.blog.handler.exception.AppException;
@@ -15,7 +15,6 @@ import com.ale.blog.handler.utils.Convert;
 import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
 import com.ale.blog.handler.utils.Format;
 import com.ale.blog.handler.utils.StaticMessage;
-import com.ale.blog.handler.utils.StaticVariable;
 import com.ale.blog.repository.PostRepository;
 import lombok.AllArgsConstructor;
 import org.jsoup.Jsoup;
@@ -23,7 +22,6 @@ import org.jsoup.safety.Safelist;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicReference;
@@ -49,8 +47,8 @@ public class PostServiceImpl implements PostService {
         post.setContent(clean);
         post.setSlug(slugIdService.getId(SlugType.POST)+"-"+ Format.toHref(post.getTitle()));
 
-        List<HeadTable> headTables = headTableService.createHeaderTable(post);
-        post.setHeadTables(headTables);
+        List<TableOfContent> headTables = headTableService.createHeaderTable(post);
+        post.setTableOfContents(headTables);
         post.setCategory(categoryService.getCategoryByIdAndAuthor(postRequest.getCategoryId(), author));
 
         postRepository.save(post);

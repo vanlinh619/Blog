@@ -1,6 +1,8 @@
 package com.ale.blog.service;
 
 import com.ale.blog.entity.User;
+import com.ale.blog.entity.state.OAuthProvider;
+import com.ale.blog.entity.state.UserRole;
 import com.ale.blog.handler.exception.AppException;
 import com.ale.blog.handler.mapper.pojo.request.CategoryRequest;
 import com.ale.blog.handler.mapper.pojo.response.DataResponse;
@@ -9,27 +11,26 @@ import com.ale.blog.handler.mapper.pojo.response.state.Status;
 import com.ale.blog.handler.utils.StaticVariable;
 import com.ale.blog.repository.UserRepository;
 import com.ale.blog.security.UserAccessDetails;
+import lombok.AllArgsConstructor;
+import org.modelmapper.internal.bytebuddy.utility.RandomString;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
-public class UserServiceImpl implements UserService {
+@AllArgsConstructor
+public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final CategoryService categoryService;
-
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, @Lazy CategoryService categoryService) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.categoryService = categoryService;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -88,5 +89,29 @@ public class UserServiceImpl implements UserService {
                 .message(username)
                 .build())
         );
+    }
+
+    @Override
+    public Optional<User> findUserByEmail(String email) {
+        return userRepository.findUserByEmail(email);
+    }
+
+    @Override
+    public User loadUserByOidcUser(OidcUser oidcUser) {
+        String email = (String) oidcUser.getAttributes().get("email");
+        return userRepository.findUserByEmail(email).orElseGet(() -> {
+            User user = User.builder()
+                    .username(RandomString.make(18))
+                    .password(RandomString.make(18))
+                    .firstName((String) oidcUser.getAttributes().get("family_name"))
+                    .lastName((String) oidcUser.getAttributes().get("given_name"))
+                    .email(email)
+                    .registered(Instant.now())
+                    .role(UserRole.USER)
+                    .provider(OAuthProvider.GOOGLE)
+                    .build();
+            userRepository.save(user);
+            return user;
+        });
     }
 }

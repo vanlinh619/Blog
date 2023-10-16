@@ -22,7 +22,7 @@ public class JwtTokenProvider implements TokenProvider {
         Instant instant = Instant.now();
         Instant expiryDate = instant.plusMillis(EXPIRATION);
         return Jwts.builder()
-                .setSubject(userAccess.getUuid().toString())
+                .setSubject(userAccess.getUser().getUuid().toString())
                 .setIssuedAt(Date.from(instant))
                 .setExpiration(Date.from(expiryDate))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)

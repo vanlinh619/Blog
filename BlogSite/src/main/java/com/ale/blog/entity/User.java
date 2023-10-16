@@ -1,14 +1,17 @@
 package com.ale.blog.entity;
 
+import com.ale.blog.entity.state.OAuthProvider;
 import com.ale.blog.entity.state.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +22,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
@@ -42,13 +45,19 @@ public class User {
     @Pattern(regexp = "^[0-9+]{10,15}$")
     private String phoneNumber;
 
+    @NotBlank
+    @Column(unique = true)
     private String email;
 
     private Instant registered;
 
     private String intro;
 
+    @NotNull
     private UserRole role;
+
+    @NotNull
+    private OAuthProvider provider;
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     private List<Post> posts;
