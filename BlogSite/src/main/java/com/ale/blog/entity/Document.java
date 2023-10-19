@@ -1,6 +1,6 @@
 package com.ale.blog.entity;
 
-import com.ale.blog.entity.state.CategoryLevel;
+import com.ale.blog.entity.state.ShareState;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -9,8 +9,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldNameConstants;
+import org.hibernate.annotations.Formula;
 
-import java.io.Serializable;
+import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -19,7 +21,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Category implements Serializable {
+public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,24 +29,31 @@ public class Category implements Serializable {
     @NotBlank
     private String title;
 
-    @NotBlank
-    @Pattern(regexp = "^[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])*$")
-    @Column(unique = true, length = 300)
-    private String slug;
-
     @Column(length = 2000)
     private String introduction;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    private List<Post> posts;
+    @NotNull
+    private ShareState state;
 
-    private CategoryLevel level;
+    @NotBlank
+    @Column(unique = true, length = 300)
+    @Pattern(regexp = "^[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])*$")
+    private String slug;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Category parent;
+    @NotNull
+    @FieldNameConstants.Include
+    private Instant createDate;
 
-    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
-    private List<Category> children;
+    @NotNull
+    private Integer size;
+
+    @OneToMany(
+            mappedBy = "document",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.REMOVE
+    )
+    @OrderBy("priority")
+    private List<DocumentSection> sections;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

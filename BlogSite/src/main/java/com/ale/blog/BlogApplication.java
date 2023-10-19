@@ -47,6 +47,5 @@ public class BlogApplication extends SpringServletContainerInitializer {
             userService.create(userAD);
             userService.create(userCT);
         });
-        slugIdService.createDefault();
     }
 }

@@ -150,4 +150,9 @@ public class ImageServiceImpl implements ImageService {
                     .build());
         }
     }
+
+    @Override
+    public Class<Image> getEntityClass() {
+        return Image.class;
+    }
 }

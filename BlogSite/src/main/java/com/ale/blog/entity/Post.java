@@ -1,6 +1,6 @@
 package com.ale.blog.entity;
 
-import com.ale.blog.entity.state.PostState;
+import com.ale.blog.entity.state.ShareState;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -38,15 +38,11 @@ public class Post implements Serializable {
     @Pattern(regexp = "^[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])*$")
     private String slug;
 
-    private PostState state;
+    private ShareState state;
 
     @NotNull
     @FieldNameConstants.Include
     private Instant createDate;
-
-    private Instant updateDate;
-
-    private Instant publishedDate;
 
     @NotBlank
     @Column(columnDefinition = "TEXT")

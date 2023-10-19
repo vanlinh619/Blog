@@ -114,4 +114,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             return user;
         });
     }
+
+    @Override
+    public Class<User> getEntityClass() {
+        return User.class;
+    }
 }

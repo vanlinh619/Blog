@@ -1,4 +1,4 @@
-package com.ale.blog.controller;
+package com.ale.blog.controller.view;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;

@@ -89,4 +89,9 @@ public class CategoryServiceImpl implements CategoryService {
             );
         }
     }
+
+    @Override
+    public Class<Category> getEntityClass() {
+        return Category.class;
+    }
 }

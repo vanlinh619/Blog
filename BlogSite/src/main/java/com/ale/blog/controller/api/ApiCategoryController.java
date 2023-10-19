@@ -1,4 +1,4 @@
-package com.ale.blog.controller;
+package com.ale.blog.controller.api;
 
 import com.ale.blog.entity.Category;
 import com.ale.blog.entity.state.CategoryLevel;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RolesAllowed({UserRole.Fields.ADMIN})
+@RolesAllowed({UserRole.Fields.ADMIN, UserRole.Fields.CONTENT_CREATOR})
 @AllArgsConstructor
 @RequestMapping("api/authorize/category")
 public class ApiCategoryController {

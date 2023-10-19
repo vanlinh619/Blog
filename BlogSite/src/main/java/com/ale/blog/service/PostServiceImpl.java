@@ -96,7 +96,17 @@ public class PostServiceImpl implements PostService {
         return postRepository.findAllByCategory(category, Convert.pageRequest(queryRequest));
     }
 
+    @Override
+    public Post getByIdAndAuthor(Long id, User author) {
+        return postRepository.findPostByIdAndAuthor(id, author).orElseThrow(this::throwIdNotExist);
+    }
+
     private void increaseView(Long id) {
         executorService.execute(() -> postRepository.increaseView(id));
+    }
+
+    @Override
+    public Class<Post> getEntityClass() {
+        return Post.class;
     }
 }

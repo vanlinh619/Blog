@@ -58,16 +58,4 @@ public class User implements Serializable {
 
     @NotNull
     private OAuthProvider provider;
-
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
-    private List<Post> posts;
-
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
-    private List<Comment> comments;
-
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
-    private List<Category> categories;
-
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
-    private List<Image> images;
 }

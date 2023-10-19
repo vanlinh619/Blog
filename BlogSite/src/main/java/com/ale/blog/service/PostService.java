@@ -7,12 +7,13 @@ import com.ale.blog.handler.mapper.pojo.request.PostRequest;
 import com.ale.blog.handler.mapper.pojo.request.QueryRequest;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
-
 public interface PostService extends EntityService<Post, Long> {
     Post createPostArticle(PostRequest postRequest, User author);
     Post getPostBySlug(String slug);
     Page<Post> findAllByUsername(String username, QueryRequest queryRequest);
     Page<Post> findAllByAuthor(User author, QueryRequest queryRequest);
     Page<Post> findAllByCategory(Category category, QueryRequest queryRequest);
+
+    //Api authorize
+    Post getByIdAndAuthor(Long id, User author);
 }

@@ -1,4 +1,4 @@
-package com.ale.blog.controller;
+package com.ale.blog.controller.api;
 
 import com.ale.blog.entity.Image;
 import com.ale.blog.entity.state.UserRole;

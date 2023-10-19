@@ -28,4 +28,9 @@ public class TagServiceImpl implements TagService {
         tagRepository.save(tag);
         return tag;
     }
+
+    @Override
+    public Class<Tag> getEntityClass() {
+        return Tag.class;
+    }
 }

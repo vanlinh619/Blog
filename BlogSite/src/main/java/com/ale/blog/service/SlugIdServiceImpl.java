@@ -18,20 +18,6 @@ public class SlugIdServiceImpl implements SlugIdService {
     private final SlugIdRepository slugIdRepository;
 
     @Override
-    public void createDefault() {
-        if (slugIdRepository.findFirstByOrderById().isEmpty()) {
-            slugIdRepository.saveAll(Arrays.stream(SlugType.values())
-                    .map(type -> SlugId.builder()
-                            .number(0L)
-                            .type(type)
-                            .build()
-                    )
-                    .toList()
-            );
-        }
-    }
-
-    @Override
     public Long getId(SlugType type) {
         return slugIdRepository.findSlugIdByType(type)
                 .map(slugId -> {
@@ -39,10 +25,18 @@ public class SlugIdServiceImpl implements SlugIdService {
                     slugIdRepository.save(slugId);
                     return slugId.getNumber();
                 })
-                .orElseThrow(() -> new AppException(DataResponse.builder()
-                        .status(Status.FAILED)
-                        .code(MessageCode.NOT_SUPPORT)
-                        .build())
-                );
+                .orElseGet(() -> {
+                    SlugId slugId = SlugId.builder()
+                            .number(1L)
+                            .type(type)
+                            .build();
+                    slugIdRepository.save(slugId);
+                    return slugId.getNumber();
+                });
+    }
+
+    @Override
+    public Class<SlugId> getEntityClass() {
+        return SlugId.class;
     }
 }

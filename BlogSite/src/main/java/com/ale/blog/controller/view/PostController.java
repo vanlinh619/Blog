@@ -1,4 +1,4 @@
-package com.ale.blog.controller;
+package com.ale.blog.controller.view;
 
 import com.ale.blog.entity.Post;
 import com.ale.blog.handler.mapper.PageMapper;
