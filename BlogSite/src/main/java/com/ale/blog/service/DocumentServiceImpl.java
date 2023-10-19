@@ -40,9 +40,8 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public void increaseSize(Document document) {
-        document.setSize(document.getSize() + 1);
-        documentRepository.save(document);
+    public void increaseSize(Long id) {
+        documentRepository.increaseSize(id);
     }
 
     @Override

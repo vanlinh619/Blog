@@ -50,7 +50,7 @@
 
               </div>
               <div v-if="expanded">
-                <ul class="mt-1">
+                <ul class="mt-1 text-sm">
                   <template v-if="posts" v-for="post in posts">
                     <li class="mt-1">
                       <a v-if="path === post.slug" :href="post.slug" class="pl-2 mt-1 border-emerald-600 border-l font-semibold text-emerald-600 -ml-[1px]">{{post.title}}</a>
@@ -69,7 +69,7 @@
                   totalPage: 0,
                   title: categoryName,
                   url: categoryLink,
-                  expanded: true,
+                  expanded: false,
                   path: '',
               }
           },

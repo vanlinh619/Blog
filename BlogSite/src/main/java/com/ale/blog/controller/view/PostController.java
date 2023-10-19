@@ -38,6 +38,7 @@ public class PostController {
         model.addAttribute("category", post.getCategory());
         model.addAttribute("post", post);
         model.addAttribute("postPage", pageMapper.toPageResponse(postPage, postMapper::toPostResponse));
+        model.addAttribute("document", post.getDocument());
         return "post";
     }
 

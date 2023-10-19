@@ -16,4 +16,5 @@ public interface PostService extends EntityService<Post, Long> {
 
     //Api authorize
     Post getByIdAndAuthor(Long id, User author);
+    Post updatePost(Post post);
 }

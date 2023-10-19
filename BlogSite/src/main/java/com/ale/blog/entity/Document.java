@@ -58,4 +58,7 @@ public class Document {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private User author;
+
+    @OneToMany(mappedBy = "document", fetch = FetchType.LAZY)
+    private List<Post> posts;
 }

@@ -101,6 +101,11 @@ public class PostServiceImpl implements PostService {
         return postRepository.findPostByIdAndAuthor(id, author).orElseThrow(this::throwIdNotExist);
     }
 
+    @Override
+    public Post updatePost(Post post) {
+        return postRepository.save(post);
+    }
+
     private void increaseView(Long id) {
         executorService.execute(() -> postRepository.increaseView(id));
     }

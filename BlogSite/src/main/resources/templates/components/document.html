@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="document" type="com.ale.blog.entity.Document"*/-->
+<!--/*@thymesVar id="post" type="com.ale.blog.entity.Post"*/-->
+
+<aside th:fragment="document(document, post)">
+  <nav th:if="${document != null}">
+    <div class="mt-3">
+      <a th:href="${'/document/'+document.getSlug()}"
+         class="flex items-center hover:text-emerald-600 stroke-slate-700 fill-slate-700 hover:stroke-emerald-600 hover:fill-emerald-600">
+        <label>
+          <svg xmlns="http://www.w3.org/2000/svg" focusable="false" fill="none" viewBox="0 0 24 24"
+               class="min-w-[1rem] min-h-[1rem]">
+            <path
+                d="M3 15H21M3 19H13M21 7H13M21 11H13M4.6 11H7.4C7.96005 11 8.24008 11 8.45399 10.891C8.64215 10.7951 8.79513 10.6422 8.89101 10.454C9 10.2401 9 9.96005 9 9.4V6.6C9 6.03995 9 5.75992 8.89101 5.54601C8.79513 5.35785 8.64215 5.20487 8.45399 5.10899C8.24008 5 7.96005 5 7.4 5H4.6C4.03995 5 3.75992 5 3.54601 5.10899C3.35785 5.20487 3.20487 5.35785 3.10899 5.54601C3 5.75992 3 6.03995 3 6.6V9.4C3 9.96005 3 10.2401 3.10899 10.454C3.20487 10.6422 3.35785 10.7951 3.54601 10.891C3.75992 11 4.03995 11 4.6 11Z"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </label>
+        <span th:text="${document.getTitle()}" class="ml-1 truncate font-semibold"></span>
+      </a>
+    </div>
+    <ul th:each="section: ${document.getSections()}" class="mt-4 text-sm text-slate-500">
+      <li th:text="${section.getTitle()}" class="leading-8 font-semibold text-slate-700"></li>
+      <li th:each="linked: ${section.getLinked()}" class="leading-7">
+        <a th:if="${post.getSlug() == linked.getSlug()}" th:href="${'/post/'+linked.getSlug()}"
+           th:text="${linked.getTitle()}" class="font-medium text-emerald-600"></a>
+        <a th:unless="${post.getSlug() == linked.getSlug()}" th:href="${'/post/'+linked.getSlug()}"
+           th:text="${linked.getTitle()}" class="font-medium hover:text-slate-600"></a>
+      </li>
+    </ul>
+  </nav>
+</aside>
+</html>

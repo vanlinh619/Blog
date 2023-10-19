@@ -29,12 +29,14 @@ public class DocumentLinkedServiceImpl implements DocumentLinkedService {
                 .title(post.getTitle())
                 .slug(post.getSlug())
                 .section(section)
-                .priority(section.getPriority())
+                .priority(section.getSize())
                 .post(post)
                 .build();
         linkedRepository.save(linked);
 
-        sectionService.increaseSize(section);
+        post.setDocument(section.getDocument());
+        postService.updatePost(post);
+        sectionService.increaseSize(section.getId());
         return linked;
     }
 }

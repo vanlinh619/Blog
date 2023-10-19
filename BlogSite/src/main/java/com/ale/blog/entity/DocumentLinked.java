@@ -33,6 +33,6 @@ public class DocumentLinked {
     private DocumentSection section;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     private Post post;
 }

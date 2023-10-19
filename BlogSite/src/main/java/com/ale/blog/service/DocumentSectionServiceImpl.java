@@ -27,7 +27,7 @@ public class DocumentSectionServiceImpl implements DocumentSectionService {
         sectionRepository.save(section);
 
         //Update size document
-        documentService.increaseSize(document);
+        documentService.increaseSize(document.getId());
         return section;
     }
 
@@ -37,9 +37,8 @@ public class DocumentSectionServiceImpl implements DocumentSectionService {
     }
 
     @Override
-    public void increaseSize(DocumentSection section) {
-        section.setSize(section.getSize() + 1);
-        sectionRepository.save(section);
+    public void increaseSize(Long id) {
+        sectionRepository.increaseSize(id);
     }
 
     @Override

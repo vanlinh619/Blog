@@ -8,5 +8,5 @@ import com.ale.blog.handler.mapper.pojo.request.DocumentSectionRequest;
 public interface DocumentSectionService extends EntityService<DocumentSection, Long> {
     DocumentSection addSection(DocumentSectionRequest sectionRequest, User author);
     DocumentSection getByIdAndAuthor(Long id, User author);
-    void increaseSize(DocumentSection section);
+    void increaseSize(Long id);
 }

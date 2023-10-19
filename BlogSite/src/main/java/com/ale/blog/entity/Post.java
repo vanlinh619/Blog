@@ -71,4 +71,10 @@ public class Post implements Serializable {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TableOfContent> tableOfContents;
+
+    @OneToOne(mappedBy = "post", fetch = FetchType.LAZY)
+    private DocumentLinked linked;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Document document;
 }

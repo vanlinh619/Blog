@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface DocumentService extends EntityService<Document, Long> {
     Document createDocument(DocumentRequest documentRequest, User author);
     Document getDocumentById(Long id, User author);
-    void increaseSize(Document document);
+    void increaseSize(Long id);
 }
