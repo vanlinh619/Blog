@@ -9,7 +9,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
 </head>
 <body>
-<header th:replace="components/header::header"></header>
+<header th:replace="components/header::header(${user})"></header>
 <div class="max-w-8xl mx-auto px-4">
   <div
       class="lg:block fixed z-20 inset-0 top-16 left-[max(0px,calc(50%-45rem))] right-auto w-[19rem] pb-10 pl-8 pr-6 overflow-y-auto">
@@ -71,43 +71,7 @@
                th:text="${post.getIntroduction()}">
           </div>
         </div>
-        <nav th:if="${postPage.getTotalPages() > 1}" class="flex justify-center mt-10">
-          <ul class="list-style-none mb-6 flex">
-            <li>
-              <a th:if="${postPage.getNumber() + 1 > 1}" th:href="${'?page=' + 1}"
-                 class="rounded px-3 py-1.5 text-sm hover:bg-slate-200">
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-              <a th:unless="${postPage.getNumber() + 1 > 1}" disabled
-                 class="rounded px-3 py-1.5 text-sm bg-slate-100 cursor-no-drop">
-                <span aria-hidden="true" class="text-slate-400">&laquo;</span>
-              </a>
-            </li>
-            <li th:each="page: ${#numbers.sequence(1, postPage.getTotalPages())}"
-                th:if="${page == 1 || page == postPage.getTotalPages() || (page > postPage.getNumber() - 2 && page < postPage.getNumber() + 4)}">
-              <a th:if="${page == postPage.getTotalPages() && postPage.getNumber() < postPage.getTotalPages() - 4} "
-                 class="rounded mx-0.5 py-1.5 text-xs">...</a>
-              <a th:if="${postPage.getNumber() + 1 == page}" th:href="${'?page='+page}" th:text="${page}"
-                 class="rounded mx-0.5 px-2.5 py-1.5 text-sm bg-emerald-400">
-              </a>
-              <a th:unless="${postPage.getNumber() + 1 == page}" th:href="${'?page='+page}" th:text="${page}"
-                 class="rounded mx-0.5 px-2.5 py-1.5 text-sm hover:bg-slate-200 ">
-              </a>
-              <a th:if="${page == 1 && postPage.getNumber() > 3} " class="rounded mx-0.5 py-1.5 text-xs">...</a>
-            </li>
-            <li>
-              <a th:if="${postPage.getNumber() + 1 < postPage.getTotalPages()}"
-                 th:href="${'?page=' + postPage.getTotalPages()}"
-                 class="rounded px-3 py-1.5 text-sm hover:bg-slate-200">
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-              <a th:unless="${postPage.getNumber() + 1 < postPage.getTotalPages()}" disabled
-                 class="rounded px-3 py-1.5 text-sm bg-slate-100 cursor-no-drop">
-                <span aria-hidden="true" class="text-slate-400">&raquo;</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
+        <nav th:replace="components/pagination::pagination(${postPage})"></nav>
       </div>
     </article>
   </main>

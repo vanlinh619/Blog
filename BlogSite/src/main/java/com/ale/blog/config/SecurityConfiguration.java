@@ -73,6 +73,7 @@ public class SecurityConfiguration {
                         .requestMatchers(
                                 "/",
                                 "/post/**",
+                                "/doc/**",
                                 "/login/**",
                                 "/category/**",
                                 "/document/**",
@@ -81,7 +82,7 @@ public class SecurityConfiguration {
                                 "/js/**"
                         ).permitAll()
                         .requestMatchers("/api/authorize/**").authenticated()
-                        .requestMatchers("/test/**").authenticated()
+                        .requestMatchers("/profile/**").authenticated()
                         .requestMatchers("/api/public/**").permitAll()
                         .anyRequest().authenticated()
                 )

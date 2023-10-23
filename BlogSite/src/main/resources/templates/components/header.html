@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<header th:fragment="header" class="sticky top-0 z-50">
+<!--/*@thymesVar id="user" type="com.ale.blog.entity.User"*/-->
+
+<header th:fragment="header(user)" class="sticky top-0 z-50">
   <div class="flex items-center justify-between flex-wrap bg-emerald-600/80 backdrop-blur-md p-4">
     <div class="flex items-center flex-shrink-0 text-white mr-6">
       <svg class="fill-current h-8 w-8 mr-2" width="54" height="54" viewBox="0 0 54 54"
@@ -12,22 +14,39 @@
     </div>
     <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
       <div class="text-sm lg:flex-grow">
-        <a href="/category/admin?page=1"
-           class="block mt-4 lg:inline-block lg:mt-0 text-white mr-4 hover:text-cyan-950">
-          Bộ sưu tập
+        <a href="/home"
+           class="block mt-4 lg:inline-block lg:mt-0 text-white mr-4 hover:text-slate-700">
+          Trang chủ
         </a>
-        <a href="/category/admin?page=1"
-           class="block mt-4 lg:inline-block lg:mt-0 text-white mr-4 hover:text-cyan-950">
-          Examples
+        <a th:if="${user != null}" th:href="${'/category/'+user.getUsername()+'?page=1'}"
+           class="block mt-4 lg:inline-block lg:mt-0 text-white mr-4 hover:text-slate-700">
+          Thể loại
         </a>
-        <a href="#responsive-header" class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-cyan-950">
-          About
+        <a th:if="${user != null}" th:href="${'/doc/'+user.getUsername()+'?page=1'}"
+           class="block mt-4 lg:inline-block lg:mt-0 text-white mr-4 hover:text-slate-700">
+          Tài liệu
         </a>
       </div>
       <div>
-        <a href="/login"
-                     class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">
+        <a th:if="${user == null}" href="/login"
+           class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">
           Login
+        </a>
+        <a th:unless="${user == null}" href="/profile" class="hover:stroke-slate-700 hover:text-slate-700 stroke-white text-white">
+          <label>
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 24 24"
+                 class="w-8 h-8 min-w-[1rem] min-h-[1rem] stroke-slate-300 fill-none">
+              <path
+                  d="M12.12 12.78C12.05 12.77 11.96 12.77 11.88 12.78C10.12 12.72 8.71997 11.28 8.71997 9.50998C8.71997 7.69998 10.18 6.22998 12 6.22998C13.81 6.22998 15.28 7.69998 15.28 9.50998C15.27 11.28 13.88 12.72 12.12 12.78Z"
+                  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path
+                  d="M18.74 19.3801C16.96 21.0101 14.6 22.0001 12 22.0001C9.40001 22.0001 7.04001 21.0101 5.26001 19.3801C5.36001 18.4401 5.96001 17.5201 7.03001 16.8001C9.77001 14.9801 14.25 14.9801 16.97 16.8001C18.04 17.5201 18.64 18.4401 18.74 19.3801Z"
+                  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path
+                  d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </label>
         </a>
       </div>
     </div>

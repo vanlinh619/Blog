@@ -2,11 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <!--/*@thymesVar id="document" type="com.ale.blog.entity.Document"*/-->
 <!--/*@thymesVar id="post" type="com.ale.blog.entity.Post"*/-->
+<!--/*@thymesVar id="author" type="com.ale.blog.entity.User"*/-->
 
-<aside th:fragment="document(document, post)">
+<aside th:fragment="document(document, post, author)">
   <nav th:if="${document != null}">
     <div class="mt-3">
-      <a th:href="${'/document/'+document.getSlug()}"
+      <a th:href="${'/doc/'+author.getUsername()+'/'+document.getSlug()}"
          class="flex items-center hover:text-emerald-600 stroke-slate-700 fill-slate-700 hover:stroke-emerald-600 hover:fill-emerald-600">
         <label>
           <svg xmlns="http://www.w3.org/2000/svg" focusable="false" fill="none" viewBox="0 0 24 24"

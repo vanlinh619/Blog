@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Category</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<header th:replace="components/header::header(${user})"></header>
+<div class="max-w-8xl mx-auto px-4">
+  PROFILE <span th:text="${user.getFirstName() + ' ' + user.getLastName()}"></span>
+</div>
+<a href="/logout">Logout</a>
+</body>
+</html>

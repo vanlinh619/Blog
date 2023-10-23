@@ -1,7 +1,8 @@
 package com.ale.blog.handler.mapper;
 
 import com.ale.blog.entity.Document;
-import com.ale.blog.entity.state.ShareState;
+import com.ale.blog.entity.state.DocumentState;
+import com.ale.blog.entity.state.PostState;
 import com.ale.blog.handler.mapper.pojo.request.DocumentRequest;
 import com.ale.blog.handler.mapper.pojo.response.DocumentResponse;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ public class DocumentMapperImpl implements DocumentMapper {
     @Override
     public Document toDocument(DocumentRequest documentRequest) {
         Document document = mapper.map(documentRequest, Document.class);
-        document.setState(ShareState.valueOf(documentRequest.getState()));
+        document.setState(DocumentState.valueOf(documentRequest.getState()));
         return document;
     }
 

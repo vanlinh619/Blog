@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping
 public class HomeController {
     @GetMapping
+    public String page() {
+        return "redirect:home";
+    }
+
+    @GetMapping("home")
     public String homePage() {
         return "redirect:category/admin?page=1";
     }

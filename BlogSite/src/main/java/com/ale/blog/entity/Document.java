@@ -1,6 +1,6 @@
 package com.ale.blog.entity;
 
-import com.ale.blog.entity.state.ShareState;
+import com.ale.blog.entity.state.DocumentState;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,7 +10,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
-import org.hibernate.annotations.Formula;
 
 import java.time.Instant;
 import java.util.List;
@@ -19,6 +18,7 @@ import java.util.List;
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"author_uuid", "title"}) )
 @Data
 @Builder
+@FieldNameConstants(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class Document {
@@ -33,7 +33,7 @@ public class Document {
     private String introduction;
 
     @NotNull
-    private ShareState state;
+    private DocumentState state;
 
     @NotBlank
     @Column(unique = true, length = 300)

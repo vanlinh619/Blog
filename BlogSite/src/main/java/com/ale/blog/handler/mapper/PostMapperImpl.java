@@ -1,7 +1,7 @@
 package com.ale.blog.handler.mapper;
 
 import com.ale.blog.entity.Post;
-import com.ale.blog.entity.state.ShareState;
+import com.ale.blog.entity.state.PostState;
 import com.ale.blog.handler.mapper.pojo.request.PostRequest;
 import com.ale.blog.handler.mapper.pojo.response.PostResponse;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ public class PostMapperImpl implements PostMapper {
     @Override
     public Post toPost(PostRequest postRequest) {
         Post post = mapper.map(postRequest, Post.class);
-        post.setState(ShareState.PUBLIC);
+        post.setState(PostState.PUBLIC);
         post.setCreateDate(Instant.now());
         return post;
     }

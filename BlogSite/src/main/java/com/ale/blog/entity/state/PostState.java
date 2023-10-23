@@ -1,8 +1,7 @@
 package com.ale.blog.entity.state;
 
-public enum ShareState {
+public enum PostState {
     PUBLIC,
     PRIVATE,
-    INTERNAL,
     SHARE
 }

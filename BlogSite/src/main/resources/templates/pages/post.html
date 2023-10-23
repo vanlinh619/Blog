@@ -9,13 +9,13 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
 </head>
 <body>
-<header th:replace="components/header::header"></header>
+<header th:replace="components/header::header(${user})"></header>
 <div class="max-w-8xl mx-auto px-4">
   <div
       class="lg:block fixed z-20 inset-0 top-16 left-[max(0px,calc(50%-45rem))] right-auto w-[19rem] pb-10 pl-8 pr-6 overflow-y-auto">
     <div class="mt-10 text-slate-700">
       <aside th:replace="components/reference::referance(${author}, ${category})"></aside>
-      <aside th:replace="components/document::document(${document}, ${post})"></aside>
+      <aside th:replace="components/aside-document::document(${document}, ${post}, ${author})"></aside>
     </div>
   </div>
   <main class="mt-10">

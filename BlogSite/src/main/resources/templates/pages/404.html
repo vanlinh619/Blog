@@ -6,7 +6,7 @@
   <link rel="stylesheet" th:href="@{/css/main.css}"/>
 </head>
 <body>
-<header th:replace="components/header::header"></header>
+<header th:replace="components/header::header(${user})"></header>
 <div class="max-w-8xl mx-auto px-4">
 <!--  <aside th:replace="components/aside::aside"></aside>-->
   <main>

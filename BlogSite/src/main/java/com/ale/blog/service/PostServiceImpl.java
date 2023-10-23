@@ -4,6 +4,7 @@ import com.ale.blog.entity.Category;
 import com.ale.blog.entity.Post;
 import com.ale.blog.entity.TableOfContent;
 import com.ale.blog.entity.User;
+import com.ale.blog.entity.state.PostState;
 import com.ale.blog.entity.state.SlugType;
 import com.ale.blog.handler.exception.AppException;
 import com.ale.blog.handler.mapper.PostMapper;
@@ -16,6 +17,7 @@ import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
 import com.ale.blog.handler.utils.Format;
 import com.ale.blog.handler.utils.StaticMessage;
 import com.ale.blog.repository.PostRepository;
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
@@ -23,8 +25,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @AllArgsConstructor
@@ -32,7 +34,6 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final SlugIdService slugIdService;
     private final PostMapper postMapper;
-    private final UserService userService;
     private final HeadTableService headTableService;
     private final CategoryService categoryService;
     private final ExecutorService executorService;
@@ -45,7 +46,7 @@ public class PostServiceImpl implements PostService {
         safelist.addTags("figure", "figcaption");
         String clean = Jsoup.clean(post.getContent(), safelist);
         post.setContent(clean);
-        post.setSlug(slugIdService.getId(SlugType.POST)+"-"+ Format.toHref(post.getTitle()));
+        post.setSlug(slugIdService.getId(SlugType.POST) + "-" + Format.toHref(post.getTitle()));
 
         List<TableOfContent> headTables = headTableService.createHeaderTable(post);
         post.setTableOfContents(headTables);
@@ -56,34 +57,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post getPostBySlug(String slug) {
-        AtomicReference<Post> reference = new AtomicReference<>();
-        postRepository.findFirstBySlug(slug).ifPresentOrElse(reference::set, () -> {
-            throw new AppException(DataResponse.builder()
-                    .code(MessageCode.NOT_FOUND)
-                    .status(Status.FAILED)
-                    .message(StaticMessage.SLUG_NOT_FOUND)
-                    .build());
-        });
-        Post post = reference.get();
-        post.setView(post.getView() + 1);
-        increaseView(post.getId());
-        return post;
-    }
-
-    @Override
-    public Page<Post> findAllByUsername(String username, QueryRequest queryRequest) {
-        AtomicReference<Page<Post>> reference = new AtomicReference<>();
-        userService.findByUsername(username).ifPresentOrElse(user -> {
-            reference.set(postRepository.findAllByAuthor(user, Convert.pageRequest(queryRequest)));
-        }, () -> {
-            throw new AppException(DataResponse.builder()
-                    .code(MessageCode.NOT_FOUND)
-                    .status(Status.FAILED)
-                    .message(StaticMessage.USERNAME_NOT_FOUND)
-                    .build());
-        });
-        return reference.get();
+    public Post getPostBySlug(String slug, @Nullable User owner) {
+        return Optional.ofNullable(owner)
+                .flatMap(own -> postRepository.findPostByStateOrOwner(slug, PostState.PUBLIC, own))
+                .or(() -> postRepository.findPostBySlugAndState(slug, PostState.PUBLIC))
+                .orElseThrow(() -> {
+                    return new AppException(DataResponse.builder()
+                            .code(MessageCode.NOT_FOUND)
+                            .status(Status.FAILED)
+                            .message(StaticMessage.SLUG_NOT_FOUND)
+                            .build());
+                });
     }
 
     @Override

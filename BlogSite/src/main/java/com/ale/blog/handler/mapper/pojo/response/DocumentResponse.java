@@ -1,6 +1,6 @@
 package com.ale.blog.handler.mapper.pojo.response;
 
-import com.ale.blog.entity.state.ShareState;
+import com.ale.blog.entity.state.PostState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +16,6 @@ public class DocumentResponse {
     private Long id;
     private String title;
     private String introduction;
-    private ShareState state;
+    private PostState state;
     private Instant createDate;
 }
