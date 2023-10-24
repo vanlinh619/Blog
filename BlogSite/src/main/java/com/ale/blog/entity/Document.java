@@ -61,4 +61,7 @@ public class Document {
 
     @OneToMany(mappedBy = "document", fetch = FetchType.LAZY)
     private List<Post> posts;
+
+    @OneToMany(mappedBy = "document", fetch = FetchType.LAZY)
+    private List<Share> shares;
 }
