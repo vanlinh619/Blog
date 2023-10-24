@@ -16,10 +16,10 @@ import java.util.Optional;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
+    Optional<Post> findPostBySlug(String slug);
     Optional<Post> findPostBySlugAndState(String slug, PostState state);
-    Optional<Post> findPostBySlugAndAuthor(String slug, User owner);
-    @Query("select p from Post p where (p.slug = :slug and p.state = :state) or (p.slug = :slug and p.author = :owner)")
-    Optional<Post> findPostByStateOrOwner(String slug, PostState state, User owner);
+    @Query("select p from Post p where p.slug = :slug and p.author = :owner")
+    Optional<Post> findPostBySlugAnOwner(String slug, User owner);
     Page<Post> findAllByAuthor(User author, Pageable pageable);
     Page<Post> findAllByAuthorAndState(User author, PostState state, Pageable pageable);
     Page<Post> findAllByCategory(Category category, Pageable pageable);

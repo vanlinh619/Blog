@@ -90,15 +90,14 @@ public class SecurityConfiguration {
                         .loginPage("/login")
                         .usernameParameter("username")
                         .passwordParameter("password")
+                        .defaultSuccessUrl("/profile", true)
                 )
                 .oauth2Login(httpSecurityOAuth2LoginConfigurer -> httpSecurityOAuth2LoginConfigurer
                         .loginPage("/login")
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
                                 .userService(oAuth2UserService)
                         )
-                        .successHandler((request, response, authentication) -> {
-                            response.sendRedirect("/post/18-gioi-thieu-design-patterns");
-                        })
+                        .defaultSuccessUrl("/profile", true)
                 )
                 .addFilterBefore(oncePerRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

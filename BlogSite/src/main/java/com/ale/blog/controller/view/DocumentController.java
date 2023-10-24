@@ -55,7 +55,7 @@ public class DocumentController {
         return "document";
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler({Exception.class})
     public String handleValidationExceptions(Exception e) {
         e.printStackTrace();

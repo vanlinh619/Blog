@@ -1,6 +1,7 @@
 package com.ale.blog.handler.mapper.pojo.response.state;
 
 public enum MessageCode {
+    UN_AUTHORIZE,
     SUCCESS,
     NOT_FOUND,
     BAD_QUERY,

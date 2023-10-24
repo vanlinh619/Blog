@@ -26,7 +26,7 @@ public class UserController {
         return "profile";
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler({Exception.class})
     public String handleValidationExceptions(Exception e) {
         e.printStackTrace();

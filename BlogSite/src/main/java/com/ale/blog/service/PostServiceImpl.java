@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 @AllArgsConstructor
@@ -58,16 +59,28 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post getPostBySlug(String slug, @Nullable User owner) {
-        return Optional.ofNullable(owner)
-                .flatMap(own -> postRepository.findPostByStateOrOwner(slug, PostState.PUBLIC, own))
-                .or(() -> postRepository.findPostBySlugAndState(slug, PostState.PUBLIC))
-                .orElseThrow(() -> {
-                    return new AppException(DataResponse.builder()
-                            .code(MessageCode.NOT_FOUND)
+        return postRepository.findPostBySlug(slug)
+                .map(post -> {
+                    /*Public Post*/
+                    if (post.getState() == PostState.PUBLIC) {
+                        return post;
+                    }
+                    /*Owner post*/
+                    if (owner != null && owner.getUuid().equals(post.getAuthor().getUuid())) {
+                        return post;
+                    }
+                    //TODO share post
+                    throw new AppException(DataResponse.builder()
+                            .code(MessageCode.UN_AUTHORIZE)
                             .status(Status.FAILED)
-                            .message(StaticMessage.SLUG_NOT_FOUND)
                             .build());
-                });
+                })
+                .orElseThrow(() -> new AppException(DataResponse.builder()
+                        .code(MessageCode.NOT_FOUND)
+                        .status(Status.FAILED)
+                        .message(StaticMessage.SLUG_NOT_FOUND)
+                        .build())
+                );
     }
 
     @Override

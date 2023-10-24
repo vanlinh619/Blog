@@ -1,17 +1,13 @@
 package com.ale.blog.controller.api;
 
 import com.ale.blog.entity.Document;
-import com.ale.blog.entity.DocumentSection;
 import com.ale.blog.entity.state.UserRole;
 import com.ale.blog.handler.mapper.DocumentMapper;
-import com.ale.blog.handler.mapper.DocumentSectionMapper;
 import com.ale.blog.handler.mapper.pojo.request.DocumentRequest;
-import com.ale.blog.handler.mapper.pojo.request.DocumentSectionRequest;
 import com.ale.blog.handler.mapper.pojo.response.DataResponse;
 import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
 import com.ale.blog.handler.mapper.pojo.response.state.Status;
 import com.ale.blog.security.UserAccess;
-import com.ale.blog.service.DocumentSectionService;
 import com.ale.blog.service.DocumentService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
@@ -40,5 +36,4 @@ public class ApiDocumentController {
                 .data(documentMapper.toDocumentResponse(document))
                 .build();
     }
-
 }

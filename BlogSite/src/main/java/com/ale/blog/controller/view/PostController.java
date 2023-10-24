@@ -2,10 +2,12 @@ package com.ale.blog.controller.view;
 
 import com.ale.blog.entity.Post;
 import com.ale.blog.entity.User;
+import com.ale.blog.handler.exception.AppException;
 import com.ale.blog.handler.mapper.PageMapper;
 import com.ale.blog.handler.mapper.PostMapper;
 import com.ale.blog.handler.mapper.pojo.request.QueryRequest;
 import com.ale.blog.handler.mapper.pojo.response.PostResponse;
+import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
 import com.ale.blog.handler.utils.SortType;
 import com.ale.blog.handler.utils.StaticVariable;
 import com.ale.blog.handler.utils.UtilMethod;
@@ -14,7 +16,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -48,10 +49,15 @@ public class PostController {
         return "post";
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler({Exception.class})
-    public String handleValidationExceptions(Exception e) {
+    public String handleValidationExceptions(Exception e, Model model) {
         e.printStackTrace();
+        if(e instanceof AppException appException && appException.getResponse().getCode() == MessageCode.UN_AUTHORIZE) {
+            model.addAttribute("message", "Un Authorize");
+        } else {
+            model.addAttribute("message", "Page not found");
+        }
         return "404";
     }
 }
