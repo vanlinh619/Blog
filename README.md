@@ -15,6 +15,11 @@ $ docker run --name postgres-db -e POSTGRES_PASSWORD=mysecretpassword -e POSTGRE
 Hoặc có thể sử dụng db khác, chỉnh sử cấu hình ở file pom.xml và application.properties
 ### 2. Chạy project BlogSite
 Load các dependency và run project
+
+Link: https://localhost:8443/
+
+Postman test API [link](https://www.postman.com/planetary-desert-10407/workspace/blog-api/collection/14981914-609dfd89-ba97-4443-ab3a-293ee6f915fc?action=share&creator=14981914)
+
 ## Frontend
 Thư mục blog-app
 ```
