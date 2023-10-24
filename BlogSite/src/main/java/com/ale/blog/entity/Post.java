@@ -77,4 +77,7 @@ public class Post implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Document document;
+
+    @OneToMany(mappedBy = "post",fetch = FetchType.LAZY)
+    private List<Share> shares;
 }
