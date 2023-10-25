@@ -3,7 +3,6 @@ package com.ale.blog.handler.exception;
 import com.ale.blog.handler.mapper.pojo.response.DataResponse;
 import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
 import com.ale.blog.handler.mapper.pojo.response.state.Status;
-import com.ale.blog.handler.utils.StaticMessage;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
@@ -34,7 +33,7 @@ public class ResponseExceptionHandler {
             errors.put(fieldName, errorMessage);
         });
         return DataResponse.builder()
-                .code(MessageCode.ARGUMENT_NOT_VALID)
+                .code(MessageCode.ARGUMENT_IS_INVALID)
                 .status(Status.FAILED)
                 .message(errors.toString())
                 .build();

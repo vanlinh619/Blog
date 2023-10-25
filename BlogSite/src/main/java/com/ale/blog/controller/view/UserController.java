@@ -1,7 +1,8 @@
 package com.ale.blog.controller.view;
 
 import com.ale.blog.entity.state.UserRole;
-import com.ale.blog.handler.utils.UtilMethod;
+import com.ale.blog.handler.exception.AppException;
+import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
 import com.ale.blog.security.UserAccess;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.AllArgsConstructor;
@@ -28,8 +29,13 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler({Exception.class})
-    public String handleValidationExceptions(Exception e) {
+    public String handleValidationExceptions(Exception e, Model model) {
         e.printStackTrace();
+        if(e instanceof AppException appException && appException.getResponse().getCode() == MessageCode.UN_AUTHORIZE) {
+            model.addAttribute("message", "Un Authorize");
+        } else {
+            model.addAttribute("message", "Page not found");
+        }
         return "404";
     }
 }

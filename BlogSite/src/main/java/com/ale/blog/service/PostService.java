@@ -5,7 +5,6 @@ import com.ale.blog.entity.Post;
 import com.ale.blog.entity.User;
 import com.ale.blog.handler.mapper.pojo.request.PostRequest;
 import com.ale.blog.handler.mapper.pojo.request.QueryRequest;
-import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.springframework.data.domain.Page;
 
@@ -19,5 +18,6 @@ public interface PostService extends EntityService<Post, Long> {
 
     //Api authorize
     Post getByIdAndAuthor(Long id, User author);
-    Post updatePost(Post post);
+    Post save(Post post);
+    Optional<Post> postWithPermission(Post post, @Nullable User owner);
 }

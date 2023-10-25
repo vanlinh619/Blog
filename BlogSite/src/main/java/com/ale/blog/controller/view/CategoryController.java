@@ -4,11 +4,13 @@ import com.ale.blog.controller.state.CategoryPage;
 import com.ale.blog.entity.Category;
 import com.ale.blog.entity.Post;
 import com.ale.blog.entity.User;
+import com.ale.blog.handler.exception.AppException;
 import com.ale.blog.handler.mapper.pojo.request.PageRequest;
 import com.ale.blog.handler.mapper.pojo.request.QueryRequest;
+import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
 import com.ale.blog.handler.utils.SortType;
 import com.ale.blog.handler.utils.StaticVariable;
-import com.ale.blog.handler.utils.UtilMethod;
+import com.ale.blog.handler.utils.UserUtil;
 import com.ale.blog.service.CategoryService;
 import com.ale.blog.service.PostService;
 import com.ale.blog.service.UserService;
@@ -42,7 +44,7 @@ public class CategoryController {
         model.addAttribute("author", author);
         model.addAttribute("type", CategoryPage.ALL);
         model.addAttribute("categoryName", "Tất cả bài viết");
-        model.addAttribute("user", UtilMethod.authenticated(authentication));
+        model.addAttribute("user", UserUtil.authenticated(authentication));
         return "category";
     }
 
@@ -66,14 +68,19 @@ public class CategoryController {
         model.addAttribute("author", author);
         model.addAttribute("type", CategoryPage.CATEGORY);
         model.addAttribute("categoryName", category.getTitle());
-        model.addAttribute("user", UtilMethod.authenticated(authentication));
+        model.addAttribute("user", UserUtil.authenticated(authentication));
         return "category";
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler({Exception.class})
-    public String handleValidationExceptions(Exception e) {
+    public String handleValidationExceptions(Exception e, Model model) {
         e.printStackTrace();
+        if(e instanceof AppException appException && appException.getResponse().getCode() == MessageCode.UN_AUTHORIZE) {
+            model.addAttribute("message", "Un Authorize");
+        } else {
+            model.addAttribute("message", "Page not found");
+        }
         return "404";
     }
 }

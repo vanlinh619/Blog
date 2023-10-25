@@ -7,15 +7,24 @@ import com.ale.blog.handler.mapper.DocumentSectionMapper;
 import com.ale.blog.handler.mapper.pojo.request.DocumentSectionRequest;
 import com.ale.blog.repository.DocumentSectionRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class DocumentSectionServiceImpl implements DocumentSectionService {
     private final DocumentSectionMapper sectionMapper;
-    private final DocumentService documentService;
     private final DocumentSectionRepository sectionRepository;
+    private DocumentService documentService;
+    @Autowired
+    public void setDocumentService(@Lazy DocumentService documentService) {
+        this.documentService = documentService;
+    }
 
     @Override
     public DocumentSection addSection(DocumentSectionRequest sectionRequest, User author) {
@@ -34,6 +43,11 @@ public class DocumentSectionServiceImpl implements DocumentSectionService {
     @Override
     public DocumentSection getByIdAndAuthor(Long id, User author) {
         return sectionRepository.findDocumentSectionByIdAndDocument_Author(id, author).orElseThrow(this::throwIdNotExist);
+    }
+
+    @Override
+    public List<DocumentSection> findAllByDocument(Document document) {
+        return sectionRepository.findAllByDocument(document);
     }
 
     @Override
