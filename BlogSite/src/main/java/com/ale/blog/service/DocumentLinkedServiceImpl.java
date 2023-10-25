@@ -6,8 +6,11 @@ import com.ale.blog.entity.Post;
 import com.ale.blog.entity.User;
 import com.ale.blog.handler.mapper.pojo.request.DocumentLinkedRequest;
 import com.ale.blog.repository.DocumentLinkedRepository;
+import jakarta.annotation.Nonnull;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -35,8 +38,13 @@ public class DocumentLinkedServiceImpl implements DocumentLinkedService {
         linkedRepository.save(linked);
 
         post.setDocument(section.getDocument());
-        postService.updatePost(post);
+        postService.save(post);
         sectionService.increaseSize(section.getId());
         return linked;
+    }
+
+    @Override
+    public List<DocumentLinked> findAllBySection(@Nonnull DocumentSection section) {
+        return linkedRepository.findAllBySection(section);
     }
 }

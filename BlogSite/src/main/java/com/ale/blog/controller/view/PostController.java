@@ -10,7 +10,8 @@ import com.ale.blog.handler.mapper.pojo.response.PostResponse;
 import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
 import com.ale.blog.handler.utils.SortType;
 import com.ale.blog.handler.utils.StaticVariable;
-import com.ale.blog.handler.utils.UtilMethod;
+import com.ale.blog.handler.utils.UserUtil;
+import com.ale.blog.service.DocumentService;
 import com.ale.blog.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,10 +30,11 @@ public class PostController {
     private final PostService postService;
     private final PageMapper<Post, PostResponse> pageMapper;
     private final PostMapper postMapper;
+    private final DocumentService documentService;
 
     @GetMapping("{postUrl}")
     public String getPost(@PathVariable String postUrl, Model model, Authentication authentication) {
-        Optional<User> userOptional = UtilMethod.owner(authentication);
+        Optional<User> userOptional = UserUtil.owner(authentication);
         Post post = postService.getPostBySlug(postUrl, userOptional.orElse(null));
         Page<Post> postPage = postService.findAllByCategory(post.getCategory(), QueryRequest.builder()
                 .page(0)
@@ -44,6 +46,7 @@ public class PostController {
         model.addAttribute("category", post.getCategory());
         model.addAttribute("post", post);
         model.addAttribute("postPage", pageMapper.toPageResponse(postPage, postMapper::toPostResponse));
+        documentService.getEntriesOfDocument(post.getDocument());
         model.addAttribute("document", post.getDocument());
         model.addAttribute("user", userOptional.orElse(null));
         return "post";

@@ -16,7 +16,9 @@ import com.ale.blog.handler.utils.Convert;
 import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
 import com.ale.blog.handler.utils.Format;
 import com.ale.blog.handler.utils.StaticMessage;
+import com.ale.blog.handler.utils.UserUtil;
 import com.ale.blog.repository.PostRepository;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import org.jsoup.Jsoup;
@@ -25,6 +27,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -38,6 +41,7 @@ public class PostServiceImpl implements PostService {
     private final HeadTableService headTableService;
     private final CategoryService categoryService;
     private final ExecutorService executorService;
+    private final ShareService shareService;
 
     @Override
     public Post createPostArticle(PostRequest postRequest, User author) {
@@ -60,21 +64,13 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post getPostBySlug(String slug, @Nullable User owner) {
         return postRepository.findPostBySlug(slug)
-                .map(post -> {
-                    /*Public Post*/
-                    if (post.getState() == PostState.PUBLIC) {
-                        return post;
-                    }
-                    /*Owner post*/
-                    if (owner != null && owner.getUuid().equals(post.getAuthor().getUuid())) {
-                        return post;
-                    }
-                    //TODO share post
-                    throw new AppException(DataResponse.builder()
-                            .code(MessageCode.UN_AUTHORIZE)
-                            .status(Status.FAILED)
-                            .build());
-                })
+                .map(post -> postWithPermission(post, owner)
+                        .orElseThrow(() -> new AppException(DataResponse.builder()
+                                .code(MessageCode.UN_AUTHORIZE)
+                                .status(Status.FAILED)
+                                .build())
+                        )
+                )
                 .orElseThrow(() -> new AppException(DataResponse.builder()
                         .code(MessageCode.NOT_FOUND)
                         .status(Status.FAILED)
@@ -99,8 +95,21 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post updatePost(Post post) {
+    public Post save(Post post) {
         return postRepository.save(post);
+    }
+
+    @Override
+    public Optional<Post> postWithPermission(@Nonnull Post post, @Nullable User owner) {
+        if (Objects.requireNonNull(post.getState()) == PostState.PUBLIC) {
+            return Optional.of(post);
+        }
+        if (owner == null) return Optional.empty();
+        return UserUtil.isOwner(owner, post.getAuthor())
+                ? Optional.of(post)
+                : shareService.isShared(post, owner)
+                ? Optional.of(post)
+                : Optional.empty();
     }
 
     private void increaseView(Long id) {

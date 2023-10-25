@@ -69,6 +69,7 @@ public class SecurityConfiguration {
                                 "/doc/**",
                                 "/login/**",
                                 "/category/**",
+                                "/home/**",
                                 "/document/**",
                                 "/image/**",
                                 "/css/**",
