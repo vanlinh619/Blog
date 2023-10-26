@@ -8,16 +8,23 @@ import com.ale.blog.handler.mapper.pojo.request.DocumentLinkedRequest;
 import com.ale.blog.repository.DocumentLinkedRepository;
 import jakarta.annotation.Nonnull;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class DocumentLinkedServiceImpl implements DocumentLinkedService {
-    private final PostService postService;
     private final DocumentSectionService sectionService;
     private final DocumentLinkedRepository linkedRepository;
+    private PostService postService;
+    @Autowired
+    public void setPostService(@Lazy PostService postService) {
+        this.postService = postService;
+    }
 
     @Override
     public Class<DocumentLinked> getEntityClass() {

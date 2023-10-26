@@ -111,7 +111,7 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public Optional<Document> documentWithPermission(@Nonnull Document document, @Nullable User owner) {
-        if (Objects.requireNonNull(document.getState()) == DocumentState.PUBLIC) {
+        if (document.getState() == DocumentState.PUBLIC) {
             return Optional.of(document);
         }
         if (owner == null) return Optional.empty();
