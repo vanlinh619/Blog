@@ -71,7 +71,7 @@
                th:text="${post.getIntroduction()}">
           </div>
         </div>
-        <nav th:replace="components/pagination::pagination(${postPage})"></nav>
+        <nav th:replace="components/pagination::pagination(${postPage}, ${'?page='})"></nav>
       </div>
     </article>
   </main>

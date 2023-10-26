@@ -2,6 +2,7 @@ package com.ale.blog.service;
 
 import com.ale.blog.entity.Document;
 import com.ale.blog.entity.User;
+import com.ale.blog.entity.state.DocumentState;
 import com.ale.blog.handler.mapper.pojo.request.DocumentRequest;
 import com.ale.blog.handler.mapper.pojo.request.QueryRequest;
 import jakarta.annotation.Nonnull;
@@ -17,7 +18,7 @@ public interface DocumentService extends EntityService<Document, Long> {
     Document getDocumentBySlug(@Nonnull String slug, @Nonnull User author, @Nullable User owner);
     void increaseSize(Long id);
     Document getEntriesOfDocument(@Nonnull Document document);
-    Page<Document> findAllByAuthor(User author, QueryRequest queryRequest);
+    Page<Document> findAllByAuthor(@Nonnull User author, @Nonnull DocumentState state, @Nonnull QueryRequest queryRequest);
     Page<Document> findAllByAuthor(@Nonnull User author, @Nonnull User owner, @Nonnull QueryRequest queryRequest);
     Document save(@Nonnull Document document);
     Optional<Document> documentWithPermission(@Nonnull Document document, @Nullable User owner);

@@ -18,7 +18,13 @@
     <article class="pl-[19.5rem] min-h-screen">
       <div class="mx-auto max-w-none ml-0 mr-[15.5rem] pr-16 text-slate-700">
         <div class="mt-10">
-          <h1 class="font-bold text-4xl">Tài liệu</h1>
+          <nav th:replace="/components/breadcrumb::breadcrumb(${breadcrumb} ,${author})"></nav>
+          <div class="mt-10">
+            <h1 class="font-bold text-4xl" th:text="${T(com.ale.blog.handler.utils.TextUtil).ALL_DOCUMENT}"></h1>
+          </div>
+        </div>
+        <div class="mt-5">
+          <div th:replace="/components/tabs-doc::tabs(${scope})"></div>
         </div>
         <div th:if="${documentPage.isEmpty()}" class="flex justify-center mt-16 font-semibold text-slate-300 uppercase">
           <span class="flex items-center font-semibold">
@@ -56,7 +62,7 @@
             </div>
           </div>
         </div>
-        <nav th:replace="components/pagination::pagination(${documentPage})"></nav>
+        <nav th:replace="components/pagination::pagination(${documentPage}, ${'?scope='+scope+'&page='})"></nav>
       </div>
     </article>
   </main>

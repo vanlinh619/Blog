@@ -94,8 +94,8 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public Page<Document> findAllByAuthor(User author, QueryRequest queryRequest) {
-        return documentRepository.findAllByAuthorAndState(author, DocumentState.PUBLIC, Convert.pageRequest(queryRequest));
+    public Page<Document> findAllByAuthor(@Nonnull User author, @Nonnull DocumentState state, @Nonnull QueryRequest queryRequest) {
+        return documentRepository.findAllByAuthorAndState(author, state, Convert.pageRequest(queryRequest));
     }
 
     @Override

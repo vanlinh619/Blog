@@ -2,12 +2,15 @@ package com.ale.blog.controller.view;
 
 import com.ale.blog.entity.Document;
 import com.ale.blog.entity.User;
+import com.ale.blog.entity.state.DocumentState;
 import com.ale.blog.handler.exception.AppException;
+import com.ale.blog.handler.mapper.pojo.request.PageDocumentRequest;
 import com.ale.blog.handler.mapper.pojo.request.PageRequest;
 import com.ale.blog.handler.mapper.pojo.request.QueryRequest;
 import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
 import com.ale.blog.handler.utils.SortType;
 import com.ale.blog.handler.utils.StaticVariable;
+import com.ale.blog.handler.utils.TextUtil;
 import com.ale.blog.handler.utils.UserUtil;
 import com.ale.blog.service.DocumentService;
 import com.ale.blog.service.UserService;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -32,13 +36,13 @@ public class DocumentController {
     @GetMapping("{username}")
     public String viewAllDocument(
             @PathVariable String username,
-            @Valid PageRequest pageRequest,
+            @Valid PageDocumentRequest pageRequest,
             Model model,
             Authentication authentication
     ) {
         Optional<User> userOptional = UserUtil.owner(authentication);
         User author = userService.getByUsername(username);
-        Page<Document> documentPage = documentService.findAllByAuthor(author, QueryRequest.builder()
+        Page<Document> documentPage = documentService.findAllByAuthor(author, DocumentState.valueOf(pageRequest.getScope().toUpperCase()), QueryRequest.builder()
                 .page(pageRequest.getPage() - 1)
                 .size(StaticVariable.PAGE_SIZE)
                 .sortBy(Document.Fields.createDate)
@@ -47,6 +51,10 @@ public class DocumentController {
         model.addAttribute("documentPage", documentPage);
         model.addAttribute("author", author);
         model.addAttribute("user", userOptional.orElse(null));
+        model.addAttribute("breadcrumb", List.of(
+                List.of(TextUtil.ALL_DOCUMENT, "")
+        ));
+        model.addAttribute("scope", pageRequest.getScope().toLowerCase());
         return "all-document";
     }
 
@@ -59,6 +67,10 @@ public class DocumentController {
         model.addAttribute("document", document);
         model.addAttribute("author", author);
         model.addAttribute("user", userOptional.orElse(null));
+        model.addAttribute("breadcrumb", List.of(
+                List.of(TextUtil.ALL_DOCUMENT, TextUtil.getLinkAllDocument(author)),
+                List.of(document.getTitle(), "")
+        ));
         return "document";
     }
 
@@ -66,7 +78,7 @@ public class DocumentController {
     @ExceptionHandler({Exception.class})
     public String handleValidationExceptions(Exception e, Model model) {
         e.printStackTrace();
-        if(e instanceof AppException appException && appException.getResponse().getCode() == MessageCode.UN_AUTHORIZE) {
+        if (e instanceof AppException appException && appException.getResponse().getCode() == MessageCode.UN_AUTHORIZE) {
             model.addAttribute("message", "Un Authorize");
         } else {
             model.addAttribute("message", "Page not found");

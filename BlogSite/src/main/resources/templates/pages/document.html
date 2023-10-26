@@ -18,7 +18,10 @@
     <article class="pl-[19.5rem] min-h-screen">
       <div class="mx-auto max-w-none ml-0 mr-[15.5rem] pr-16 text-slate-700">
         <div class="mt-10">
-          <h1 class="font-bold text-4xl" th:text="${document.getTitle()}"></h1>
+          <nav th:replace="/components/breadcrumb::breadcrumb(${breadcrumb} ,${author})"></nav>
+          <div class="mt-10">
+            <h1 class="font-bold text-4xl" th:text="${document.getTitle()}"></h1>
+          </div>
           <div class="mt-3 text-sm">
             <label>
               <span class="text-emerald-600 font-light">Ngày đăng: </span>
