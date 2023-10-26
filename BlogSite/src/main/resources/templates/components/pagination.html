@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <!--/*@thymesVar id="pageData" type="org.springframework.data.domain.Page"*/-->
+<!--/*@thymesVar id="paramsUrl" type="java.lang.String"*/-->
 
-<nav th:fragment="pagination(pageData)">
+<nav th:fragment="pagination(pageData, paramsUrl)">
 
   <nav th:if="${pageData.getTotalPages() > 1}" class="flex justify-center mt-10">
     <ul class="list-style-none mb-6 flex">
       <li>
-        <a th:if="${pageData.getNumber() + 1 > 1}" th:href="${'?page=' + 1}"
+        <a th:if="${pageData.getNumber() + 1 > 1}" th:href="${paramsUrl + 1}"
            class="rounded px-3 py-1.5 text-sm hover:bg-slate-200">
           <span aria-hidden="true">&laquo;</span>
         </a>
@@ -20,17 +21,17 @@
           th:if="${page == 1 || page == pageData.getTotalPages() || (page > pageData.getNumber() - 2 && page < pageData.getNumber() + 4)}">
         <a th:if="${page == pageData.getTotalPages() && pageData.getNumber() < pageData.getTotalPages() - 4} "
            class="rounded mx-0.5 py-1.5 text-xs">...</a>
-        <a th:if="${pageData.getNumber() + 1 == page}" th:href="${'?page='+page}" th:text="${page}"
+        <a th:if="${pageData.getNumber() + 1 == page}" th:href="${paramsUrl+page}" th:text="${page}"
            class="rounded mx-0.5 px-2.5 py-1.5 text-sm bg-emerald-400">
         </a>
-        <a th:unless="${pageData.getNumber() + 1 == page}" th:href="${'?page='+page}" th:text="${page}"
+        <a th:unless="${pageData.getNumber() + 1 == page}" th:href="${paramsUrl+page}" th:text="${page}"
            class="rounded mx-0.5 px-2.5 py-1.5 text-sm hover:bg-slate-200 ">
         </a>
         <a th:if="${page == 1 && pageData.getNumber() > 3} " class="rounded mx-0.5 py-1.5 text-xs">...</a>
       </li>
       <li>
         <a th:if="${pageData.getNumber() + 1 < pageData.getTotalPages()}"
-           th:href="${'?page=' + pageData.getTotalPages()}"
+           th:href="${paramsUrl + pageData.getTotalPages()}"
            class="rounded px-3 py-1.5 text-sm hover:bg-slate-200">
           <span aria-hidden="true">&raquo;</span>
         </a>

@@ -38,6 +38,7 @@ public class Post implements Serializable {
     @Pattern(regexp = "^[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])*$")
     private String slug;
 
+    @NotNull
     private PostState state;
 
     @NotNull

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="scope" type="java.lang.String"*/-->
+
+<div th:fragment="tabs(scope)" class="text-sm font-medium text-center text-slate-500 border-b border-slate-200">
+  <ul class="flex flex-wrap -mb-px">
+    <li class="mr-2">
+      <a th:if="${scope == 'public'}" href="?scope=public&page=1" class="inline-block p-4 text-emerald-600 border-b-2 border-emerald-600 rounded-t-lg">
+        Công khai
+      </a>
+      <a th:unless="${scope == 'public'}" href="?scope=public&page=1" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300">
+        Công khai
+      </a>
+    </li>
+    <li class="mr-2">
+      <a th:if="${scope == 'private'}" href="?scope=private&page=1" class="inline-block p-4 text-emerald-600 border-b-2 border-emerald-600 rounded-t-lg">
+        Riêng tư
+      </a>
+      <a th:unless="${scope == 'private'}" href="?scope=private&page=1" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300">
+        Riêng tư
+      </a>
+    </li>
+    <li class="mr-2">
+      <a th:if="${scope == 'share'}" href="?scope=share&page=1" class="inline-block p-4 text-emerald-600 border-b-2 border-emerald-600 rounded-t-lg">
+        Chia sẻ
+      </a>
+      <a th:unless="${scope == 'share'}" href="?scope=share&page=1" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300">
+        Chia sẻ
+      </a>
+    </li>
+  </ul>
+</div>
+</html>

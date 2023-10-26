@@ -42,6 +42,7 @@ public class PostServiceImpl implements PostService {
     private final CategoryService categoryService;
     private final ExecutorService executorService;
     private final ShareService shareService;
+    private final DocumentService documentService;
 
     @Override
     public Post createPostArticle(PostRequest postRequest, User author) {
@@ -101,15 +102,20 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Optional<Post> postWithPermission(@Nonnull Post post, @Nullable User owner) {
-        if (Objects.requireNonNull(post.getState()) == PostState.PUBLIC) {
-            return Optional.of(post);
-        }
-        if (owner == null) return Optional.empty();
-        return UserUtil.isOwner(owner, post.getAuthor())
-                ? Optional.of(post)
-                : shareService.isShared(post, owner)
-                ? Optional.of(post)
-                : Optional.empty();
+        return Optional.ofNullable(post.getDocument())
+                .flatMap(document -> documentService.documentWithPermission(document, owner))
+                .map(document -> post)
+                .or(() -> {
+                    if (post.getState() == PostState.PUBLIC) {
+                        return Optional.of(post);
+                    }
+                    if (owner == null) return Optional.empty();
+                    return UserUtil.isOwner(owner, post.getAuthor())
+                            ? Optional.of(post)
+                            : shareService.isShared(post, owner)
+                            ? Optional.of(post)
+                            : Optional.empty();
+                });
     }
 
     private void increaseView(Long id) {
