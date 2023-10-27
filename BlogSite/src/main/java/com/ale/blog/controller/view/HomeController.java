@@ -14,6 +14,6 @@ public class HomeController {
 
     @GetMapping("home")
     public String homePage() {
-        return "redirect:category/admin?page=1";
+        return "redirect:category/admin?scope=public&page=1";
     }
 }

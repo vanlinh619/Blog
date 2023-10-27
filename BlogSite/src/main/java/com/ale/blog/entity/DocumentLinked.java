@@ -7,11 +7,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldNameConstants;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"section_id", "post_id"}))
 @Data
 @Builder
+@FieldNameConstants(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class DocumentLinked {
@@ -26,6 +28,7 @@ public class DocumentLinked {
     private String slug;
 
     @NotNull
+    @FieldNameConstants.Include
     private Integer priority;
 
     @NotNull

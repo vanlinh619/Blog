@@ -23,9 +23,14 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findAllByAuthor(User author, Pageable pageable);
     Page<Post> findAllByAuthorAndState(User author, PostState state, Pageable pageable);
     Page<Post> findAllByCategory(Category category, Pageable pageable);
+    Page<Post> findAllByCategoryAndState(Category category, PostState state, Pageable pageable);
     @Transactional
     @Modifying
     @Query("update Post p set p.view = p.view + 1 where p.id = :id")
     void increaseView(Long id);
     Optional<Post> findPostByIdAndAuthor(Long id, User author);
+    @Query("select p from Post p join Share s on p = s.post where p.category = :category and s.shareWith = :owner")
+    Page<Post> findAllByCategoryAndShareWith(Category category, User owner, Pageable pageable);
+    @Query("select p from Post p join Share s on p = s.post where p.author = :author and s.shareWith = :owner")
+    Page<Post> findAllByAuthorAndShareWith(User author, User owner, Pageable pageable);
 }

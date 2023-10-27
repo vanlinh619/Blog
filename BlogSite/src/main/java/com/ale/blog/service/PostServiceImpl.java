@@ -4,6 +4,7 @@ import com.ale.blog.entity.Category;
 import com.ale.blog.entity.Post;
 import com.ale.blog.entity.TableOfContent;
 import com.ale.blog.entity.User;
+import com.ale.blog.entity.state.DocumentState;
 import com.ale.blog.entity.state.PostState;
 import com.ale.blog.entity.state.SlugType;
 import com.ale.blog.handler.exception.AppException;
@@ -27,10 +28,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 @AllArgsConstructor
@@ -86,8 +85,32 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public Page<Post> findAllByAuthor(@Nullable User owner, @Nonnull User author, @Nonnull PostState state, @Nonnull QueryRequest queryRequest) {
+        return Optional.ofNullable(owner)
+                .map(user -> author.equals(user) ? state : null)
+                .or(() -> state == PostState.PUBLIC ? Optional.of(state) : Optional.empty())
+                .map(st -> postRepository.findAllByAuthorAndState(author, st, Convert.pageRequest(queryRequest)))
+                .orElseGet(() -> state == PostState.SHARE && owner != null
+                        ? postRepository.findAllByAuthorAndShareWith(author, owner, Convert.pageRequest(queryRequest))
+                        : Page.empty()
+                );
+    }
+
+    @Override
     public Page<Post> findAllByCategory(Category category, QueryRequest queryRequest) {
         return postRepository.findAllByCategory(category, Convert.pageRequest(queryRequest));
+    }
+
+    @Override
+    public Page<Post> findAllByCategory(@Nonnull Category category, @Nullable User owner, @Nonnull User author, @Nonnull PostState state, @Nonnull QueryRequest queryRequest) {
+        return Optional.ofNullable(owner)
+                .map(user -> author.equals(user) ? state : null)
+                .or(() -> state == PostState.PUBLIC ? Optional.of(state) : Optional.empty())
+                .map(st -> postRepository.findAllByCategoryAndState(category, st, Convert.pageRequest(queryRequest)))
+                .orElseGet(() -> state == PostState.SHARE && owner != null
+                        ? postRepository.findAllByCategoryAndShareWith(category, owner, Convert.pageRequest(queryRequest))
+                        : Page.empty()
+                );
     }
 
     @Override

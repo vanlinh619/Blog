@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,7 +52,7 @@ public class DocumentLinkedServiceImpl implements DocumentLinkedService {
     }
 
     @Override
-    public List<DocumentLinked> findAllBySection(@Nonnull DocumentSection section) {
-        return linkedRepository.findAllBySection(section);
+    public List<DocumentLinked> findAllBySection(@Nonnull DocumentSection section, @Nonnull Sort sort) {
+        return linkedRepository.findAllBySection(section, sort);
     }
 }

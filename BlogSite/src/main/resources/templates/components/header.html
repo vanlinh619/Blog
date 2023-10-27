@@ -18,11 +18,11 @@
            class="block mt-4 lg:inline-block lg:mt-0 text-white mr-4 hover:text-slate-700">
           Trang chủ
         </a>
-        <a th:if="${user != null}" th:href="${'/category/'+user.getUsername()+'?page=1'}"
+        <a th:if="${user != null}" th:href="${'/category/'+user.getUsername()+'?scope=public&page=1'}"
            class="block mt-4 lg:inline-block lg:mt-0 text-white mr-4 hover:text-slate-700">
           Thể loại
         </a>
-        <a th:if="${user != null}" th:href="${'/doc/'+user.getUsername()+'?page=1'}"
+        <a th:if="${user != null}" th:href="${'/doc/'+user.getUsername()+'?scope=public&page=1'}"
            class="block mt-4 lg:inline-block lg:mt-0 text-white mr-4 hover:text-slate-700">
           Tài liệu
         </a>

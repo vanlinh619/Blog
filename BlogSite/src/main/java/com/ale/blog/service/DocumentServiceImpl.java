@@ -2,6 +2,7 @@ package com.ale.blog.service;
 
 import com.ale.blog.entity.Document;
 import com.ale.blog.entity.DocumentLinked;
+import com.ale.blog.entity.DocumentSection;
 import com.ale.blog.entity.User;
 import com.ale.blog.entity.state.DocumentState;
 import com.ale.blog.entity.state.SlugType;
@@ -23,12 +24,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @RequiredArgsConstructor
@@ -64,7 +67,7 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public Document getDocumentBySlug(@Nonnull String slug, @Nonnull User author, @Nullable User owner) {
         return documentRepository.findDocumentBySlugAndAuthor(slug, author)
-                .map(document -> documentWithPermission(document, owner)
+                .map(document -> isDisplayDocument(document, owner)
                         .orElseThrow(() -> new AppException(DataResponse.builder()
                                 .code(MessageCode.UN_AUTHORIZE)
                                 .status(Status.FAILED)
@@ -86,9 +89,14 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public Document getEntriesOfDocument(@Nonnull Document document) {
-        document.setSections(sectionService.findAllByDocument(document).stream()
-                .peek(section -> section.setLinked(linkedService.findAllBySection(section)))
-                .toList()
+        document.setSections(sectionService.findAllByDocument(document, Sort.by(
+                                DocumentSection.Fields.priority
+                        ))
+                        .stream()
+                        .peek(section -> section.setLinked(linkedService.findAllBySection(section, Sort.by(
+                                DocumentLinked.Fields.priority
+                        ))))
+                        .toList()
         );
         return document;
     }
@@ -98,10 +106,22 @@ public class DocumentServiceImpl implements DocumentService {
         return documentRepository.findAllByAuthorAndState(author, state, Convert.pageRequest(queryRequest));
     }
 
+    /**
+     * return Page Document if <p>
+     * is owner <p>
+     * or state == PUBLIC <p>
+     * or share with user
+     */
     @Override
-    public Page<Document> findAllByAuthor(@Nonnull User author, @Nullable User owner, @Nonnull QueryRequest queryRequest) {
-
-        return documentRepository.findAllByAuthorAndState(author, DocumentState.PUBLIC, Convert.pageRequest(queryRequest));
+    public Page<Document> findAllByAuthor(@Nonnull User author, @Nullable User owner, @Nonnull DocumentState state, @Nonnull QueryRequest queryRequest) {
+        return Optional.ofNullable(owner)
+                .map(user -> user.equals(author) ? state : null)
+                .or(() -> state == DocumentState.PUBLIC || state == DocumentState.SHARE
+                        ? Optional.of(state)
+                        : Optional.empty()
+                )
+                .map(st -> documentRepository.findAllByAuthorAndState(author, st, Convert.pageRequest(queryRequest)))
+                .orElse(Page.empty());
     }
 
     @Override
@@ -118,6 +138,13 @@ public class DocumentServiceImpl implements DocumentService {
         return UserUtil.isOwner(owner, document.getAuthor())
                 ? Optional.of(document)
                 : shareService.isShared(document, owner)
+                ? Optional.of(document)
+                : Optional.empty();
+    }
+
+    @Override
+    public Optional<Document> isDisplayDocument(@Nonnull Document document, @Nullable User owner) {
+        return UserUtil.isOwner(owner, document.getAuthor()) || document.getState() != DocumentState.PRIVATE
                 ? Optional.of(document)
                 : Optional.empty();
     }
