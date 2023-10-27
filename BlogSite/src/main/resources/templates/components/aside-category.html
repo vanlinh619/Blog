@@ -4,22 +4,29 @@
 <!--/*@thymesVar id="post" type="com.ale.blog.entity.Post"*/-->
 <!--/*@thymesVar id="author" type="com.ale.blog.entity.User"*/-->
 <!--/*@thymesVar id="category" type="com.ale.blog.entity.Category"*/-->
+<!--/*@thymesVar id="scope" type="java.lang.String"*/-->
 
-<aside th:fragment="categories(author)">
+<aside th:fragment="categories(author, scope)">
   <div id="reference">
   </div>
   <script th:inline="javascript" type="module">
       /*<![CDATA[*/
       let username = /*[[${author.getUsername()}]]*/ ''
+      let scope = /*[[${scope}]]*/ 'public'
       /*]]>*/
-      const {createApp} = Vue
+      const {createApp, ref } = Vue
       createApp({
+          setup() {
+              return {
+                  scope
+              }
+          },
           template: `
 
   <nav class="text-cyan-950">
     <ul class="space-y-1.5">
       <li>
-        <a :href="'/category/'+username+'?page=1'" :class="acClass(null)">
+        <a :href="'/category/'+username+'?scope='+scope+'&page=1'" :class="acClass(null)">
           <h5 class="pr-2">Tất cả bài viết</h5>
           <span v-if="!activeUrl" class="order-last">
             <svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24" fill="none"
@@ -31,7 +38,7 @@
         </a>
       </li>
       <li v-for="categoryL1 in categories">
-        <a :href="'/category/'+username+'/'+categoryL1.slug+'?page=1'" :class="acClass(categoryL1.slug)">
+        <a :href="'/category/'+username+'/'+categoryL1.slug+'?scope='+scope+'&page=1'" :class="acClass(categoryL1.slug)">
           <h5 class="pr-2">{{ categoryL1.title }}</h5>
           <span v-if="activeUrl && activeUrl === categoryL1.slug" class="order-last">
             <svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24" fill="none"
@@ -43,7 +50,7 @@
         </a>
         <ul v-if="categoryL1.children?.length !== 0" class="mt-3 ml-4 space-y-1.5">
           <li v-for="categoryL2 in categoryL1.children">
-            <a :href="'/category/'+username+'/'+categoryL2.slug+'?page=1'" :class="acClass(categoryL2.slug)">
+            <a :href="'/category/'+username+'/'+categoryL2.slug+'?scope='+scope+'&page=1'" :class="acClass(categoryL2.slug)">
               <h5 class="pr-2">{{ categoryL2.title }}</h5>
               <span v-if="activeUrl && activeUrl === categoryL2.slug" class="order-last">
                 <svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24" fill="none"
@@ -55,7 +62,7 @@
             </a>
             <ul v-if="categoryL2.children?.length !== 0" class="mt-3 ml-4 space-y-1.5">
               <li v-for="categoryL3 in categoryL2.children">
-                <a :href="'/category/'+username+'/'+categoryL3.slug+'?page=1'" :class="acClass(categoryL3.slug)">
+                <a :href="'/category/'+username+'/'+categoryL3.slug+'?scope='+scope+'&page=1'" :class="acClass(categoryL3.slug)">
                   <h5 class="pr-2">{{ categoryL3.title }}</h5>
                   <span v-if="activeUrl && activeUrl === categoryL3.slug" class="order-last">
                     <svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24" fill="none"

@@ -14,25 +14,31 @@
   <div
       class="lg:block fixed z-20 inset-0 top-16 left-[max(0px,calc(50%-45rem))] right-auto w-[19rem] pb-10 pl-8 pr-6 overflow-y-auto">
     <div class="mt-10">
-      <aside th:replace="components/aside-category::categories(${author})"></aside>
+      <aside th:replace="components/aside-category::categories(${author}, ${scope})"></aside>
     </div>
   </div>
   <main class="mt-10">
     <article class="pl-[19.5rem] min-h-screen">
       <div class="mx-auto max-w-none ml-0 mr-[15.5rem] pr-16 text-slate-700">
         <div class="mt-10">
-          <h1 class="font-bold text-4xl" th:text="${categoryName}"></h1>
+          <nav th:replace="/components/breadcrumb::breadcrumb(${breadcrumb} ,${author})"></nav>
+          <div class="mt-10">
+            <h1 class="font-bold text-4xl" th:text="${categoryName}"></h1>
+          </div>
+        </div>
+        <div class="mt-5">
+          <div th:replace="/components/tabs-doc::tabs(${scope})"></div>
         </div>
         <div th:if="${postPage.isEmpty()}" class="flex justify-center mt-16 font-semibold text-slate-300 uppercase">
-        <span class="flex items-center font-semibold">
-          <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 24 24"
-               class="w-4 h-4 min-w-[1rem] min-h-[1rem] stroke-slate-300 fill-none">
-            <path
-                d="M9 13H15M12.0627 6.06274L11.9373 5.93726C11.5914 5.59135 11.4184 5.4184 11.2166 5.29472C11.0376 5.18506 10.8425 5.10425 10.6385 5.05526C10.4083 5 10.1637 5 9.67452 5H6.2C5.0799 5 4.51984 5 4.09202 5.21799C3.71569 5.40973 3.40973 5.71569 3.21799 6.09202C3 6.51984 3 7.07989 3 8.2V15.8C3 16.9201 3 17.4802 3.21799 17.908C3.40973 18.2843 3.71569 18.5903 4.09202 18.782C4.51984 19 5.07989 19 6.2 19H17.8C18.9201 19 19.4802 19 19.908 18.782C20.2843 18.5903 20.5903 18.2843 20.782 17.908C21 17.4802 21 16.9201 21 15.8V10.2C21 9.0799 21 8.51984 20.782 8.09202C20.5903 7.71569 20.2843 7.40973 19.908 7.21799C19.4802 7 18.9201 7 17.8 7H14.3255C13.8363 7 13.5917 7 13.3615 6.94474C13.1575 6.89575 12.9624 6.81494 12.7834 6.70528C12.5816 6.5816 12.4086 6.40865 12.0627 6.06274Z"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-          </svg>
-          <h5 class="ml-1">Chưa có bài viết nào</h5>
-        </span>
+          <span class="flex items-center font-semibold">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 24 24"
+                 class="w-4 h-4 min-w-[1rem] min-h-[1rem] stroke-slate-300 fill-none">
+              <path
+                  d="M9 13H15M12.0627 6.06274L11.9373 5.93726C11.5914 5.59135 11.4184 5.4184 11.2166 5.29472C11.0376 5.18506 10.8425 5.10425 10.6385 5.05526C10.4083 5 10.1637 5 9.67452 5H6.2C5.0799 5 4.51984 5 4.09202 5.21799C3.71569 5.40973 3.40973 5.71569 3.21799 6.09202C3 6.51984 3 7.07989 3 8.2V15.8C3 16.9201 3 17.4802 3.21799 17.908C3.40973 18.2843 3.71569 18.5903 4.09202 18.782C4.51984 19 5.07989 19 6.2 19H17.8C18.9201 19 19.4802 19 19.908 18.782C20.2843 18.5903 20.5903 18.2843 20.782 17.908C21 17.4802 21 16.9201 21 15.8V10.2C21 9.0799 21 8.51984 20.782 8.09202C20.5903 7.71569 20.2843 7.40973 19.908 7.21799C19.4802 7 18.9201 7 17.8 7H14.3255C13.8363 7 13.5917 7 13.3615 6.94474C13.1575 6.89575 12.9624 6.81494 12.7834 6.70528C12.5816 6.5816 12.4086 6.40865 12.0627 6.06274Z"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            <h5 class="ml-1">Chưa có bài viết nào</h5>
+          </span>
         </div>
         <div th:unless="${postPage.isEmpty()}" th:each="post: ${postPage}" class="mt-10 pb-7 border-b">
           <a class="font-semibold text-3xl hover:text-emerald-600" th:text="${post.getTitle()}"
@@ -54,7 +60,7 @@
             </label>
           </div>
           <div th:if="${type == T(com.ale.blog.controller.state.CategoryPage).ALL}" class="mt-3 text-sm">
-            <a th:href="${'/category/'+username+'/'+post.getCategory().getSlug()+'?page=1'}"
+            <a th:href="${'/category/'+username+'/'+post.getCategory().getSlug()+'?scope='+scope+'&page=1'}"
                class="flex items-center text-xs hover:text-emerald-700 text-emerald-600 stroke-emerald-600 fill-emerald-600 hover:stroke-emerald-700 hover:fill-emerald-700">
               <div class="font-light">
                 <svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24" fill="none"
@@ -71,7 +77,7 @@
                th:text="${post.getIntroduction()}">
           </div>
         </div>
-        <nav th:replace="components/pagination::pagination(${postPage}, ${'?page='})"></nav>
+        <nav th:replace="components/pagination::pagination(${postPage}, ${'?scope='+scope+'&page='})"></nav>
       </div>
     </article>
   </main>

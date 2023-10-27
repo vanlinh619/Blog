@@ -15,7 +15,7 @@
       class="lg:block fixed z-20 inset-0 top-16 left-[max(0px,calc(50%-45rem))] right-auto w-[19rem] pb-10 pl-8 pr-6 overflow-y-auto">
     <div class="mt-10 text-slate-700">
       <div class="mt-5 pb-2 border-b mb-2">
-        <a th:href="${'/category/'+author.getUsername()+'/'+category.getSlug()+'?page=1'}"
+        <a th:href="${'/category/'+author.getUsername()+'/'+category.getSlug()+'?scope=public&page=1'}"
            class="col-span-4 flex items-center hover:text-emerald-600 stroke-slate-700 fill-slate-700 hover:stroke-emerald-600 hover:fill-emerald-600">
           <label>
             <svg xmlns="http://www.w3.org/2000/svg" focusable="false" fill="none" viewBox="0 0 24 24"
