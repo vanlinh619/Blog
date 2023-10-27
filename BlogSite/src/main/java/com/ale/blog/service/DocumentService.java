@@ -22,4 +22,5 @@ public interface DocumentService extends EntityService<Document, Long> {
     Page<Document> findAllByAuthor(@Nonnull User author, @Nullable User owner, @Nonnull DocumentState state, @Nonnull QueryRequest queryRequest);
     Document save(@Nonnull Document document);
     Optional<Document> documentWithPermission(@Nonnull Document document, @Nullable User owner);
+    Optional<Document> isDisplayDocument(@Nonnull Document document, @Nullable User owner);
 }

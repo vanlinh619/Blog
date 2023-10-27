@@ -6,10 +6,12 @@ import com.ale.blog.entity.User;
 import com.ale.blog.handler.mapper.DocumentSectionMapper;
 import com.ale.blog.handler.mapper.pojo.request.DocumentSectionRequest;
 import com.ale.blog.repository.DocumentSectionRepository;
+import jakarta.annotation.Nonnull;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
@@ -46,8 +48,8 @@ public class DocumentSectionServiceImpl implements DocumentSectionService {
     }
 
     @Override
-    public List<DocumentSection> findAllByDocument(Document document) {
-        return sectionRepository.findAllByDocument(document);
+    public List<DocumentSection> findAllByDocument(Document document, @Nonnull Sort sort) {
+        return sectionRepository.findAllByDocument(document, sort);
     }
 
     @Override

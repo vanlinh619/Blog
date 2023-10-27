@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldNameConstants;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"document_id", "title"}))
 @Data
 @Builder
+@FieldNameConstants(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class DocumentSection {
@@ -25,6 +27,7 @@ public class DocumentSection {
     private String title;
 
     @NotNull
+    @FieldNameConstants.Include
     private Integer priority;
 
     @NotNull
