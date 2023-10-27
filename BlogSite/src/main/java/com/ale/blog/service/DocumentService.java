@@ -19,7 +19,7 @@ public interface DocumentService extends EntityService<Document, Long> {
     void increaseSize(Long id);
     Document getEntriesOfDocument(@Nonnull Document document);
     Page<Document> findAllByAuthor(@Nonnull User author, @Nonnull DocumentState state, @Nonnull QueryRequest queryRequest);
-    Page<Document> findAllByAuthor(@Nonnull User author, @Nonnull User owner, @Nonnull QueryRequest queryRequest);
+    Page<Document> findAllByAuthor(@Nonnull User author, @Nullable User owner, @Nonnull DocumentState state, @Nonnull QueryRequest queryRequest);
     Document save(@Nonnull Document document);
     Optional<Document> documentWithPermission(@Nonnull Document document, @Nullable User owner);
 }

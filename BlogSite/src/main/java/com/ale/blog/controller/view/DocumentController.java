@@ -42,7 +42,7 @@ public class DocumentController {
     ) {
         Optional<User> userOptional = UserUtil.owner(authentication);
         User author = userService.getByUsername(username);
-        Page<Document> documentPage = documentService.findAllByAuthor(author, DocumentState.valueOf(pageRequest.getScope().toUpperCase()), QueryRequest.builder()
+        Page<Document> documentPage = documentService.findAllByAuthor(author, userOptional.orElse(null), DocumentState.valueOf(pageRequest.getScope().toUpperCase()), QueryRequest.builder()
                 .page(pageRequest.getPage() - 1)
                 .size(StaticVariable.PAGE_SIZE)
                 .sortBy(Document.Fields.createDate)

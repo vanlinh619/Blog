@@ -29,6 +29,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @RequiredArgsConstructor
@@ -98,10 +99,22 @@ public class DocumentServiceImpl implements DocumentService {
         return documentRepository.findAllByAuthorAndState(author, state, Convert.pageRequest(queryRequest));
     }
 
+    /**
+     * return Page Document if <p>
+     * is owner <p>
+     * or state == PUBLIC <p>
+     * or share with user
+     */
     @Override
-    public Page<Document> findAllByAuthor(@Nonnull User author, @Nullable User owner, @Nonnull QueryRequest queryRequest) {
-
-        return documentRepository.findAllByAuthorAndState(author, DocumentState.PUBLIC, Convert.pageRequest(queryRequest));
+    public Page<Document> findAllByAuthor(@Nonnull User author, @Nullable User owner, @Nonnull DocumentState state, @Nonnull QueryRequest queryRequest) {
+        return Optional.ofNullable(owner)
+                .map(user -> user.equals(author) ? state : null)
+                .or(() -> state == DocumentState.PUBLIC ? Optional.of(state) : Optional.empty())
+                .map(st -> documentRepository.findAllByAuthorAndState(author, st, Convert.pageRequest(queryRequest)))
+                .orElseGet(() -> state == DocumentState.SHARE && owner != null
+                        ? documentRepository.findAllByAuthorAndShareWith(author, owner, Convert.pageRequest(queryRequest))
+                        : Page.empty()
+                );
     }
 
     @Override

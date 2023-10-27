@@ -24,4 +24,6 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
     @Query("update Document d set d.size = d.size + 1 where d.id = :id")
     void increaseSize(Long id);
     Page<Document> findAllByAuthorAndState(User author, DocumentState state, Pageable pageable);
+    @Query("select d from Document d join Share s on d = s.document where s.shareWith = :owner and s.document.author = :author")
+    Page<Document> findAllByAuthorAndShareWith(User author, User owner, Pageable pageable);
 }
