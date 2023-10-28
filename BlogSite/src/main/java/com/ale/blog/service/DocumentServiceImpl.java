@@ -88,17 +88,20 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public Document getEntriesOfDocument(@Nonnull Document document) {
-        document.setSections(sectionService.findAllByDocument(document, Sort.by(
-                                DocumentSection.Fields.priority
-                        ))
-                        .stream()
-                        .peek(section -> section.setLinked(linkedService.findAllBySection(section, Sort.by(
-                                DocumentLinked.Fields.priority
-                        ))))
-                        .toList()
-        );
-        return document;
+    public Optional<Document> getEntriesOfDocument(@Nullable Document document) {
+        return Optional.ofNullable(document)
+                .map(doc -> {
+                    doc.setSections(sectionService.findAllByDocument(doc, Sort.by(
+                                            DocumentSection.Fields.priority
+                                    ))
+                                    .stream()
+                                    .peek(section -> section.setLinked(linkedService.findAllBySection(section, Sort.by(
+                                            DocumentLinked.Fields.priority
+                                    ))))
+                                    .toList()
+                    );
+                    return doc;
+                });
     }
 
     @Override
