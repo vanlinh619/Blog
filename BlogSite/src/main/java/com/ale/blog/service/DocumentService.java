@@ -17,7 +17,7 @@ public interface DocumentService extends EntityService<Document, Long> {
     Document getDocumentBySlug(String slug, User author);
     Document getDocumentBySlug(@Nonnull String slug, @Nonnull User author, @Nullable User owner);
     void increaseSize(Long id);
-    Document getEntriesOfDocument(@Nonnull Document document);
+    Optional<Document> getEntriesOfDocument(@Nullable Document document);
     Page<Document> findAllByAuthor(@Nonnull User author, @Nonnull DocumentState state, @Nonnull QueryRequest queryRequest);
     Page<Document> findAllByAuthor(@Nonnull User author, @Nullable User owner, @Nonnull DocumentState state, @Nonnull QueryRequest queryRequest);
     Document save(@Nonnull Document document);
