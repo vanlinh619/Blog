@@ -16,7 +16,6 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Indexed
 @Data
 @Builder
 @AllArgsConstructor
@@ -26,7 +25,6 @@ public class Tag implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @KeywordField
     @NotBlank
     @Pattern(regexp = "^[a-zA-Z0-9]$")
     @Column(unique = true, length = 50)
