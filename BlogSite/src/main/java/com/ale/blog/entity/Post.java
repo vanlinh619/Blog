@@ -10,12 +10,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
 
 @Entity
+@Indexed
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"author_uuid", "title"}) )
 @Data
 @Builder
@@ -27,6 +30,7 @@ public class Post implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @FullTextField
     @NotBlank
     private String title;
 
@@ -48,6 +52,10 @@ public class Post implements Serializable {
     @NotBlank
     @Column(columnDefinition = "TEXT")
     private String content;
+
+    @FullTextField
+    @Column(columnDefinition = "TEXT")
+    private String rawContent;
 
     @Column(nullable = false)
     private Long view = 0L;

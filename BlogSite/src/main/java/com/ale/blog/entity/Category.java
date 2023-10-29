@@ -9,11 +9,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
 import java.io.Serializable;
 import java.util.List;
 
 @Entity
+@Indexed
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"author_uuid", "title"}) )
 @Data
 @Builder
@@ -24,6 +27,7 @@ public class Category implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @FullTextField
     @NotBlank
     private String title;
 
@@ -32,6 +36,7 @@ public class Category implements Serializable {
     @Column(unique = true, length = 300)
     private String slug;
 
+    @FullTextField
     @Column(length = 2000)
     private String introduction;
 

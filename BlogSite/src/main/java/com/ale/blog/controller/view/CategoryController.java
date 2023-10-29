@@ -7,7 +7,6 @@ import com.ale.blog.entity.User;
 import com.ale.blog.entity.state.PostState;
 import com.ale.blog.handler.exception.AppException;
 import com.ale.blog.handler.mapper.pojo.request.PageDocumentRequest;
-import com.ale.blog.handler.mapper.pojo.request.PageRequest;
 import com.ale.blog.handler.mapper.pojo.request.QueryRequest;
 import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
 import com.ale.blog.handler.utils.SortType;
