@@ -3,6 +3,8 @@ package com.ale.blog;
 import com.ale.blog.entity.User;
 import com.ale.blog.entity.state.OAuthProvider;
 import com.ale.blog.entity.state.UserRole;
+import com.ale.blog.handler.mapper.pojo.request.SearchRequest;
+import com.ale.blog.service.SearchService;
 import com.ale.blog.service.SlugIdService;
 import com.ale.blog.service.UserService;
 import org.springframework.boot.SpringApplication;
@@ -47,5 +49,7 @@ public class BlogApplication extends SpringServletContainerInitializer {
             userService.create(userAD);
             userService.create(userCT);
         });
+//        SearchService searchService = context.getBean(SearchService.class);
+//        searchService.manuallyIndexData();
     }
 }

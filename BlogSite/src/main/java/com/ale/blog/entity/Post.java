@@ -30,6 +30,7 @@ public class Post implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @FieldNameConstants.Include
     @FullTextField
     @NotBlank
     private String title;
@@ -53,6 +54,7 @@ public class Post implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    @FieldNameConstants.Include
     @FullTextField
     @Column(columnDefinition = "TEXT")
     private String rawContent;

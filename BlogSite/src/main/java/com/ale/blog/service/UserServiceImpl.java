@@ -77,6 +77,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User create(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setFullName(user.getFirstName() + " " + user.getLastName());
         userRepository.save(user);
         return user;
     }
@@ -110,6 +111,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                     .role(UserRole.USER)
                     .provider(OAuthProvider.GOOGLE)
                     .build();
+            user.setFullName(user.getFirstName() + " " + user.getLastName());
             userRepository.save(user);
             return user;
         });

@@ -3,8 +3,10 @@ package com.ale.blog.entity;
 import com.ale.blog.entity.state.ImageExtension;
 import com.ale.blog.entity.state.ImageState;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -44,6 +46,7 @@ public class Image implements Serializable {
     @FieldNameConstants.Include
     private Instant createDate;
 
+    @Size(max = 5000000)
     @NotNull
     private Long size;
 
