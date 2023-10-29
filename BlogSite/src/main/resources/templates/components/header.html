@@ -27,12 +27,35 @@
           Tài liệu
         </a>
       </div>
+      <div class="relative w-4/12 mr-4">
+        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+          <svg class="w-4 h-4 text-slate-500 fill-slate-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+               viewBox="0 0 24 24">
+            <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M17.0392 15.6244C18.2714 14.084 19.0082 12.1301 19.0082 10.0041C19.0082 5.03127 14.9769 1 10.0041 1C5.03127 1 1 5.03127 1 10.0041C1 14.9769 5.03127 19.0082 10.0041 19.0082C12.1301 19.0082 14.084 18.2714 15.6244 17.0392L21.2921 22.707C21.6828 23.0977 22.3163 23.0977 22.707 22.707C23.0977 22.3163 23.0977 21.6828 22.707 21.2921L17.0392 15.6244ZM10.0041 17.0173C6.1308 17.0173 2.99087 13.8774 2.99087 10.0041C2.99087 6.1308 6.1308 2.99087 10.0041 2.99087C13.8774 2.99087 17.0173 6.1308 17.0173 10.0041C17.0173 13.8774 13.8774 17.0173 10.0041 17.0173Z">
+            </path>
+          </svg>
+        </div>
+        <input type="text"
+               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:ring-1 focus:ring-slate-500 focus:border-slate-500 block w-full px-10 p-1.5"
+               placeholder="Tìm kiếm..." required>
+        <button type="button" class="absolute inset-y-0 right-0 flex items-center pr-3">
+          <svg class="w-4 h-4 text-slate-500 stroke-slate-500 animate-spin"
+               aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <path
+                d="M20.0001 12C20.0001 13.3811 19.6425 14.7386 18.9623 15.9405C18.282 17.1424 17.3022 18.1477 16.1182 18.8587C14.9341 19.5696 13.5862 19.9619 12.2056 19.9974C10.825 20.0328 9.45873 19.7103 8.23975 19.0612"
+                stroke-width="3.55556" stroke-linecap="round">
+            </path>
+          </svg>
+        </button>
+      </div>
       <div>
         <a th:if="${user == null}" href="/login"
            class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">
           Login
         </a>
-        <a th:unless="${user == null}" href="/profile" class="hover:stroke-slate-700 hover:text-slate-700 stroke-white text-white">
+        <a th:unless="${user == null}" href="/profile"
+           class="hover:stroke-slate-700 hover:text-slate-700 stroke-white text-white">
           <label>
             <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 24 24"
                  class="w-8 h-8 min-w-[1rem] min-h-[1rem] stroke-slate-300 fill-none">

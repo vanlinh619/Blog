@@ -30,6 +30,7 @@ build/
 !**/src/test/**/build/
 node_modules/
 images/
+data/
 
 ### VS Code ###
 .vscode/

@@ -47,10 +47,14 @@ public class PostServiceImpl implements PostService {
     public Post createPostArticle(PostRequest postRequest, User author) {
         Post post = postMapper.toPost(postRequest);
         post.setAuthor(author);
+
         Safelist safelist = Safelist.relaxed();
         safelist.addTags("figure", "figcaption");
         String clean = Jsoup.clean(post.getContent(), safelist);
+        String rawText = Jsoup.parse(clean).text();
+
         post.setContent(clean);
+        post.setRawContent(rawText);
         post.setSlug(slugIdService.getId(SlugType.POST) + "-" + Format.toHref(post.getTitle()));
 
         List<TableOfContent> headTables = headTableService.createHeaderTable(post);

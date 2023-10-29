@@ -10,10 +10,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -30,14 +30,17 @@ public class User implements Serializable {
     @NotBlank
     private String password;
 
+    @KeywordField
     @NotBlank
     @Pattern(regexp = "^[a-zA-Z0-9-]{4,50}$")
     @Column(unique = true,length = 50)
     private String username;
 
+    @KeywordField
     @Column(length = 50)
     private String firstName;
 
+    @KeywordField
     @Column(length = 50)
     private String lastName;
 
