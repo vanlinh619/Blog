@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 public class SearchResponse {
     private String id;
     private String view;
-//    private String snippet;
+    private String snippet;
     private EntityType type;
 }
