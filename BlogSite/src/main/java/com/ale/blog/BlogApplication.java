@@ -49,7 +49,7 @@ public class BlogApplication extends SpringServletContainerInitializer {
             userService.create(userAD);
             userService.create(userCT);
         });
-//        SearchService searchService = context.getBean(SearchService.class);
-//        searchService.manuallyIndexData();
+        SearchService searchService = context.getBean(SearchService.class);
+        searchService.manuallyIndexData();
     }
 }

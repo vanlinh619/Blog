@@ -116,7 +116,7 @@ export default {
           })
           .catch(error => {
             if (!RequestApi.hasAuthorize(error, this.save)) return
-            this.response = error?.response.data
+            this.response = error?.response?.data
             console.log(error)
           })
     },

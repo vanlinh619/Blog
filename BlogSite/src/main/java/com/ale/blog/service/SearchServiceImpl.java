@@ -41,11 +41,13 @@ public class SearchServiceImpl implements SearchService {
         List<Post> posts = searchDefault(
                 Post.class,
                 pattern,
+                4,
                 Post.Fields.title, Post.Fields.rawContent
         );
         List<User> users = searchDefault(
                 User.class,
                 pattern,
+                3,
                 User.Fields.username, User.Fields.fullName
         );
         List<SearchResponse> searchResponses = new ArrayList<>(posts.size() + users.size());

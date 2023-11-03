@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="search">
+  <div id="search"></div>
+  <script th:inline="javascript" type="module">
+      const {createApp} = Vue
+      createApp({
+          data() {
+              return {
+                  loading: false,
+                  pattern: '',
+                  searchResponse: []
+              }
+          },
+          methods: {
+              searchFullText(pattern) {
+                  axios.get(`/api/public/search?pattern=${pattern}`)
+                      .then(response => {
+                          console.log(response)
+                          this.searchResponse.splice(0, this.searchResponse.length)
+                          this.searchResponse.push(...response?.data)
+                          this.loading = false
+                      })
+                      .catch(error => {
+                          console.log(error)
+                          this.loading = false
+                      })
+              }
+          },
+          watch: {
+              pattern(data) {
+                  this.loading = true
+                  this.searchFullText(data)
+              }
+          },
+          template: `
+      <div>
+          <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <svg class="w-4 h-4 text-slate-500 fill-slate-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                 viewBox="0 0 24 24">
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M17.0392 15.6244C18.2714 14.084 19.0082 12.1301 19.0082 10.0041C19.0082 5.03127 14.9769 1 10.0041 1C5.03127 1 1 5.03127 1 10.0041C1 14.9769 5.03127 19.0082 10.0041 19.0082C12.1301 19.0082 14.084 18.2714 15.6244 17.0392L21.2921 22.707C21.6828 23.0977 22.3163 23.0977 22.707 22.707C23.0977 22.3163 23.0977 21.6828 22.707 21.2921L17.0392 15.6244ZM10.0041 17.0173C6.1308 17.0173 2.99087 13.8774 2.99087 10.0041C2.99087 6.1308 6.1308 2.99087 10.0041 2.99087C13.8774 2.99087 17.0173 6.1308 17.0173 10.0041C17.0173 13.8774 13.8774 17.0173 10.0041 17.0173Z">
+              </path>
+            </svg>
+          </div>
+          <input v-model="pattern" type="text"
+                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:ring-1 focus:ring-slate-500 focus:border-slate-500 block w-full px-10 p-1.5"
+                 placeholder="Tìm kiếm..." required>
+          <button v-if="loading" type="button" class="absolute inset-y-0 right-0 flex items-center pr-3">
+            <svg class="w-4 h-4 text-slate-500 stroke-slate-500 animate-spin"
+                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <path
+                  d="M20.0001 12C20.0001 13.3811 19.6425 14.7386 18.9623 15.9405C18.282 17.1424 17.3022 18.1477 16.1182 18.8587C14.9341 19.5696 13.5862 19.9619 12.2056 19.9974C10.825 20.0328 9.45873 19.7103 8.23975 19.0612"
+                  stroke-width="3.55556" stroke-linecap="round">
+              </path>
+            </svg>
+          </button>
+          <div v-if="searchResponse && searchResponse.length !== 0" class="absolute bg-white w-full rounded border p-3 mt-1">
+            <ul class="space-y-1">
+              <template v-for="search in searchResponse">
+                <li v-if="search.type === 'POST'" class="border-b pb-2 mt-2 hover:text-emerald-600 stroke-slate-700 fill-slate-700 hover:stroke-emerald-600 hover:fill-emerald-600">
+                  <div class="flex items-center">
+                    <span>
+                      <svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"
+                             class="min-w-[1rem] min-h-[1rem]">
+                             <path fill-rule="evenodd" clip-rule="evenodd" d="M10.9436 1.25H13.0564C14.8942 1.24998 16.3498 1.24997 17.489 1.40314C18.6614 1.56076 19.6104 1.89288 20.3588 2.64124C21.1071 3.38961 21.4392 4.33856 21.5969 5.51098C21.75 6.65019 21.75 8.10583 21.75 9.94359V14.0564C21.75 15.8942 21.75 17.3498 21.5969 18.489C21.4392 19.6614 21.1071 20.6104 20.3588 21.3588C19.6104 22.1071 18.6614 22.4392 17.489 22.5969C16.3498 22.75 14.8942 22.75 13.0564 22.75H10.9436C9.10583 22.75 7.65019 22.75 6.51098 22.5969C5.33856 22.4392 4.38961 22.1071 3.64124 21.3588C2.89288 20.6104 2.56076 19.6614 2.40314 18.489C2.24997 17.3498 2.24998 15.8942 2.25 14.0564V9.94358C2.24998 8.10582 2.24997 6.65019 2.40314 5.51098C2.56076 4.33856 2.89288 3.38961 3.64124 2.64124C4.38961 1.89288 5.33856 1.56076 6.51098 1.40314C7.65019 1.24997 9.10582 1.24998 10.9436 1.25ZM6.71085 2.88976C5.70476 3.02502 5.12511 3.27869 4.7019 3.7019C4.27869 4.12511 4.02502 4.70476 3.88976 5.71085C3.75159 6.73851 3.75 8.09318 3.75 10V14C3.75 15.9068 3.75159 17.2615 3.88976 18.2892C4.02502 19.2952 4.27869 19.8749 4.7019 20.2981C5.12511 20.7213 5.70476 20.975 6.71085 21.1102C7.73851 21.2484 9.09318 21.25 11 21.25H13C14.9068 21.25 16.2615 21.2484 17.2892 21.1102C18.2952 20.975 18.8749 20.7213 19.2981 20.2981C19.7213 19.8749 19.975 19.2952 20.1102 18.2892C20.2484 17.2615 20.25 15.9068 20.25 14V10C20.25 8.09318 20.2484 6.73851 20.1102 5.71085C19.975 4.70476 19.7213 4.12511 19.2981 3.7019C18.8749 3.27869 18.2952 3.02502 17.2892 2.88976C16.2615 2.75159 14.9068 2.75 13 2.75H11C9.09318 2.75 7.73851 2.75159 6.71085 2.88976ZM7.25 10C7.25 9.58579 7.58579 9.25 8 9.25H16C16.4142 9.25 16.75 9.58579 16.75 10C16.75 10.4142 16.4142 10.75 16 10.75H8C7.58579 10.75 7.25 10.4142 7.25 10ZM7.25 14C7.25 13.5858 7.58579 13.25 8 13.25H13C13.4142 13.25 13.75 13.5858 13.75 14C13.75 14.4142 13.4142 14.75 13 14.75H8C7.58579 14.75 7.25 14.4142 7.25 14Z">
+                              </path>
+                      </svg>
+                    </span>
+                    <a :href="'/post/'+search.id" class="ml-2 truncate">{{search.view}}</a>
+                  </div>
+                  <div class="mt-1 truncate text-xs text-slate-500">{{search.snippet}}</div>
+                </li>
+                <li v-else class="border-b pb-2 mt-2 hover:text-emerald-600 stroke-slate-700 fill-slate-700 hover:stroke-emerald-600 hover:fill-emerald-600">
+                  <div class="flex items-center">
+                    <span>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" focusable="false" viewBox="0 0 24 24"
+                             class="min-w-[1rem] min-h-[1rem]">
+                        <circle cx="12" cy="9" r="3" stroke="#1C274C" stroke-width="1.5"></circle>
+                        <circle cx="12" cy="12" r="10" stroke="#1C274C" stroke-width="1.5"></circle>
+                        <path d="M17.9691 20C17.81 17.1085 16.9247 15 11.9999 15C7.07521 15 6.18991 17.1085 6.03076 20" stroke-width="1.5" stroke-linecap="round"></path>
+                      </svg>
+                    </span>
+                    <a :href="'/home/'+search.id" class="ml-2 truncate">{{search.view}}</a>
+                  </div>
+                  <div class="mt-1 truncate text-xs text-slate-500">{{search.snippet}}</div>
+                </li>
+              </template>
+            </ul>
+          </div>
+      </div>
+      `
+      }).mount('#search')
+  </script>
+</div>
+</html>

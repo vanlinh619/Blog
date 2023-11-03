@@ -13,12 +13,12 @@ public interface SearchService {
 
     List<SearchResponse> search(String pattern);
 
-    default <T> List<T> searchDefault(Class<T> clazz, String pattern, String... fields) {
+    default <T> List<T> searchDefault(Class<T> clazz, String pattern, int size, String... fields) {
         return getSearchSession().search(clazz)
                 .where(searchPredicateFactory -> searchPredicateFactory.match()
                         .fields(fields)
                         .matching(pattern)
                 )
-                .fetchHits(10);
+                .fetchHits(size);
     }
 }

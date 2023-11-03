@@ -18,6 +18,7 @@ public class SearchMapperImpl implements SearchMapper {
                 .id(user.getUsername())
                 .view(user.getFirstName() + " " + user.getLastName())
                 .type(EntityType.USER)
+                .snippet(user.getUsername())
                 .build();
     }
 
@@ -27,6 +28,10 @@ public class SearchMapperImpl implements SearchMapper {
                 .id(post.getSlug())
                 .view(post.getTitle())
                 .type(EntityType.POST)
+                .snippet(post.getRawContent().length() > 100
+                        ? post.getRawContent().substring(0, 100)
+                        : post.getRawContent()
+                )
                 .build();
     }
 

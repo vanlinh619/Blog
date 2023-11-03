@@ -21,6 +21,6 @@ const hoverLink = (scroll) => {
     }
 }
 window.onscroll = (e) => {
-    let scroll = this.scrollY + 150
+    let scroll = this.scrollY + 100
     hoverLink(scroll)
 }
