@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
+import org.hibernate.search.engine.backend.types.Norms;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
@@ -31,7 +32,7 @@ public class Post implements Serializable {
     private Long id;
 
     @FieldNameConstants.Include
-    @FullTextField
+    @FullTextField(analyzer = "vietnamese")
     @NotBlank
     private String title;
 
@@ -55,7 +56,7 @@ public class Post implements Serializable {
     private String content;
 
     @FieldNameConstants.Include
-    @FullTextField
+    @FullTextField(analyzer = "vietnamese")
     @Column(columnDefinition = "TEXT")
     private String rawContent;
 

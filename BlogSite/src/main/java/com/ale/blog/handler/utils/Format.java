@@ -26,8 +26,9 @@ public class Format {
                 .toLowerCase()
                 .replaceAll("đ", "d")
                 .replaceAll("[^a-z0-9 -]", "")
-                .replaceAll("\\s+", "-");
-//                .replaceAll("^[^a-z]+", "");
+                .replaceAll("\\s+", "-")
+                .replaceAll("^[^a-z0-9]+", "")
+                .replaceAll("[^a-z0-9]+$", "");
     }
 
     public static String toParamUrl(Set<Map.Entry<String, String>> entries, String key, String value) {
