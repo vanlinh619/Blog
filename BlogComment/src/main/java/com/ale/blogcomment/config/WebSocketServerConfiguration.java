@@ -1,22 +1,25 @@
 package com.ale.blogcomment.config;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.WebSocketHandler;
-import org.springframework.web.socket.config.annotation.EnableWebSocket;
-import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
-import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+import org.springframework.web.socket.config.annotation.*;
 
 @Configuration
-@ComponentScan(basePackages = "com.ale.blogcomment")
-@EnableWebSocket
-@AllArgsConstructor
-public class WebSocketServerConfiguration implements WebSocketConfigurer {
-    private final WebSocketHandler webSocketHandler;
+@EnableWebSocketMessageBroker
+public class WebSocketServerConfiguration implements WebSocketMessageBrokerConfigurer {
     @Override
-    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(webSocketHandler, "/comment");
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/comment")
+                .setAllowedOrigins("https://localhost:8443")
+                .withSockJS();
+    }
+
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry registry) {
+        registry.enableSimpleBroker("/topic/", "/queue/");
+        registry.setApplicationDestinationPrefixes("/app");
     }
 }
