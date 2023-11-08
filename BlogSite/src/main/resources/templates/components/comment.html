@@ -26,7 +26,7 @@
               }
           },
           mounted() {
-              this.socket = new SockJS("https://localhost:8440/comment")
+              this.socket = new SockJS("//localhost:8440/comment")
               this.stomp = Stomp.over(this.socket)
               this.stomp.connect(
                   {},
