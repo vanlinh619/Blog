@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.ale</groupId>
-    <artifactId>Blog</artifactId>
+    <artifactId>BlogSite</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Blog</name>
-    <description>Blog</description>
+    <name>BlogSite</name>
+    <description>BlogSite</description>
     <properties>
         <java.version>17</java.version>
     </properties>
@@ -52,10 +52,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-webflux</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-client</artifactId>

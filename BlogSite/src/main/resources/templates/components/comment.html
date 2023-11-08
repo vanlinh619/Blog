@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="comment(postSlug)">
+  <div id="comment-service"></div>
+  <script th:inline="javascript" type="module">
+      /*<![CDATA[*/
+      let postId = /*[[${postSlug}]]*/  ''
+      /*]]>*/
+
+      const {createApp} = Vue
+      createApp({
+          data() {
+              return {
+                  socket: null,
+                  stomp: null,
+
+                  comment: ''
+              }
+          },
+          methods: {
+              send() {
+                  console.log(this.comment)
+                  if (this.stomp && this.stomp.connected) {
+                      this.stomp.send(`/app/post/${postId}`, {}, JSON.stringify(this.comment));
+                  }
+              }
+          },
+          mounted() {
+              this.socket = new SockJS("//localhost:8440/comment")
+              this.stomp = Stomp.over(this.socket)
+              this.stomp.connect(
+                  {},
+                  frame => {
+                      console.log(frame);
+                      this.stomp.subscribe(`/topic/post/${postId}`, tick => {
+                          console.log(tick);
+                      });
+                  },
+                  error => {
+                      console.log(error);
+                  }
+              )
+          },
+          template: `
+          <input type="text" v-model="comment"/>
+          <button @click="send">Send</button>
+          `,
+      }).mount("#comment-service")
+  </script>
+</div>
+</html>
