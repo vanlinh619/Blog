@@ -10,8 +10,8 @@ public class WebSocketServerConfiguration implements WebSocketMessageBrokerConfi
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/comment")
-                .setAllowedOrigins("https://localhost:8443")
-                .withSockJS();
+                .setAllowedOrigins("https://localhost:8443");
+//                .withSockJS();
     }
 
     @Override
