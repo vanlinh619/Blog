@@ -1,48 +1,8 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<div th:fragment="comment(postSlug)">
-  <div id="comment-service"></div>
-  <script th:inline="javascript" type="module">
-      /*<![CDATA[*/
-      let postId = /*[[${postSlug}]]*/  ''
-      /*]]>*/
+<script setup>
 
-      const {createApp} = Vue
-      createApp({
-          data() {
-              return {
-                  socket: null,
-                  stomp: null,
+</script>
 
-                  comment: ''
-              }
-          },
-          methods: {
-              send() {
-                  console.log(this.comment)
-                  if (this.stomp && this.stomp.connected) {
-                      this.stomp.send(`/app/post/${postId}`, {}, JSON.stringify(this.comment));
-                  }
-              }
-          },
-          mounted() {
-              // this.socket = new SockJS("//localhost:8440/comment")
-              let socketUrl = 'ws://localhost:8440/comment'
-              this.stomp = new Stomp.client(socketUrl)
-              this.stomp.connect(
-                  {},
-                  frame => {
-                      console.log(frame);
-                      this.stomp.subscribe(`/topic/post/${postId}`, tick => {
-                          console.log(tick);
-                      });
-                  },
-                  error => {
-                      console.log(error);
-                  }
-              )
-          },
-          template: `
+<template>
   <div>
     <div class="font-medium text-center text-slate-500 border-b border-slate-200">
       <ul class="flex flex-wrap -mb-px">
@@ -54,10 +14,9 @@
       </ul>
     </div>
     <div class="mt-4 flex justify-between">
-      <input v-model="comment" type="text" placeholder="Thêm bình luận..."
+      <input type="text" placeholder="Thêm bình luận..."
              class="px-3 py-2 w-full mr-3 border rounded bg-slate-50 focus:border-slate-400 focus:outline-0"/>
-      <button @click="send" class="px-3 py-2 border rounded text-emerald-700 active:text-emerald-900 active:border-emerald-400">
-        Đăng
+      <button class="px-3 py-2 border rounded text-emerald-700 active:text-emerald-900 active:border-emerald-400">Đăng
       </button>
     </div>
     <div class="mt-3 border rounded bg-slate-50">
@@ -163,8 +122,13 @@
       </div>
     </div>
   </div>
-          `,
-      }).mount("#comment-service")
-  </script>
-</div>
-</html>
+
+
+
+
+  <div class="mb-10"></div>
+</template>
+
+<style scoped>
+
+</style>
