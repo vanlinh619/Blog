@@ -1,10 +1,13 @@
 package com.ale.blog.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldNameConstants;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -15,24 +18,40 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@FieldNameConstants(onlyExplicitlyIncluded = true)
 public class Comment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(columnDefinition = "TEXT")
-    private String content;
-    private Instant date;
 
+    @NotBlank
+    private String content;
+
+    @NotNull
+    @FieldNameConstants.Include
+    private Instant createDate;
+
+    private String replyUsername;
+
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private Post post;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private User author;
-    private String authorName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Comment replyFor;
 
     @OneToMany(mappedBy = "replyFor",fetch = FetchType.LAZY)
     private List<Comment> replies;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Comment superParent;
+
+    @OneToMany(mappedBy = "superParent",fetch = FetchType.LAZY)
+    private List<Comment> children;
+    @NotNull
+    private Long childrenSize;
 }

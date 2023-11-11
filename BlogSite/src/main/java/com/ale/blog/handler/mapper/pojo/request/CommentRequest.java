@@ -1,6 +1,8 @@
 package com.ale.blog.handler.mapper.pojo.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,5 +14,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CommentRequest {
     @NotBlank
-    private String message;
+    @Size(max = 255)
+    private String content;
+
+    @NotBlank
+    private String postSlug;
+
+    private Long replyCommentId;
 }
