@@ -1,5 +1,7 @@
 package com.ale.blog.handler.utils;
 
+import com.ale.blog.entity.User;
+
 import java.text.Normalizer;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -7,6 +9,33 @@ import java.util.Map;
 import java.util.Set;
 
 public class Format {
+
+    public static String nameOfUser(User user) {
+        return user.getFirstName() + " " + user.getLastName();
+    }
+
+    public static String toTimeDifference(Instant instant) {
+        LocalDate atTime = LocalDate.ofInstant(instant, ZoneId.systemDefault());
+        LocalDate now = LocalDate.now();
+
+        if (atTime.isEqual(now)) {
+            Duration duration = Duration.between(instant, Instant.now());
+            long hour = duration.getSeconds() / 3600;
+            long minute = duration.getSeconds() / 60;
+            if (hour > 0) {
+                return hour + " giờ trước";
+            }
+            if (minute > 0) {
+                return minute + " phút trước";
+            }
+            return "mới bình luận";
+        }
+        if (atTime.getYear() == now.getYear()) {
+            return atTime.format(DateTimeFormatter.ofPattern("dd-MM"));
+        }
+        return atTime.format(DateTimeFormatter.ofPattern("dd-MM-yy"));
+    }
+
     public static String toLocalDate(Instant instant) {
         if (instant == null) return "";
         LocalDate localDate = LocalDate.ofInstant(instant, ZoneId.systemDefault());
