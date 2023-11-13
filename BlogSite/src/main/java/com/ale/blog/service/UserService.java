@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface UserService extends EntityService<User, UUID> {
+    Optional<User> findDefaultAdmin();
     Optional<UserDetails> loadUserByUuid(UUID uuid);
     User getById(UUID uuid);
     Optional<User> findByUsername(String username);

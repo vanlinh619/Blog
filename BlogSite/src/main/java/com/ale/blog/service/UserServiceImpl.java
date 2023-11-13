@@ -4,16 +4,15 @@ import com.ale.blog.entity.User;
 import com.ale.blog.entity.state.OAuthProvider;
 import com.ale.blog.entity.state.UserRole;
 import com.ale.blog.handler.exception.AppException;
-import com.ale.blog.handler.mapper.pojo.request.CategoryRequest;
 import com.ale.blog.handler.mapper.pojo.response.DataResponse;
 import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
 import com.ale.blog.handler.mapper.pojo.response.state.Status;
-import com.ale.blog.handler.utils.StaticVariable;
 import com.ale.blog.repository.UserRepository;
 import com.ale.blog.security.UserAccessDetails;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.internal.bytebuddy.utility.RandomString;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,20 +26,44 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Value("${account.admin.username}")
+    private String username;
+    @Value("${account.admin.password}")
+    private String password;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         AtomicReference<UserDetails> atomicReference = new AtomicReference<>();
-        userRepository.findFirstByUsername(username).ifPresentOrElse(user -> {
+        userRepository.findUserByUsername(username).ifPresentOrElse(user -> {
             atomicReference.set(new UserAccessDetails(user));
         }, () -> {
             throw new UsernameNotFoundException(username);
         });
         return atomicReference.get();
+    }
+
+    @Override
+    public Optional<User> findDefaultAdmin() {
+        return userRepository.findUserByRole(UserRole.ADMIN)
+                .or(() -> {
+                    User userAD = User.builder()
+                            .username(username)
+                            .password(password)
+                            .lastName(username)
+                            .firstName(username)
+                            .email(username+"@mail.com")
+                            .registered(Instant.now())
+                            .role(UserRole.ADMIN)
+                            .provider(OAuthProvider.LOCAL)
+                            .build();
+                    create(userAD);
+                    return Optional.of(userAD);
+                });
     }
 
     @Override
@@ -66,7 +89,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public Optional<User> findByUsername(String username) {
-        return userRepository.findFirstByUsername(username);
+        return userRepository.findUserByUsername(username);
     }
 
     @Override
@@ -84,7 +107,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User getByUsername(String username) {
-        return userRepository.findFirstByUsername(username).orElseThrow(() -> new AppException(DataResponse.builder()
+        return userRepository.findUserByUsername(username).orElseThrow(() -> new AppException(DataResponse.builder()
                 .status(Status.FAILED)
                 .code(MessageCode.NOT_FOUND)
                 .message(username)
