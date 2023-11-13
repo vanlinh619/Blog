@@ -60,6 +60,7 @@ public class User implements Serializable {
     @Column(unique = true)
     private String email;
 
+    @NotNull
     private Instant registered;
 
     private String intro;

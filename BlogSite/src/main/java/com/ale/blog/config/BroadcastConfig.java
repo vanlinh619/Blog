@@ -2,6 +2,7 @@ package com.ale.blog.config;
 
 import com.ale.blog.service.BroadcastService;
 import com.ale.blog.service.BroadcastServiceImpl;
+import com.ale.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,14 +24,14 @@ public class BroadcastConfig {
     private String broadcastServiceUrl;
 
     @Bean
-    public BroadcastService broadcastService() {
+    public BroadcastService broadcastService(UserService userService) {
         if(broadcast) {
             WebSocketClient client = new StandardWebSocketClient();
             WebSocketStompClient stompClient = new WebSocketStompClient(client);
             stompClient.setMessageConverter(new MappingJackson2MessageConverter());
             StompSessionHandler sessionHandler = new StompSessionHandlerAdapter() {};
             CompletableFuture<StompSession> future = stompClient.connectAsync(broadcastServiceUrl, sessionHandler);
-            return new BroadcastServiceImpl(future.join());
+            return new BroadcastServiceImpl(future.join(), userService);
         }
         return new BroadcastService() {};
     }

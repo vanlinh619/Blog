@@ -1,7 +1,9 @@
 package com.ale.blogcomment.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.web.socket.config.annotation.*;
 
 @Configuration
@@ -16,7 +18,12 @@ public class WebSocketServerConfiguration implements WebSocketMessageBrokerConfi
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/topic/", "/queue/");
+//        registry.enableSimpleBroker("/topic/", "/queue/");
         registry.setApplicationDestinationPrefixes("/app");
+    }
+
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(new TopicSubscriptionInterceptor());
     }
 }

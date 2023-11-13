@@ -54,11 +54,7 @@ public class CommentServiceImpl implements CommentService, EntityService<Comment
                 });
 
         commentRepository.save(comment);
-        broadcastService.broadcast("/app/post/" + post.getSlug(), BroadcastResponse.builder()
-                .type(BroadcastType.COMMENT)
-                .payload(commentMapper.toCommentResponse(comment))
-                .build()
-        );
+        broadcastService.broadcast("/app/post/" + post.getSlug(), BroadcastType.COMMENT, commentMapper.toCommentResponse(comment));
         return comment;
     }
 

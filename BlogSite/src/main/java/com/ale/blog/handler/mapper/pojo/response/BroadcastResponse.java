@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BroadcastResponse {
+    private String userId;
     private BroadcastType type;
     private Object payload;
 }

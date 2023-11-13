@@ -7,6 +7,7 @@ import com.ale.blog.handler.mapper.pojo.request.SearchRequest;
 import com.ale.blog.service.SearchService;
 import com.ale.blog.service.SlugIdService;
 import com.ale.blog.service.UserService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -20,35 +21,8 @@ public class BlogApplication extends SpringServletContainerInitializer {
         ApplicationContext context = SpringApplication.run(BlogApplication.class, args);
 
         UserService userService = context.getBean(UserService.class);
-        SlugIdService slugIdService = context.getBean(SlugIdService.class);
-        userService.findFistUser().ifPresentOrElse(user -> {}, () -> {
-            User userAD = User.builder()
-                    .username("admin")
-                    .password("admin")
-                    .lastName("admin")
-                    .firstName("admin")
-                    .email("admin@mail.com")
-                    .phoneNumber("0999999999")
-                    .intro("admin")
-                    .registered(Instant.now())
-                    .role(UserRole.ADMIN)
-                    .provider(OAuthProvider.LOCAL)
-                    .build();
-            User userCT = User.builder()
-                    .username("content")
-                    .password("content")
-                    .lastName("content creator")
-                    .firstName("content creator")
-                    .email("creator@mail.com")
-                    .phoneNumber("0888888888")
-                    .intro("content creator")
-                    .registered(Instant.now())
-                    .role(UserRole.CONTENT_CREATOR)
-                    .provider(OAuthProvider.LOCAL)
-                    .build();
-            userService.create(userAD);
-            userService.create(userCT);
-        });
+        userService.findDefaultAdmin();
+
 //        SearchService searchService = context.getBean(SearchService.class);
 //        searchService.manuallyIndexData();
     }
