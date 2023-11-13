@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -39,7 +40,7 @@ public class PostController {
         Page<Post> postPage = postService.findAllByCategory(post.getCategory(), QueryRequest.builder()
                 .page(0)
                 .size(StaticVariable.PAGE_SIZE)
-                .sortBy(Post.Fields.createDate)
+                .sortBy(List.of(Post.Fields.createDate))
                 .sortType(SortType.DESC.name())
                 .build());
         model.addAttribute("author", post.getAuthor());

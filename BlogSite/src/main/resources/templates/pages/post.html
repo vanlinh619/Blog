@@ -7,7 +7,7 @@
   <link rel="stylesheet" th:href="@{/css/main.css}"/>
   <script src="https://cdn.jsdelivr.net/npm/vue@3.3.4/dist/vue.global.prod.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<!--  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>-->
   <script src="https://cdn.jsdelivr.net/npm/stomp-websocket@2.3.4-next/lib/stomp.min.js"></script>
 </head>
 <body>
@@ -55,7 +55,6 @@
             <span th:text="${post.getView()}"></span>
           </label>
         </div>
-        <div th:replace="components/comment::comment(${user}, ${post})"></div>
         <div class="mt-10 min-h-screen text-lg
             [&_h2]:text-3xl [&_h2]:mt-10 [&_h2]:mb-3 [&_h2]:py-3 [&_h2]:scroll-mt-20 [&_h2]:font-medium
             [&_h3]:text-[1.65rem] [&_h3]:mt-8 [&_h3]:mb-2 [&_h3]:py-3 [&_h3]:scroll-mt-20 [&_h3]:font-medium
@@ -76,6 +75,10 @@
             [&_td]:border [&_td]:p-2
             [&_p]:mt-4"
              th:utext="${post.getContent()}">
+        </div>
+        <div class="mt-10">
+          <h2 class="text-3xl mb-3 font-medium">Bình luận</h2>
+          <div th:replace="components/comment::comment(${user}, ${post})"></div>
         </div>
         <footer th:replace="components/footer::footer"></footer>
       </div>

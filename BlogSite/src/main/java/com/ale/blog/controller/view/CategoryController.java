@@ -47,7 +47,7 @@ public class CategoryController {
                 QueryRequest.builder()
                         .page(pageRequest.getPage() - 1)
                         .size(StaticVariable.PAGE_SIZE)
-                        .sortBy(Post.Fields.createDate)
+                        .sortBy(List.of(Post.Fields.createDate))
                         .sortType(SortType.DESC.name())
                         .build()
         );
@@ -82,7 +82,7 @@ public class CategoryController {
                 QueryRequest.builder()
                         .page(pageRequest.getPage() - 1)
                         .size(StaticVariable.PAGE_SIZE)
-                        .sortBy(Post.Fields.createDate)
+                        .sortBy(List.of(Post.Fields.createDate))
                         .sortType(SortType.DESC.name())
                         .build()
         );

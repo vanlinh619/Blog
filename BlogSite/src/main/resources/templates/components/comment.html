@@ -10,22 +10,21 @@
       import ApiUtil from /*[[@{/js/ApiUtil.js}]]*/ "../../public/js/ApiUtil";
 
       let isLogin = /*[[${user != null ? true : false}]]*/ false
+      let username = /*[[${user != null ? user.getUsername() : ''}]]*/ ''
       let postSlug = /*[[${post.getSlug()}]]*/  ''
       /*]]>*/
 
-      const {createApp} = Vue
-      createApp({
+      Vue.createApp({
           data() {
               return {
-                  socket: null,
-                  stomp: null,
                   isLogin: isLogin,
                   comments: [],
                   page: 0,
                   totalPage: 0,
 
                   content: '',
-                  replyCommentId: null
+                  replyComment: null,
+                  newComment: null
               }
           },
           methods: {
@@ -33,17 +32,22 @@
                   axios.post(ApiUtil.commentUrl, {
                       postSlug: postSlug,
                       content: this.content,
-                      replyCommentId: this.replyCommentId
+                      replyCommentId: this.replyComment ? this.replyComment.id : null
                   }, {
                       headers: {
                           'Content-Type': 'application/json',
                       }
                   })
                       .then(response => {
-                          console.log(response)
-                          this.comments.unshift(response?.data?.data)
+                          let newComment = response?.data?.data
+                          if (newComment.supperCommentId) {
+                              this.newComment = newComment
+                          } else {
+                              this.comments.unshift(newComment)
+                          }
+
                           this.content = ''
-                          this.replyCommentId = null
+                          this.replyComment = null
                       })
                       .catch(error => {
                           console.log(error)
@@ -52,26 +56,33 @@
               loadComments(page) {
                   axios.get(ApiUtil.getAllCommentUrl(postSlug, page))
                       .then(response => {
-                          console.log(response)
-                          this.comments.push(...response?.data?.data?.content)
+                          let comments = response?.data?.data?.content
+                              .filter(comment => !this.comments.find(cm => cm.id === comment.id))
+                          this.comments.push(...comments)
                           this.page = response?.data?.data?.page
                           this.totalPage = response?.data?.data?.totalPage
                       })
                       .catch(error => {
                           console.log(error)
                       })
-              }
+              },
           },
           mounted() {
               // this.socket = new SockJS("//localhost:8440/comment")
-              let socketUrl = 'ws://localhost:8440/comment'
-              this.stomp = new Stomp.client(socketUrl)
-              this.stomp.connect(
+              let stomp = new Stomp.client(ApiUtil.socketUrl)
+              stomp.connect(
                   {},
                   frame => {
-                      console.log(frame);
-                      this.stomp.subscribe(`/topic/post/${postSlug}`, tick => {
-                          console.log(tick);
+                      // console.log(frame);
+                      stomp.subscribe(`/topic/post/${postSlug}`, e => {
+                          console.log(e.body);
+                          let newComment = JSON.parse(e.body)
+                          if (newComment.sender === username) return
+                          if (newComment.supperCommentId) {
+                              this.newComment = newComment
+                          } else {
+                              this.comments.unshift(newComment)
+                          }
                       });
                   },
                   error => {
@@ -84,11 +95,6 @@
           watch: {
               page(value) {
                   this.loadComments(value)
-              }
-          },
-          computed: {
-              relyFor() {
-                  return this.comments.find(comment => comment.id === this.replyCommentId).username
               }
           },
           template: `
@@ -104,8 +110,8 @@
     </div>
     <div v-if="isLogin" class="mt-4 flex justify-between">
       <div class="px-3 py-2 w-full flex items-center mr-3 border rounded bg-slate-50 focus:border-slate-400">
-        <div v-if="replyCommentId" class="max-w-[30%] truncate">Trả lời: {{relyFor}}</div>
-        <button v-if="replyCommentId" @click="replyCommentId = null"
+        <div v-if="replyComment" class="max-w-[30%] truncate">Trả lời: {{replyComment.username}}</div>
+        <button v-if="replyComment" @click="replyComment = null"
               class="stroke-slate-500 hover:stroke-emerald-500 mt-1 px-2 border-r border-slate-200" >
           <svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24" class="min-w-[1rem] min-h-[1rem]">
             <path d="M7 7.00006L17 17.0001M7 17.0001L17 7.00006" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -118,9 +124,12 @@
         Đăng
       </button>
     </div>
-    <div class="mt-3 border rounded bg-slate-50 max-h-96 overflow-y-auto">
+    <div class="mt-3 border rounded bg-slate-50 max-h-[30rem] overflow-y-auto">
+      <div v-if="!comments || comments.length === 0" class="text-slate-500 m-7">
+        Chưa có bình luận nào
+      </div>
 
-      <div v-for="comment in comments" class="mx-7 my-5 flex items-start">
+      <div v-for="comment in comments" :key="comment.id" class="mx-7 my-5 flex items-start">
         <img class="w-10 h-10 rounded-full object-center object-cover"
              src="https://stcv4.hnammobile.com/downloads/f/cach-chup-anh-chan-dung-bang-dien-thoai-lung-linh-nhu-may-anh-01676344756.jpg">
         <div class="ml-3">
@@ -128,84 +137,12 @@
           <div>{{comment.content}}</div>
           <div class="mt-1 text-sm text-slate-500">
             <label>{{comment.createDate}}</label>
-            <button @click="replyCommentId = comment.id" class="ml-5">Trả lời</button>
+            <button @click="replyComment = comment" class="ml-5">Trả lời</button>
           </div>
-          <div v-if="comment.childrenSize > 0" class="mt-2 flex items-center">
-            <button class="text-sm text-slate-500">Xem {{comment.childrenSize}} câu trả lời</button>
-            <label class="mt-[0.1rem] ml-1 fill-slate-500">
-              <svg xmlns="http://www.w3.org/2000/svg" focusable="false" stroke="none" viewBox="0 0 24 24"
-                   class="min-w-[1rem] min-h-[1rem]">
-                <path fill-rule="evenodd" clip-rule="evenodd"
-                      d="M4.29289 8.29289C4.68342 7.90237 5.31658 7.90237 5.70711 8.29289L12 14.5858L18.2929 8.29289C18.6834 7.90237 19.3166 7.90237 19.7071 8.29289C20.0976 8.68342 20.0976 9.31658 19.7071 9.70711L12.7071 16.7071C12.3166 17.0976 11.6834 17.0976 11.2929 16.7071L4.29289 9.70711C3.90237 9.31658 3.90237 8.68342 4.29289 8.29289Z"></path>
-              </svg>
-            </label>
-          </div>
+          <child-comment v-model:children="comment.childrenComments" :comment="comment" :new-comment="newComment" v-model:reply-comment="replyComment"></child-comment>
         </div>
       </div>
 
-<!--      <div class="mx-7 my-5 flex items-start">-->
-<!--        <img class="w-10 h-10 rounded-full object-center object-cover"-->
-<!--             src="https://stcv4.hnammobile.com/downloads/f/cach-chup-anh-chan-dung-bang-dien-thoai-lung-linh-nhu-may-anh-01676344756.jpg">-->
-<!--        <div class="ml-3">-->
-<!--          <label class="font-medium truncate">Name User</label>-->
-<!--          <div>-->
-<!--            Comment Use the scale-{percentage}, scale-x-{percentage}, and scale-y-{percentage} utilities to scale-->
-<!--            an element. scale-x-{percentage}, and scale-y-{percentage} utilities to scale an element.-->
-<!--          </div>-->
-<!--          <div class="mt-1 text-sm text-slate-500">-->
-<!--            <label>17-10</label>-->
-<!--            <button class="ml-5">Trả lời</button>-->
-<!--          </div>-->
-
-<!--          <div>-->
-<!--            &lt;!&ndash;            Subcomment&ndash;&gt;-->
-<!--            <div class="my-5 flex items-start">-->
-<!--              <img class="w-7 h-7 rounded-full object-center object-cover"-->
-<!--                   src="https://stcv4.hnammobile.com/downloads/f/cach-chup-anh-chan-dung-bang-dien-thoai-lung-linh-nhu-may-anh-01676344756.jpg">-->
-<!--              <div class="ml-3">-->
-<!--                <label class="font-medium truncate">Name User</label>-->
-<!--                <div>-->
-<!--                  Comment Use the scale-{percentage}, scale-x-{percentage}, and scale-y-{percentage} utilities to scale-->
-<!--                  an element. scale-x-{percentage}, and scale-y-{percentage} utilities to scale an element.-->
-<!--                </div>-->
-<!--                <div class="mt-1 text-sm text-slate-500">-->
-<!--                  <label>17-10</label>-->
-<!--                  <button class="ml-5">Trả lời</button>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
-
-<!--            <div class="my-5 flex items-start">-->
-<!--              <img class="w-7 h-7 rounded-full object-center object-cover"-->
-<!--                   src="https://stcv4.hnammobile.com/downloads/f/cach-chup-anh-chan-dung-bang-dien-thoai-lung-linh-nhu-may-anh-01676344756.jpg">-->
-<!--              <div class="ml-3">-->
-<!--                <label class="font-medium truncate">Name User</label>-->
-<!--                <div>-->
-<!--                  Comment Use the scale-{percentage}, scale-x-{percentage}, and scale-y-{percentage} utilities to scale-->
-<!--                  an element. scale-x-{percentage}, and scale-y-{percentage} utilities to scale an element.-->
-<!--                </div>-->
-<!--                <div class="mt-1 text-sm text-slate-500">-->
-<!--                  <label>17-10</label>-->
-<!--                  <button class="ml-5">Trả lời</button>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
-
-<!--          </div>-->
-
-<!--          <div class="mt-2 flex items-center">-->
-<!--            <button class="text-sm text-slate-500">Xem thêm 14</button>-->
-<!--            <label class="mt-[0.1rem] ml-1 fill-slate-500">-->
-<!--              <svg xmlns="http://www.w3.org/2000/svg" focusable="false" stroke="none" viewBox="0 0 24 24"-->
-<!--                   class="min-w-[1rem] min-h-[1rem]">-->
-<!--                <path fill-rule="evenodd" clip-rule="evenodd"-->
-<!--                      d="M4.29289 8.29289C4.68342 7.90237 5.31658 7.90237 5.70711 8.29289L12 14.5858L18.2929 8.29289C18.6834 7.90237 19.3166 7.90237 19.7071 8.29289C20.0976 8.68342 20.0976 9.31658 19.7071 9.70711L12.7071 16.7071C12.3166 17.0976 11.6834 17.0976 11.2929 16.7071L4.29289 9.70711C3.90237 9.31658 3.90237 8.68342 4.29289 8.29289Z"></path>-->
-<!--              </svg>-->
-<!--            </label>-->
-<!--          </div>-->
-
-<!--        </div>-->
-<!--      </div>-->
       <div v-if="page < totalPage - 1" class="ml-7 mb-4 flex items-center">
         <button class="text-sm text-slate-500" @click="page++">Xem thêm bình luận</button>
         <label class="mt-[0.1rem] ml-1 fill-slate-500">
@@ -219,6 +156,71 @@
     </div>
   </div>
           `,
+      }).component('child-comment', {
+          props: {
+              comment: null,
+              replyComment: null,
+              newComment: null
+          },
+          emit: ['update:replyComment'],
+          data() {
+              return {
+                  supperCommentId: this.comment.id,
+                  childrenSize: this.comment.childrenSize,
+                  page: 0,
+                  childComments: [],
+              };
+          },
+          methods: {
+              loadChildComment() {
+                  axios.get(ApiUtil.getAllChildCommentUrl(postSlug, this.supperCommentId, this.page))
+                      .then(response => {
+                          let child = [...response?.data?.data?.content]
+                              .filter(comment => !this.childComments.find(cm => cm.id === comment.id))
+                          this.childComments.push(...child)
+                          this.page++
+                          this.childrenSize -= child.length
+                      })
+                      .catch(error => {
+                          console.log(error)
+                      })
+              },
+          },
+          watch: {
+              newComment(comment) {
+                  if(comment.supperCommentId === this.supperCommentId) {
+                      this.childComments.push(comment)
+                  }
+              }
+          },
+          template: `
+          <div v-if="childComments.length > 0">
+            <div v-for="childComment in childComments" :key="childComment.id" class="my-5 flex items-start">
+              <img class="w-7 h-7 rounded-full object-center object-cover"
+                   src="https://stcv4.hnammobile.com/downloads/f/cach-chup-anh-chan-dung-bang-dien-thoai-lung-linh-nhu-may-anh-01676344756.jpg">
+              <div class="ml-3">
+                <label class="font-medium truncate">{{childComment.username}}</label>
+                <label> > </label>
+                <label>{{childComment.relyUsername}}</label>
+                <div>{{childComment.content}}</div>
+                <div class="mt-1 text-sm text-slate-500">
+                  <label>{{childComment.createDate}}</label>
+                  <button @click="$emit('update:replyComment', childComment)" class="ml-5">Trả lời</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div v-if="childrenSize > 0" class="mt-2 flex items-center">
+            <button @click="loadChildComment" class="text-sm text-slate-500">Xem {{childrenSize}} câu trả lời</button>
+            <label class="mt-[0.1rem] ml-1 fill-slate-500">
+              <svg xmlns="http://www.w3.org/2000/svg" focusable="false" stroke="none" viewBox="0 0 24 24"
+                   class="min-w-[1rem] min-h-[1rem]">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M4.29289 8.29289C4.68342 7.90237 5.31658 7.90237 5.70711 8.29289L12 14.5858L18.2929 8.29289C18.6834 7.90237 19.3166 7.90237 19.7071 8.29289C20.0976 8.68342 20.0976 9.31658 19.7071 9.70711L12.7071 16.7071C12.3166 17.0976 11.6834 17.0976 11.2929 16.7071L4.29289 9.70711C3.90237 9.31658 3.90237 8.68342 4.29289 8.29289Z"></path>
+              </svg>
+            </label>
+          </div>
+          `
       }).mount("#comment-service")
   </script>
 </div>
