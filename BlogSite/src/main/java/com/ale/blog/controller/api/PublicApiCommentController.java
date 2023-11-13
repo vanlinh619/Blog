@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -39,9 +40,35 @@ public class PublicApiCommentController {
         Page<Comment> commentPage = commentService.findAllByPostSlug(userOptional.orElse(null), postSlug, QueryRequest.builder()
                 .page(pageRequest.getPage())
                 .size(StaticVariable.COMMENT_PAGE_SIZE)
-                .sortBy(Comment.Fields.createDate)
+                .sortBy(List.of(Comment.Fields.childrenSize, Comment.Fields.createDate))
                 .sortType(SortType.DESC.name())
                 .build()
+        );
+        return DataResponse.builder()
+                .status(Status.SUCCESS)
+                .code(MessageCode.SUCCESS)
+                .data(pageMapper.toPageResponse(commentPage, commentMapper::toCommentResponse))
+                .build();
+    }
+
+    @GetMapping("{postSlug}/{superCommentId}")
+    public DataResponse getAllChildrenComment(
+            Authentication authentication,
+            @PathVariable String postSlug,
+            @PathVariable Long superCommentId,
+            @Valid PageRequest pageRequest
+    ) {
+        Optional<User> userOptional = UserUtil.owner(authentication);
+        Page<Comment> commentPage = commentService.findAllByPostSlugAndSupperComment(
+                userOptional.orElse(null),
+                postSlug,
+                superCommentId,
+                QueryRequest.builder()
+                        .page(pageRequest.getPage())
+                        .size(StaticVariable.COMMENT_PAGE_SIZE)
+                        .sortBy(List.of(Comment.Fields.createDate))
+                        .sortType(SortType.ASC.name())
+                        .build()
         );
         return DataResponse.builder()
                 .status(Status.SUCCESS)

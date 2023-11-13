@@ -45,7 +45,7 @@ public class DocumentController {
         Page<Document> documentPage = documentService.findAllByAuthor(author, userOptional.orElse(null), DocumentState.valueOf(pageRequest.getScope().toUpperCase()), QueryRequest.builder()
                 .page(pageRequest.getPage() - 1)
                 .size(StaticVariable.PAGE_SIZE)
-                .sortBy(Document.Fields.createDate)
+                .sortBy(List.of(Document.Fields.createDate))
                 .sortType(SortType.DESC.name())
                 .build());
         model.addAttribute("documentPage", documentPage);

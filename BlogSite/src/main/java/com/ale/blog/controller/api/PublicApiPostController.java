@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/public/post")
@@ -37,7 +39,7 @@ public class PublicApiPostController {
         Page<Post> pagePost = postService.findAllByCategory(category, QueryRequest.builder()
                 .page(pageRequest.getPage())
                 .size(StaticVariable.PAGE_SIZE)
-                .sortBy(Post.Fields.createDate)
+                .sortBy(List.of(Post.Fields.createDate))
                 .sortType(SortType.DESC.name())
                 .build());
         return DataResponse.builder()

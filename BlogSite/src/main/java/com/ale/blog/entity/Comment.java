@@ -52,6 +52,8 @@ public class Comment implements Serializable {
 
     @OneToMany(mappedBy = "superParent",fetch = FetchType.LAZY)
     private List<Comment> children;
+
     @NotNull
+    @FieldNameConstants.Include
     private Long childrenSize;
 }

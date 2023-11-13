@@ -7,7 +7,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    Page<Comment> findAllByPost(Post post, Pageable pageable);
+    Page<Comment> findAllByPostAndSuperParentIsNull(Post post, Pageable pageable);
+    Page<Comment> findAllByPostAndSuperParent(Post post, Comment supperParent, Pageable pageable);
+    Optional<Comment> findCommentByIdAndPost(Long id, Post post);
 }

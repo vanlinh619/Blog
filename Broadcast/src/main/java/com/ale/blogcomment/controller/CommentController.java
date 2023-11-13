@@ -19,10 +19,10 @@ public class CommentController {
 
     @MessageMapping("/post/{id}")
     @SendTo("/topic/post/{id}")
-    public CommentResponse commentToPost(@DestinationVariable String id, @Payload BroadcastResponse broadcastResponse) {
+    public Object commentToPost(@DestinationVariable String id, @Payload BroadcastResponse broadcastResponse) {
         System.out.println(broadcastResponse);
         System.out.println(id);
 //        BroadcastResponse broadcastResponse = broadcastMapper.toBroadcastResponse(payload);
-        return modelMapper.map(broadcastResponse.getPayload(), CommentResponse.class);
+        return broadcastResponse.getPayload();
     }
 }

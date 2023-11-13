@@ -24,7 +24,7 @@ public class Convert {
         }
 
         if(queryRequest.getSortBy() != null && !queryRequest.getSortBy().isEmpty()){
-            pageRequest = pageRequest.withSort(direction, queryRequest.getSortBy());
+            pageRequest = pageRequest.withSort(direction, queryRequest.getSortBy().toArray(new String[0]));
         } else {
             pageRequest = pageRequest.withSort(direction, "id");
         }

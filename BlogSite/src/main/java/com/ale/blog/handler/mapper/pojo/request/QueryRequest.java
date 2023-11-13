@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -15,6 +17,6 @@ public class QueryRequest {
     private Integer page;
     @NotNull(message = "size not blank")
     private Integer size;
-    private String sortBy;
+    private List<String> sortBy;
     private String sortType;
 }

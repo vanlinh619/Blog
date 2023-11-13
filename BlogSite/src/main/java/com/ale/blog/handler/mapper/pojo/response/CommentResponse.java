@@ -1,5 +1,6 @@
 package com.ale.blog.handler.mapper.pojo.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,4 +16,11 @@ public class CommentResponse {
     private String content;
     private String createDate;
     private Long childrenSize;
+    private String sender;
+
+    //rely on comment
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Long supperCommentId;
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String relyUsername;
 }

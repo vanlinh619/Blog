@@ -23,6 +23,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RolesAllowed({UserRole.Fields.ADMIN, UserRole.Fields.CONTENT_CREATOR})
 @RequestMapping("api/authorize/image")
@@ -50,7 +52,7 @@ public class ApiImageController {
         Page<Image> page = imageService.getAllByAuthor(userAccess.getUser(), QueryRequest.builder()
                 .page(pageRequest.getPage())
                 .size(StaticVariable.PAGE_SIZE)
-                .sortBy(Image.Fields.createDate)
+                .sortBy(List.of(Image.Fields.createDate))
                 .sortType(SortType.DESC.name())
                 .build()
         );
