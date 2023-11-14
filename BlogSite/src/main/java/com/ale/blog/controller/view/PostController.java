@@ -14,6 +14,8 @@ import com.ale.blog.handler.utils.UserUtil;
 import com.ale.blog.service.DocumentService;
 import com.ale.blog.service.PostService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -25,13 +27,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("post")
 public class PostController {
     private final PostService postService;
     private final PageMapper<Post, PostResponse> pageMapper;
     private final PostMapper postMapper;
     private final DocumentService documentService;
+
+    @Value("${microservice.broadcast}")
+    private Boolean broadcastService;
 
     @GetMapping("{postUrl}")
     public String getPost(@PathVariable String postUrl, Model model, Authentication authentication) {
@@ -50,6 +55,7 @@ public class PostController {
         documentService.getEntriesOfDocument(post.getDocument());
         model.addAttribute("document", post.getDocument());
         model.addAttribute("user", userOptional.orElse(null));
+        model.addAttribute("broadcastService", broadcastService);
         return "post";
     }
 
