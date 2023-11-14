@@ -3,7 +3,6 @@ package com.ale.blog.entity;
 import com.ale.blog.entity.state.ImageExtension;
 import com.ale.blog.entity.state.ImageState;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -12,6 +11,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
+import org.hibernate.validator.constraints.Range;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -46,7 +46,7 @@ public class Image implements Serializable {
     @FieldNameConstants.Include
     private Instant createDate;
 
-    @Size(max = 5000000)
+    @Range(min = 1, max = 5000000)
     @NotNull
     private Long size;
 
