@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldNameConstants;
 
 import java.time.Instant;
 
@@ -14,7 +15,7 @@ import java.time.Instant;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class View {
+public class Favourite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,11 +26,6 @@ public class View {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private Post post;
-
-    /**
-     * Ip address or User
-    * */
-    private String ipaddress;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;

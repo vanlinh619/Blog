@@ -7,15 +7,18 @@
   <link rel="stylesheet" th:href="@{/css/main.css}"/>
   <script src="https://cdn.jsdelivr.net/npm/vue@3.3.4/dist/vue.global.prod.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
-<!--  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>-->
+  <!--  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>-->
   <script src="https://cdn.jsdelivr.net/npm/stomp-websocket@2.3.4-next/lib/stomp.min.js"></script>
 </head>
 <body>
 <header th:replace="components/header::header(${user})"></header>
-<div class="max-w-8xl mx-auto px-4">
-  <div
-      class="lg:block fixed z-20 inset-0 top-16 left-[max(0px,calc(50%-45rem))] right-auto w-[19rem] pb-10 pl-8 pr-6 overflow-y-auto">
-    <div class="mt-10 text-slate-700">
+<div class="max-w-8xl mx-auto">
+  <!--  <div-->
+  <!--      class="lg:block fixed z-20 inset-0 top-16 left-[max(0px,calc(50%-45rem))] right-auto w-[19rem] pb-10 pl-8 pr-6 overflow-y-auto">-->
+
+  <!--  </div>-->
+  <main class="mt-10 flex">
+    <div class="w-80 pr-4 mr-4 self-start sticky top-16 h-[90vh] overflow-y-auto overscroll-none no-scrollbar text-slate-700">
       <div class="mt-5 pb-2 border-b mb-2">
         <a th:href="${'/category/'+author.getUsername()+'/'+category.getSlug()+'?scope=public&page=1'}"
            class="col-span-4 flex items-center hover:text-emerald-600 stroke-slate-700 fill-slate-700 hover:stroke-emerald-600 hover:fill-emerald-600">
@@ -33,10 +36,8 @@
       <!--      <aside th:replace="components/reference::referance(${author}, ${category})"></aside>-->
       <aside th:replace="components/aside-document::document(${document}, ${post}, ${author})"></aside>
     </div>
-  </div>
-  <main class="mt-10">
-    <article class="pl-[19.5rem]">
-      <div class="mx-auto max-w-none ml-0 mr-[15.5rem] pr-16 text-slate-700">
+    <article class="w-[52rem]">
+      <div class="text-slate-700">
         <h1 class="font-medium text-4xl">
           <strong th:text="${post.getTitle()}"></strong>
         </h1>
@@ -76,18 +77,26 @@
             [&_p]:mt-4"
              th:utext="${post.getContent()}">
         </div>
-        <div class="mt-10">
-          <div th:href="comment" class="text-3xl mb-3 font-medium">Bình luận</div>
+        <div class="mt-10 mb-10">
+          <div id="comment" class="text-3xl mb-3 font-medium scroll-mt-20">Bình luận</div>
           <div th:replace="components/comment::comment(${user}, ${post}, ${broadcastService})"></div>
         </div>
-        <footer th:replace="components/footer::footer"></footer>
       </div>
     </article>
+    <div class="w-80 pl-8 self-start sticky top-16 h-[90vh] overflow-y-auto overscroll-none no-scrollbar">
+      <div class="sticky top-0 py-5 bg-gradient-to-b from-white from-90%">
+        <div th:replace="components/interact-bar::interact-bar(${user}, ${post})"></div>
+      </div>
+      <div class="">
+        <div th:replace="components/table-of-content::heading(${post.getTableOfContents()})"></div>
+      </div>
+    </div>
   </main>
-  <div class="fixed z-20 top-16 bottom-0 right-[max(0px,calc(50%-45rem))] w-[19.5rem] py-10 overflow-y-auto block">
-    <div th:replace="components/table-of-content::heading(${post.getTableOfContents()})"></div>
-  </div>
+  <!--  <div class="top-16 bottom-0 right-[max(0px,calc(50%-45rem))] w-[19.5rem] py-10 overflow-y-auto block">-->
+  <!--    -->
+  <!--  </div>-->
 </div>
+<footer th:replace="components/footer::footer"></footer>
 </body>
 <script type="text/javascript" th:src="@{/js/main.js}"></script>
 </html>

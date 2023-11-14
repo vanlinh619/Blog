@@ -37,4 +37,6 @@ public interface PostService extends EntityService<Post, Long> {
     Optional<Post> postWithPermission(Post post, @Nullable User owner);
 
     void increaseView(Long id);
+    void increaseComment(Long id);
+    void increaseFavourite(Long id);
 }

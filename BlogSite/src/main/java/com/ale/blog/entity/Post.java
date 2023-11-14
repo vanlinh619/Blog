@@ -1,6 +1,7 @@
 package com.ale.blog.entity;
 
 import com.ale.blog.entity.state.PostState;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -59,8 +60,14 @@ public class Post implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String rawContent;
 
-    @Column(nullable = false)
+    @NotNull
     private Long view = 0L;
+
+    @NotNull
+    private Long comment = 0L;
+
+    @NotNull
+    private Long favourite = 0L;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

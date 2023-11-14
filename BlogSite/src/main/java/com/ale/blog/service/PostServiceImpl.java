@@ -150,6 +150,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public void increaseComment(Long id) {
+        postRepository.increaseComment(id);
+    }
+
+    @Override
+    public void increaseFavourite(Long id) {
+        postRepository.increaseFavourite(id);
+    }
+
+    @Override
     public Class<Post> getEntityClass() {
         return Post.class;
     }
