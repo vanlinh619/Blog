@@ -78,7 +78,7 @@
         </div>
         <div class="mt-10">
           <div th:href="comment" class="text-3xl mb-3 font-medium">Bình luận</div>
-          <div th:replace="components/comment::comment(${user}, ${post})"></div>
+          <div th:replace="components/comment::comment(${user}, ${post}, ${broadcastService})"></div>
         </div>
         <footer th:replace="components/footer::footer"></footer>
       </div>

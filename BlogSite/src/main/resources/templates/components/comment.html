@@ -2,8 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <!--/*@thymesVar id="post" type="com.ale.blog.entity.Post"*/-->
 <!--/*@thymesVar id="user" type="com.ale.blog.entity.User"*/-->
+<!--/*@thymesVar id="broadcastService" type="java.lang.Boolean"*/-->
 
-<div th:fragment="comment(user, post)">
+<div th:fragment="comment(user, post, broadcastService)">
   <div id="comment-service" th:text="${post.getSlug()}"></div>
   <script th:inline="javascript" type="module">
       /*<![CDATA[*/
@@ -12,6 +13,7 @@
       let isLogin = /*[[${user != null ? true : false}]]*/ false
       let username = /*[[${user != null ? user.getUsername() : ''}]]*/ ''
       let postSlug = /*[[${post.getSlug()}]]*/  ''
+      let broadcastService = /*[[${broadcastService}]]*/ false
       /*]]>*/
 
       Vue.createApp({
@@ -66,30 +68,33 @@
                           console.log(error)
                       })
               },
+              broadcastPlugin() {
+                  if (!broadcastService) return
+                  // this.socket = new SockJS("//localhost:8440/comment")
+                  let stomp = new Stomp.client(ApiUtil.socketUrl)
+                  stomp.connect(
+                      {},
+                      frame => {
+                          // console.log(frame);
+                          stomp.subscribe(`/topic/post/${postSlug}`, e => {
+                              // console.log(e.body);
+                              let newComment = JSON.parse(e.body)
+                              if (newComment.sender === username) return
+                              if (newComment.supperCommentId) {
+                                  this.newComment = newComment
+                              } else {
+                                  this.comments.unshift(newComment)
+                              }
+                          });
+                      },
+                      error => {
+                          console.log(error);
+                      }
+                  )
+              }
           },
           mounted() {
-              // this.socket = new SockJS("//localhost:8440/comment")
-              let stomp = new Stomp.client(ApiUtil.socketUrl)
-              stomp.connect(
-                  {},
-                  frame => {
-                      // console.log(frame);
-                      stomp.subscribe(`/topic/post/${postSlug}`, e => {
-                          console.log(e.body);
-                          let newComment = JSON.parse(e.body)
-                          if (newComment.sender === username) return
-                          if (newComment.supperCommentId) {
-                              this.newComment = newComment
-                          } else {
-                              this.comments.unshift(newComment)
-                          }
-                      });
-                  },
-                  error => {
-                      console.log(error);
-                  }
-              )
-
+              this.broadcastPlugin()
               this.loadComments(0)
           },
           watch: {
