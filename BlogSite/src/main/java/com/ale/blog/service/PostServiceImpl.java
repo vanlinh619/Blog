@@ -4,7 +4,6 @@ import com.ale.blog.entity.Category;
 import com.ale.blog.entity.Post;
 import com.ale.blog.entity.TableOfContent;
 import com.ale.blog.entity.User;
-import com.ale.blog.entity.state.DocumentState;
 import com.ale.blog.entity.state.PostState;
 import com.ale.blog.entity.state.SlugType;
 import com.ale.blog.handler.exception.AppException;
@@ -145,8 +144,9 @@ public class PostServiceImpl implements PostService {
                 });
     }
 
-    private void increaseView(Long id) {
-        executorService.execute(() -> postRepository.increaseView(id));
+    @Override
+    public void increaseView(Long id) {
+        postRepository.increaseView(id);
     }
 
     @Override

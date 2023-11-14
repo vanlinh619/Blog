@@ -88,7 +88,7 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public Optional<Document> getEntriesOfDocument(@Nullable Document document) {
+    public Optional<Document> setEntriesOfDocument(@Nullable Document document) {
         return Optional.ofNullable(document)
                 .map(doc -> {
                     doc.setSections(sectionService.findAllByDocument(doc, Sort.by(

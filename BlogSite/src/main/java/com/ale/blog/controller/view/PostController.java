@@ -13,7 +13,8 @@ import com.ale.blog.handler.utils.StaticVariable;
 import com.ale.blog.handler.utils.UserUtil;
 import com.ale.blog.service.DocumentService;
 import com.ale.blog.service.PostService;
-import lombok.AllArgsConstructor;
+import com.ale.blog.service.ViewService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -34,12 +35,18 @@ public class PostController {
     private final PageMapper<Post, PostResponse> pageMapper;
     private final PostMapper postMapper;
     private final DocumentService documentService;
+    private final ViewService viewService;
 
     @Value("${microservice.broadcast}")
     private Boolean broadcastService;
 
     @GetMapping("{postUrl}")
-    public String getPost(@PathVariable String postUrl, Model model, Authentication authentication) {
+    public String getPost(
+            @PathVariable String postUrl,
+            Model model,
+            Authentication authentication,
+            HttpServletRequest request
+    ) {
         Optional<User> userOptional = UserUtil.owner(authentication);
         Post post = postService.getPostBySlug(postUrl, userOptional.orElse(null));
         Page<Post> postPage = postService.findAllByCategory(post.getCategory(), QueryRequest.builder()
@@ -52,10 +59,13 @@ public class PostController {
         model.addAttribute("category", post.getCategory());
         model.addAttribute("post", post);
         model.addAttribute("postPage", pageMapper.toPageResponse(postPage, postMapper::toPostResponse));
-        documentService.getEntriesOfDocument(post.getDocument());
+        documentService.setEntriesOfDocument(post.getDocument());
         model.addAttribute("document", post.getDocument());
         model.addAttribute("user", userOptional.orElse(null));
         model.addAttribute("broadcastService", broadcastService);
+
+        viewService.increaseView(userOptional.orElse(null), post, request);
+
         return "post";
     }
 
