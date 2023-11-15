@@ -37,12 +37,4 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Modifying
     @Query("update Post p set p.comment = p.comment + 1 where p.id = :id")
     void increaseComment(Long id);
-    @Transactional
-    @Modifying
-    @Query("update Post p set p.favourite = p.favourite + 1 where p.id = :id")
-    void increaseFavourite(Long id);
-    @Transactional
-    @Modifying
-    @Query("update Post p set p.favourite = p.favourite - 1 where p.id = :id")
-    void decreaseFavourite(Long id);
 }

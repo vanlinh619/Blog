@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -56,4 +57,8 @@ public class Comment implements Serializable {
     @NotNull
     @FieldNameConstants.Include
     private Long childrenSize;
+
+    @Version
+    @ColumnDefault("0")
+    private Long version;
 }

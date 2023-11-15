@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.validator.constraints.Range;
 
 import java.io.Serializable;
@@ -59,4 +60,8 @@ public class Image implements Serializable {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private User author;
+
+    @Version
+    @ColumnDefault("0")
+    private Long version;
 }

@@ -7,6 +7,7 @@ import com.ale.blog.entity.state.FavouriteState;
 import com.ale.blog.repository.FavouriteRepository;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,19 +23,20 @@ public class FavouriteServiceImpl implements FavouriteService {
     @Override
     public Favourite updateFavouritePost(@Nonnull User user, @Nonnull String postSlug) {
         Post post = postService.getPostBySlug(postSlug, user);
-        return favouriteRepository.findFavouriteByUserAndPost(user, post)
+        return favouriteRepository.findFirstByUserAndPost(user, post)
                 .map(favourite -> {
                     switch (favourite.getState()) {
                         case PERSIST -> {
                             favourite.setState(FavouriteState.DELETED);
-                            postService.decreaseFavourite(post.getId());
+                            post.setFavourite(post.getFavourite() - 1);
                         }
                         case DELETED -> {
                             favourite.setState(FavouriteState.PERSIST);
-                            postService.increaseFavourite(post.getId());
+                            post.setFavourite(post.getFavourite() + 1);
                         }
                     }
                     favouriteRepository.save(favourite);
+                    postService.save(post);
                     return favourite;
                 })
                 .orElseGet(() -> {
@@ -45,7 +47,8 @@ public class FavouriteServiceImpl implements FavouriteService {
                             .state(FavouriteState.PERSIST)
                             .build();
                     favouriteRepository.save(favourite);
-                    postService.increaseFavourite(post.getId());
+                    post.setFavourite(post.getFavourite() + 1);
+                    postService.save(post);
                     return favourite;
                 });
     }
@@ -53,7 +56,7 @@ public class FavouriteServiceImpl implements FavouriteService {
     @Override
     public Boolean ifFavourite(@Nullable User user, @Nonnull Post post) {
         return Optional.ofNullable(user)
-                .flatMap(us -> favouriteRepository.findFavouriteByUserAndPostAndState(us, post, FavouriteState.PERSIST))
+                .flatMap(us -> favouriteRepository.findFirstByUserAndPostAndState(us, post, FavouriteState.PERSIST))
                 .isPresent();
     }
 

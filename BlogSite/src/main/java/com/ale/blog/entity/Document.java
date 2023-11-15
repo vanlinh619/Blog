@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
@@ -66,4 +67,8 @@ public class Document {
 
     @OneToMany(mappedBy = "document", fetch = FetchType.LAZY)
     private List<Share> shares;
+
+    @Version
+    @ColumnDefault("0")
+    private Long version;
 }

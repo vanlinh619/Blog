@@ -22,7 +22,8 @@
               return {
                   commentCount: commentCount,
                   favouriteCount: favouriteCount,
-                  favourite: favourite
+                  favourite: favourite,
+                  waitResponse: false
               }
           },
           methods: {
@@ -30,7 +31,8 @@
                   location.hash = 'comment'
               },
               favouritePost() {
-                  if (!isLogin) return
+                  if (!isLogin || this.waitResponse) return
+                  this.waitResponse = true
                   axios.put(ApiUtil.favouritePostUrl(postSlug))
                       .then(response => {
                           console.log(response)
@@ -40,9 +42,11 @@
                           } else {
                               this.favouriteCount--
                           }
+                          this.waitResponse = false
                       })
                       .catch(error => {
                           console.log(error)
+                          this.waitResponse = false
                       })
               }
           },

@@ -26,8 +26,8 @@ public class ViewServiceImpl implements ViewService {
     public void increaseView(@Nullable User user, @Nonnull Post post, @Nonnull HttpServletRequest request) {
         String ipaddress = request.getRemoteAddr();
         Optional.ofNullable(user)
-                .flatMap(us -> viewRepository.findViewByPostAndUserOrderByTimestampDesc(post, us))
-                .or(() -> viewRepository.findViewByPostAndIpaddressOrderByTimestampDesc(post, ipaddress)
+                .flatMap(us -> viewRepository.findFirstByPostAndUserOrderByTimestampDesc(post, us))
+                .or(() -> viewRepository.findFirstByPostAndIpaddressOrderByTimestampDesc(post, ipaddress)
                         .map(view -> {
                             view.setUser(user);
                             viewRepository.save(view);

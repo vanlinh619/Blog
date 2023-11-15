@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.io.Serializable;
 
@@ -34,4 +35,8 @@ public class TableOfContent implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Post post;
+
+    @Version
+    @ColumnDefault("0")
+    private Long version;
 }

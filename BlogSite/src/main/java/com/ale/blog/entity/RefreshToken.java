@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -23,4 +24,8 @@ public class RefreshToken implements Serializable {
 
     @OneToOne
     private User user;
+
+    @Version
+    @ColumnDefault("0")
+    private Long version;
 }

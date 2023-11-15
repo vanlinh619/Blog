@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 
@@ -40,4 +41,8 @@ public class Tag implements Serializable {
 
     @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
     private List<Post> posts;
+
+    @Version
+    @ColumnDefault("0")
+    private Long version;
 }

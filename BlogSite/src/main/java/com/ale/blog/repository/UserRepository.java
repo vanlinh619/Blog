@@ -11,7 +11,7 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findFirstByOrderByUuid();
-    Optional<User> findUserByRole(UserRole role);
+    Optional<User> findFirstByRole(UserRole role);
     Optional<User> findUserByUsername(String username);
     Optional<User> findByUuid(UUID uuid);
     Optional<User> findUserByEmail(String email);

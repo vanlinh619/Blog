@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Data
@@ -27,4 +28,8 @@ public class Share {
 
     @ManyToOne
     private Document document;
+
+    @Version
+    @ColumnDefault("0")
+    private Long version;
 }

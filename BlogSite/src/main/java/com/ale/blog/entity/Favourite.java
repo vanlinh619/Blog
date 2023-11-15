@@ -8,10 +8,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"user_uuid", "post_id"}) )
 @Data
 @Builder
 @AllArgsConstructor
@@ -33,4 +35,8 @@ public class Favourite {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
+    @Version
+    @ColumnDefault("0")
+    private Long version;
 }
