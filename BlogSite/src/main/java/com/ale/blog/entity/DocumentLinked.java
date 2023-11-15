@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"section_id", "post_id"}))
@@ -38,4 +39,8 @@ public class DocumentLinked {
     @NotNull
     @OneToOne(fetch = FetchType.LAZY)
     private Post post;
+
+    @Version
+    @ColumnDefault("0")
+    private Long version;
 }

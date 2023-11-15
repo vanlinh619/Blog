@@ -1,15 +1,13 @@
 package com.ale.blog.entity;
 
 import com.ale.blog.entity.state.SlugType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.io.Serializable;
 
@@ -25,4 +23,8 @@ public class SlugId implements Serializable {
     @NotNull
     private Long number;
     private SlugType type;
+
+    @Version
+    @ColumnDefault("0")
+    private Long version;
 }

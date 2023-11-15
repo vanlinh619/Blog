@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.List;
 
@@ -40,4 +41,8 @@ public class DocumentSection {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Document document;
+
+    @Version
+    @ColumnDefault("0")
+    private Long version;
 }

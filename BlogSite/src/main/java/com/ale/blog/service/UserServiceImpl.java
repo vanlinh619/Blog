@@ -9,7 +9,6 @@ import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
 import com.ale.blog.handler.mapper.pojo.response.state.Status;
 import com.ale.blog.repository.UserRepository;
 import com.ale.blog.security.UserAccessDetails;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.internal.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,7 +48,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public Optional<User> findDefaultAdmin() {
-        return userRepository.findUserByRole(UserRole.ADMIN)
+        return userRepository.findFirstByRole(UserRole.ADMIN)
                 .or(() -> {
                     User userAD = User.builder()
                             .username(username)

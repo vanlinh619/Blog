@@ -155,16 +155,6 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void increaseFavourite(Long id) {
-        postRepository.increaseFavourite(id);
-    }
-
-    @Override
-    public void decreaseFavourite(Long id) {
-        postRepository.decreaseFavourite(id);
-    }
-
-    @Override
     public Class<Post> getEntityClass() {
         return Post.class;
     }

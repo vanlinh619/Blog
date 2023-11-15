@@ -38,6 +38,4 @@ public interface PostService extends EntityService<Post, Long> {
 
     void increaseView(Long id);
     void increaseComment(Long id);
-    void increaseFavourite(Long id);
-    void decreaseFavourite(Long id);
 }

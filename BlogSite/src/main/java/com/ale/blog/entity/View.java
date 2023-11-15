@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
 
@@ -33,4 +34,8 @@ public class View {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
+    @Version
+    @ColumnDefault("0")
+    private Long version;
 }

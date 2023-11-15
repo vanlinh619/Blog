@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface ViewRepository extends JpaRepository<View, Long> {
-    Optional<View> findViewByPostAndUserOrderByTimestampDesc(Post post, User user);
-    Optional<View> findViewByPostAndIpaddressOrderByTimestampDesc(Post post, String ipaddress);
+    Optional<View> findFirstByPostAndUserOrderByTimestampDesc(Post post, User user);
+    Optional<View> findFirstByPostAndIpaddressOrderByTimestampDesc(Post post, String ipaddress);
 }

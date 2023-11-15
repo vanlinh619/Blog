@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
@@ -51,4 +52,8 @@ public class Category implements Serializable {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private User author;
+
+    @Version
+    @ColumnDefault("0")
+    private Long version;
 }
