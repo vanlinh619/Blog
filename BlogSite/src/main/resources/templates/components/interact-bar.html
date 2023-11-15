@@ -3,48 +3,77 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <!--/*@thymesVar id="post" type="com.ale.blog.entity.Post"*/-->
 <!--/*@thymesVar id="user" type="com.ale.blog.entity.User"*/-->
+<!--/*@thymesVar id="favourite" type="com.ale.blog.entity.Favourite"*/-->
 
-<div th:fragment="interact-bar(user, post)">
+<div th:fragment="interact-bar(user, post, favourite)">
   <div id="interact-bar"></div>
   <script th:inline="javascript" type="module">
       /*<![CDATA[*/
       import ApiUtil from /*[[@{/js/ApiUtil.js}]]*/ "../../public/js/ApiUtil";
 
-      let favourite = /*[[${T(com.ale.blog.handler.utils.Format).toNumber(post.getFavourite())}]]*/ '0'
-      let comment = /*[[${T(com.ale.blog.handler.utils.Format).toNumber(post.getComment())}]]*/ '0'
-      let isLogin = /*[[${user != null ? true : false}]]*/ false
+      let favourite =  /*[[${favourite}]]*/  false
+      let postSlug = /*[[${post.getSlug()}]]*/ ''
+      let favouriteCount = /*[[${T(com.ale.blog.handler.utils.Format).toNumber(post.getFavourite())}]]*/ '0'
+      let commentCount = /*[[${T(com.ale.blog.handler.utils.Format).toNumber(post.getComment())}]]*/ '0'
+      let isLogin = /*[[${user != null}]]*/ false
       /*]]>*/
       Vue.createApp({
           data() {
               return {
-                  comment: comment,
-                  favourite: favourite,
+                  commentCount: commentCount,
+                  favouriteCount: favouriteCount,
+                  favourite: favourite
               }
           },
           methods: {
               gotoComment() {
                   location.hash = 'comment'
+              },
+              favouritePost() {
+                  if (!isLogin) return
+                  axios.put(ApiUtil.favouritePostUrl(postSlug))
+                      .then(response => {
+                          console.log(response)
+                          this.favourite = response?.data?.data?.state === 'PERSIST'
+                          if (this.favourite) {
+                              this.favouriteCount++
+                          } else {
+                              this.favouriteCount--
+                          }
+                      })
+                      .catch(error => {
+                          console.log(error)
+                      })
+              }
+          },
+          computed: {
+              favouriteClass() {
+                  return !isLogin
+                      ? 'stroke-slate-500 fill-slate-500 w-8 h-8'
+                      : this.favourite
+                          ? 'stroke-rose-500 fill-rose-500 w-8 h-8 transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110'
+                          : 'stroke-slate-500 fill-slate-500 w-8 h-8 transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110'
               }
           },
           template: `
           <div class="flex items-center px-2">
             <div class="grid justify-items-center">
-              <button class="stroke-slate-500 fill-slate-500 w-8 h-8 transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:stroke-emerald-500 hover:fill-emerald-500">
+              <button @click="favouritePost" :class="favouriteClass">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="min-w-[1rem] min-h-[1rem]">
                   <path d="M15.7 4C18.87 4 21 6.98 21 9.76C21 15.39 12.16 20 12 20C11.84 20 3 15.39 3 9.76C3 6.98 5.13 4 8.3 4C10.12 4 11.31 4.91 12 5.71C12.69 4.91 13.88 4 15.7 4Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   </path>
                 </svg>
               </button>
-              <label>{{favourite}}</label>
+              <label>{{favouriteCount}}</label>
             </div>
             <div class="ml-4 grid justify-items-center">
-              <a href="#comment" class="stroke-slate-500 fill-slate-500 w-8 h-8 transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:stroke-emerald-500 hover:fill-emerald-500">
+              <a href="#comment" class="stroke-slate-500 fill-slate-500 w-8 h-8 transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110">
                 <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" class="min-w-[1rem] min-h-[1rem]">
                   <path d="M256 32C114.6 32 0 125.1 0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5c-2.2 2.3-2.8 5.7-1.5 8.7S4.8 480 8 480c66.3 0 116-31.8 140.6-51.4 32.7 12.3 69 19.4 107.4 19.4 141.4 0 256-93.1 256-208S397.4 32 256 32zM128 272c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z">
                   </path>
                 </svg>
               </a>
-              <label>{{comment}}</label>
+              <label>{{commentCount}}</label>
             </div>
           </div>
           `

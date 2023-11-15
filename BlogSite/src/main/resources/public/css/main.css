@@ -703,6 +703,10 @@ video {
   margin-left: -1px;
 }
 
+.mb-10 {
+  margin-bottom: 2.5rem;
+}
+
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -819,10 +823,6 @@ video {
   margin-top: 0.1rem;
 }
 
-.mb-10 {
-  margin-bottom: 2.5rem;
-}
-
 .line-clamp-2 {
   overflow: hidden;
   display: -webkit-box;
@@ -888,14 +888,6 @@ video {
 
 .h-\[90vh\] {
   height: 90vh;
-}
-
-.max-h-\[30rem\] {
-  max-height: 30rem;
-}
-
-.max-h-\[28rem\] {
-  max-height: 28rem;
 }
 
 .max-h-\[27rem\] {
@@ -964,14 +956,6 @@ video {
 
 .w-full {
   width: 100%;
-}
-
-.w-1\/4 {
-  width: 25%;
-}
-
-.w-2\/4 {
-  width: 50%;
 }
 
 .min-w-\[1rem\] {
@@ -1262,6 +1246,10 @@ video {
   fill: none;
 }
 
+.fill-rose-600 {
+  fill: #e11d48;
+}
+
 .fill-slate-500 {
   fill: #64748b;
 }
@@ -1270,8 +1258,16 @@ video {
   fill: #334155;
 }
 
+.fill-rose-500 {
+  fill: #f43f5e;
+}
+
 .stroke-emerald-600 {
   stroke: #059669;
+}
+
+.stroke-rose-600 {
+  stroke: #e11d48;
 }
 
 .stroke-slate-300 {
@@ -1288,6 +1284,10 @@ video {
 
 .stroke-white {
   stroke: #fff;
+}
+
+.stroke-rose-500 {
+  stroke: #f43f5e;
 }
 
 .object-cover {
@@ -1392,6 +1392,10 @@ video {
   padding-bottom: 2rem;
 }
 
+.pl-10 {
+  padding-left: 2.5rem;
+}
+
 .pl-2 {
   padding-left: 0.5rem;
 }
@@ -1400,8 +1404,8 @@ video {
   padding-left: 0.75rem;
 }
 
-.pl-4 {
-  padding-left: 1rem;
+.pl-6 {
+  padding-left: 1.5rem;
 }
 
 .pl-8 {
@@ -1438,14 +1442,6 @@ video {
 
 .pt-6 {
   padding-top: 1.5rem;
-}
-
-.pl-10 {
-  padding-left: 2.5rem;
-}
-
-.pl-6 {
-  padding-left: 1.5rem;
 }
 
 .text-center {
@@ -1668,10 +1664,6 @@ video {
   transition-duration: 150ms;
 }
 
-.duration-150 {
-  transition-duration: 150ms;
-}
-
 .duration-300 {
   transition-duration: 300ms;
 }
@@ -1742,9 +1734,8 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.hover\:bg-indigo-500:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(99 102 241 / var(--tw-bg-opacity));
+.hover\:fill-emerald-500:hover {
+  fill: #10b981;
 }
 
 .hover\:fill-emerald-600:hover {
@@ -1753,10 +1744,6 @@ video {
 
 .hover\:fill-emerald-700:hover {
   fill: #047857;
-}
-
-.hover\:fill-emerald-500:hover {
-  fill: #10b981;
 }
 
 .hover\:stroke-emerald-500:hover {

@@ -1,5 +1,6 @@
 package com.ale.blog.controller.view;
 
+import com.ale.blog.entity.Favourite;
 import com.ale.blog.entity.Post;
 import com.ale.blog.entity.User;
 import com.ale.blog.handler.exception.AppException;
@@ -12,6 +13,7 @@ import com.ale.blog.handler.utils.SortType;
 import com.ale.blog.handler.utils.StaticVariable;
 import com.ale.blog.handler.utils.UserUtil;
 import com.ale.blog.service.DocumentService;
+import com.ale.blog.service.FavouriteService;
 import com.ale.blog.service.PostService;
 import com.ale.blog.service.ViewService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,6 +38,7 @@ public class PostController {
     private final PostMapper postMapper;
     private final DocumentService documentService;
     private final ViewService viewService;
+    private final FavouriteService favouriteService;
 
     @Value("${microservice.broadcast}")
     private Boolean broadcastService;
@@ -63,6 +66,7 @@ public class PostController {
         model.addAttribute("document", post.getDocument());
         model.addAttribute("user", userOptional.orElse(null));
         model.addAttribute("broadcastService", broadcastService);
+        model.addAttribute("favourite",favouriteService.ifFavourite(userOptional.orElse(null), post));
 
         viewService.increaseView(userOptional.orElse(null), post, request);
 

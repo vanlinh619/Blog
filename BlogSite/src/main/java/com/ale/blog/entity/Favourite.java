@@ -1,5 +1,6 @@
 package com.ale.blog.entity;
 
+import com.ale.blog.entity.state.FavouriteState;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,9 @@ public class Favourite {
 
     @NotNull
     private Instant timestamp;
+
+    @NotNull
+    private FavouriteState state;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
