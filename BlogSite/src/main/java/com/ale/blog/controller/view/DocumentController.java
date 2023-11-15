@@ -5,7 +5,6 @@ import com.ale.blog.entity.User;
 import com.ale.blog.entity.state.DocumentState;
 import com.ale.blog.handler.exception.AppException;
 import com.ale.blog.handler.mapper.pojo.request.PageDocumentRequest;
-import com.ale.blog.handler.mapper.pojo.request.PageRequest;
 import com.ale.blog.handler.mapper.pojo.request.QueryRequest;
 import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
 import com.ale.blog.handler.utils.SortType;
@@ -63,7 +62,7 @@ public class DocumentController {
         Optional<User> userOptional = UserUtil.owner(authentication);
         User author = userService.getByUsername(username);
         Document document = documentService.getDocumentBySlug(slug, author, userOptional.orElse(null));
-        documentService.getEntriesOfDocument(document);
+        documentService.setEntriesOfDocument(document);
         model.addAttribute("document", document);
         model.addAttribute("author", author);
         model.addAttribute("user", userOptional.orElse(null));

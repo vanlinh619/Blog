@@ -1,6 +1,7 @@
 package com.ale.blog.entity;
 
 import com.ale.blog.entity.state.PostState;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,7 +11,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
-import org.hibernate.search.engine.backend.types.Norms;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
@@ -60,8 +60,14 @@ public class Post implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String rawContent;
 
-    @Column(nullable = false)
+    @NotNull
     private Long view = 0L;
+
+    @NotNull
+    private Long comment = 0L;
+
+    @NotNull
+    private Long favourite = 0L;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

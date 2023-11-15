@@ -3,8 +3,8 @@
 <!--/*@thymesVar id="index" type="com.ale.blog.entity.TableOfContent"*/-->
 
 <div th:fragment="heading(tableOfContents)">
-  <span class="text-sm font-semibold px-10 text-slate-700">NỘI DUNG</span>
-  <div class="px-8">
+  <div>
+    <span class="text-sm font-semibold px-2 text-slate-700">NỘI DUNG</span>
     <ul class="space-y-0.5 mt-3 text-slate-700">
       <li th:each="index: ${tableOfContents}" class="hover:text-emerald-600 active:text-emerald-600">
         <a th:if="${index.getTag().name()}  == 'h2'" class="block pl-2 text-sm font-medium mt-1"

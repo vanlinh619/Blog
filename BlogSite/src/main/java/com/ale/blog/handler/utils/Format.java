@@ -9,6 +9,15 @@ import java.util.Map;
 import java.util.Set;
 
 public class Format {
+    public static String toNumber(Long number) {
+        return number >= 1000000000
+                ? String.format("%.1fB", 1.0 * number / 1000000000)
+                : number >= 1000000
+                ? String.format("%.1fM", 1.0 * number / 1000000)
+                : number >= 1000
+                ? String.format("%.1fK", 1.0 * number / 1000)
+                : String.valueOf(number);
+    }
 
     public static String nameOfUser(User user) {
         return user.getFirstName() + " " + user.getLastName();
