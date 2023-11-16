@@ -10,6 +10,9 @@ import jakarta.annotation.Nullable;
 import java.util.Optional;
 
 public interface FavouriteService extends EntityService<Favourite, Long> {
-    Favourite updateFavouritePost(@Nonnull User user, @Nonnull String postSlug);
+    /**
+     * create/delete
+     * */
+    Optional<Favourite> persistOrDelete(@Nonnull User user, @Nonnull String postSlug);
     Boolean ifFavourite(@Nullable User user, @Nonnull Post post);
 }

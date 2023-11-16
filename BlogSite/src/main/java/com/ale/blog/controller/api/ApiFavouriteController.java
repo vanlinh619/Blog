@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 @RolesAllowed({UserRole.Fields.ADMIN, UserRole.Fields.CONTENT_CREATOR, UserRole.Fields.USER})
 @RequiredArgsConstructor
@@ -27,11 +29,10 @@ public class ApiFavouriteController {
     @PutMapping("{postSlug}")
     public DataResponse favourite(Authentication authentication, @PathVariable String postSlug) {
         UserAccess userAccess = (UserAccess) authentication.getPrincipal();
-        Favourite favourite = favouriteService.updateFavouritePost(userAccess.getUser(), postSlug);
+        Optional<Favourite> favouriteOptional = favouriteService.persistOrDelete(userAccess.getUser(), postSlug);
         return DataResponse.builder()
                 .status(Status.SUCCESS)
-                .code(MessageCode.SUCCESS)
-                .data(favouriteMapper.toFavouriteRepository(favourite))
+                .code(favouriteOptional.map(favourite -> MessageCode.PERSIST).orElse(MessageCode.DELETED))
                 .build();
     }
 }

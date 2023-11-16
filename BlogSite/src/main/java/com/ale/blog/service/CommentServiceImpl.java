@@ -3,22 +3,24 @@ package com.ale.blog.service;
 import com.ale.blog.entity.Comment;
 import com.ale.blog.entity.Post;
 import com.ale.blog.entity.User;
+import com.ale.blog.entity.state.NotificationType;
 import com.ale.blog.handler.mapper.CommentMapper;
 import com.ale.blog.handler.mapper.pojo.request.CommentRequest;
 import com.ale.blog.handler.mapper.pojo.request.QueryRequest;
-import com.ale.blog.handler.mapper.pojo.response.BroadcastResponse;
 import com.ale.blog.handler.mapper.pojo.response.state.BroadcastType;
 import com.ale.blog.handler.utils.Convert;
 import com.ale.blog.handler.utils.Format;
 import com.ale.blog.repository.CommentRepository;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @AllArgsConstructor
@@ -27,7 +29,9 @@ public class CommentServiceImpl implements CommentService, EntityService<Comment
     private final BroadcastService broadcastService;
     private final PostService postService;
     private final CommentMapper commentMapper;
+    private final NotificationService notificationService;
 
+    @Transactional(rollbackOn = {Exception.class})
     @Override
     public Comment comment(@Nonnull User author, @Nonnull CommentRequest commentRequest) {
         Post post = postService.getPostBySlug(commentRequest.getPostSlug(), author);
@@ -40,11 +44,14 @@ public class CommentServiceImpl implements CommentService, EntityService<Comment
                 .childrenSize(0L)
                 .build();
 
+        //rely on
         Optional.ofNullable(commentRequest.getReplyCommentId())
-                .map(id -> getByIdAndPost(id, post))
-                .map(commentRely -> {
+                .map(id -> {
+                    Comment commentRely = getByIdAndPost(id, post);
                     comment.setReplyFor(commentRely);
                     comment.setReplyUsername(Format.nameOfUser(commentRely.getAuthor()));
+
+                    notificationService.addNotification(commentRely.getAuthor(), author, NotificationType.RELY_COMMENT, String.valueOf(commentRely.getId()));
                     return commentRely.getSuperParent() == null ? commentRely : commentRely.getSuperParent();
                 })
                 .ifPresent(superParent -> {
@@ -54,7 +61,12 @@ public class CommentServiceImpl implements CommentService, EntityService<Comment
                 });
 
         commentRepository.save(comment);
-        postService.increaseComment(post.getId());
+
+        if(comment.getReplyFor() == null || !comment.getReplyFor().getAuthor().equals(post.getAuthor())) {
+            notificationService.addNotification(post.getAuthor(), author, NotificationType.COMMENT_POST, String.valueOf(comment.getId()));
+        }
+        post.setComment(post.getComment() + 1);
+        postService.save(post);
         broadcastService.broadcast("/app/post/" + post.getSlug(), BroadcastType.COMMENT, commentMapper.toCommentResponse(comment));
         return comment;
     }

@@ -6,7 +6,9 @@ import com.ale.blog.entity.View;
 import com.ale.blog.repository.ViewRepository;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ public class ViewServiceImpl implements ViewService {
     private final PostService postService;
 
     @Async
+    @Transactional(rollbackOn = {Exception.class})
     @Override
     public void increaseView(@Nullable User user, @Nonnull Post post, @Nonnull HttpServletRequest request) {
         String ipaddress = request.getRemoteAddr();
@@ -45,7 +48,6 @@ public class ViewServiceImpl implements ViewService {
     }
 
     private void increaseAndUpdateView(@Nullable User user, @Nonnull Post post, @Nonnull String ipaddress) {
-        postService.increaseView(post.getId());
         View view = View.builder()
                 .post(post)
                 .timestamp(Instant.now())
@@ -53,6 +55,8 @@ public class ViewServiceImpl implements ViewService {
                 .ipaddress(ipaddress)
                 .build();
         viewRepository.save(view);
+        post.setView(post.getView() + 1);
+        postService.save(post);
     }
 
     @Override

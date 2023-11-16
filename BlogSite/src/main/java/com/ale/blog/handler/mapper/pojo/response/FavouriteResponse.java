@@ -1,6 +1,5 @@
 package com.ale.blog.handler.mapper.pojo.response;
 
-import com.ale.blog.entity.state.FavouriteState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -900,6 +900,10 @@ video {
   height: 90vh;
 }
 
+.h-9 {
+  height: 2.25rem;
+}
+
 .max-h-\[27rem\] {
   max-height: 27rem;
 }
@@ -966,6 +970,10 @@ video {
 
 .w-full {
   width: 100%;
+}
+
+.w-9 {
+  width: 2.25rem;
 }
 
 .min-w-\[1rem\] {
@@ -1276,6 +1284,10 @@ video {
   fill: #334155;
 }
 
+.fill-white {
+  fill: #fff;
+}
+
 .stroke-emerald-600 {
   stroke: #059669;
 }
@@ -1324,6 +1336,14 @@ video {
 
 .p-4 {
   padding: 1rem;
+}
+
+.p-\[0\.1rem\] {
+  padding: 0.1rem;
+}
+
+.p-\[0\.05rem\] {
+  padding: 0.05rem;
 }
 
 .px-10 {

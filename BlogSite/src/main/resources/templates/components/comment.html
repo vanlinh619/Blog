@@ -26,11 +26,13 @@
 
                   content: '',
                   replyComment: null,
-                  newComment: null
+                  newComment: null,
+                  disableButtonSend: false
               }
           },
           methods: {
               addComment() {
+                  this.disableButtonSend = true
                   axios.post(ApiUtil.commentUrl, {
                       postSlug: postSlug,
                       content: this.content,
@@ -50,9 +52,11 @@
 
                           this.content = ''
                           this.replyComment = null
+                          this.disableButtonSend = false
                       })
                       .catch(error => {
                           console.log(error)
+                          this.disableButtonSend = false
                       })
               },
               loadComments(page) {
@@ -102,6 +106,11 @@
                   this.loadComments(value)
               }
           },
+          computed: {
+              isDisableButton() {
+                  return !(postSlug && this.content && !this.disableButtonSend)
+              }
+          },
           template: `
   <div>
     <div class="font-medium text-center text-slate-500 border-b border-slate-200">
@@ -125,7 +134,7 @@
         <input v-model="content" type="text" placeholder="Thêm bình luận..."
                class="ml-2 grow outline-0 bg-slate-50"/>
       </div>
-      <button @click="addComment" class="px-3 py-2 border rounded text-emerald-700 active:text-emerald-900 active:border-emerald-400">
+      <button :disabled="isDisableButton" @click="addComment" class="px-3 py-2 border rounded text-emerald-700 active:text-emerald-900 active:border-emerald-400">
         Đăng
       </button>
     </div>

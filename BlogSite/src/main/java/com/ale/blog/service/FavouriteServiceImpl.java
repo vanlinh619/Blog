@@ -3,7 +3,7 @@ package com.ale.blog.service;
 import com.ale.blog.entity.Favourite;
 import com.ale.blog.entity.Post;
 import com.ale.blog.entity.User;
-import com.ale.blog.entity.state.FavouriteState;
+import com.ale.blog.entity.state.NotificationType;
 import com.ale.blog.repository.FavouriteRepository;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -19,44 +19,38 @@ import java.util.Optional;
 public class FavouriteServiceImpl implements FavouriteService {
     private final FavouriteRepository favouriteRepository;
     private final PostService postService;
+    private final NotificationService notificationService;
 
+    @Transactional(rollbackOn = {Exception.class})
     @Override
-    public Favourite updateFavouritePost(@Nonnull User user, @Nonnull String postSlug) {
+    public Optional<Favourite> persistOrDelete(@Nonnull User user, @Nonnull String postSlug) {
         Post post = postService.getPostBySlug(postSlug, user);
         return favouriteRepository.findFirstByUserAndPost(user, post)
                 .map(favourite -> {
-                    switch (favourite.getState()) {
-                        case PERSIST -> {
-                            favourite.setState(FavouriteState.DELETED);
-                            post.setFavourite(post.getFavourite() - 1);
-                        }
-                        case DELETED -> {
-                            favourite.setState(FavouriteState.PERSIST);
-                            post.setFavourite(post.getFavourite() + 1);
-                        }
-                    }
-                    favouriteRepository.save(favourite);
+                    favouriteRepository.delete(favourite);
+                    notificationService.deleteNotification(user, postSlug);
+                    post.setFavourite(post.getFavourite() - 1);
                     postService.save(post);
-                    return favourite;
+                    return Optional.<Favourite>empty();
                 })
                 .orElseGet(() -> {
                     Favourite favourite = Favourite.builder()
                             .post(post)
                             .timestamp(Instant.now())
                             .user(user)
-                            .state(FavouriteState.PERSIST)
                             .build();
                     favouriteRepository.save(favourite);
+                    notificationService.addNotification(post.getAuthor(), user, NotificationType.FAVOURITE_POST, postSlug);
                     post.setFavourite(post.getFavourite() + 1);
                     postService.save(post);
-                    return favourite;
+                    return Optional.of(favourite);
                 });
     }
 
     @Override
     public Boolean ifFavourite(@Nullable User user, @Nonnull Post post) {
         return Optional.ofNullable(user)
-                .flatMap(us -> favouriteRepository.findFirstByUserAndPostAndState(us, post, FavouriteState.PERSIST))
+                .flatMap(us -> favouriteRepository.findFavouriteByUserAndPost(us, post))
                 .isPresent();
     }
 
