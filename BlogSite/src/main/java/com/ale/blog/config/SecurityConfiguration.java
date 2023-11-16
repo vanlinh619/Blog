@@ -86,6 +86,9 @@ public class SecurityConfiguration {
                         .passwordParameter("password")
                         .defaultSuccessUrl("/profile", true)
                 )
+                .rememberMe(httpSecurityRememberMeConfigurer -> httpSecurityRememberMeConfigurer
+                        .rememberMeParameter("remember-me")
+                )
                 .oauth2Login(httpSecurityOAuth2LoginConfigurer -> httpSecurityOAuth2LoginConfigurer
                         .loginPage("/login")
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
