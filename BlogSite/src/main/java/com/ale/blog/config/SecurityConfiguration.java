@@ -2,6 +2,7 @@ package com.ale.blog.config;
 
 import com.ale.blog.security.RedirectAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -30,6 +31,9 @@ import java.util.List;
         prePostEnabled = true
 )
 public class SecurityConfiguration {
+    @Value("${jwt.secret}")
+    private String SECRET_KEY;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -87,7 +91,9 @@ public class SecurityConfiguration {
                         .defaultSuccessUrl("/profile", true)
                 )
                 .rememberMe(httpSecurityRememberMeConfigurer -> httpSecurityRememberMeConfigurer
+                        .key(SECRET_KEY)
                         .rememberMeParameter("remember-me")
+                        .tokenValiditySeconds(604800)
                 )
                 .oauth2Login(httpSecurityOAuth2LoginConfigurer -> httpSecurityOAuth2LoginConfigurer
                         .loginPage("/login")
