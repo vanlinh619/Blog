@@ -6,6 +6,7 @@ import com.ale.blog.entity.User;
 import com.ale.blog.entity.state.NotificationType;
 import com.ale.blog.handler.mapper.CommentMapper;
 import com.ale.blog.handler.mapper.pojo.request.CommentRequest;
+import com.ale.blog.handler.mapper.pojo.request.NotificationObjectWrapper;
 import com.ale.blog.handler.mapper.pojo.request.QueryRequest;
 import com.ale.blog.handler.mapper.pojo.response.state.BroadcastType;
 import com.ale.blog.handler.utils.Convert;
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @AllArgsConstructor
@@ -50,8 +50,6 @@ public class CommentServiceImpl implements CommentService, EntityService<Comment
                     Comment commentRely = getByIdAndPost(id, post);
                     comment.setReplyFor(commentRely);
                     comment.setReplyUsername(Format.nameOfUser(commentRely.getAuthor()));
-
-                    notificationService.addNotification(commentRely.getAuthor(), author, NotificationType.RELY_COMMENT, String.valueOf(commentRely.getId()));
                     return commentRely.getSuperParent() == null ? commentRely : commentRely.getSuperParent();
                 })
                 .ifPresent(superParent -> {
@@ -62,9 +60,8 @@ public class CommentServiceImpl implements CommentService, EntityService<Comment
 
         commentRepository.save(comment);
 
-        if(comment.getReplyFor() == null || !comment.getReplyFor().getAuthor().equals(post.getAuthor())) {
-            notificationService.addNotification(post.getAuthor(), author, NotificationType.COMMENT_POST, String.valueOf(comment.getId()));
-        }
+        pushNotify(author, post, comment);
+
         post.setComment(post.getComment() + 1);
         postService.save(post);
         broadcastService.broadcast("/app/post/" + post.getSlug(), BroadcastType.COMMENT, commentMapper.toCommentResponse(comment));
@@ -94,5 +91,24 @@ public class CommentServiceImpl implements CommentService, EntityService<Comment
     @Override
     public Class<Comment> getEntityClass() {
         return Comment.class;
+    }
+
+    private void pushNotify(User author, Post post, Comment comment) {
+        if (comment.getReplyFor() == null || !comment.getReplyFor().getAuthor().equals(post.getAuthor())) {
+            notificationService.upsertNotification(
+                    post.getAuthor(),
+                    author,
+                    NotificationType.COMMENT_POST,
+                    NotificationObjectWrapper.builder().post(post).comment(comment).build()
+            );
+        }
+        if (comment.getReplyFor() != null) {
+            notificationService.upsertNotification(
+                    comment.getReplyFor().getAuthor(),
+                    author,
+                    NotificationType.RELY_COMMENT,
+                    NotificationObjectWrapper.builder().post(post).comment(comment).build()
+            );
+        }
     }
 }

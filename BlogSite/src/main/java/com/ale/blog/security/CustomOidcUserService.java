@@ -1,7 +1,8 @@
-package com.ale.blog.service;
+package com.ale.blog.security;
 
 import com.ale.blog.entity.User;
 import com.ale.blog.security.UserOAuth2AccessDetail;
+import com.ale.blog.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;

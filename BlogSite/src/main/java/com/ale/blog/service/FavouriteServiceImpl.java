@@ -4,6 +4,7 @@ import com.ale.blog.entity.Favourite;
 import com.ale.blog.entity.Post;
 import com.ale.blog.entity.User;
 import com.ale.blog.entity.state.NotificationType;
+import com.ale.blog.handler.mapper.pojo.request.NotificationObjectWrapper;
 import com.ale.blog.repository.FavouriteRepository;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -28,7 +29,12 @@ public class FavouriteServiceImpl implements FavouriteService {
         return favouriteRepository.findFirstByUserAndPost(user, post)
                 .map(favourite -> {
                     favouriteRepository.delete(favourite);
-                    notificationService.deleteNotification(user, postSlug);
+                    notificationService.deleteOrUpdateNotification(
+                            post.getAuthor(),
+                            user,
+                            NotificationType.FAVOURITE_POST,
+                            NotificationObjectWrapper.builder().post(post).build()
+                    );
                     post.setFavourite(post.getFavourite() - 1);
                     postService.save(post);
                     return Optional.<Favourite>empty();
@@ -40,7 +46,12 @@ public class FavouriteServiceImpl implements FavouriteService {
                             .user(user)
                             .build();
                     favouriteRepository.save(favourite);
-                    notificationService.addNotification(post.getAuthor(), user, NotificationType.FAVOURITE_POST, postSlug);
+                    notificationService.upsertNotification(
+                            post.getAuthor(),
+                            user,
+                            NotificationType.FAVOURITE_POST,
+                            NotificationObjectWrapper.builder().post(post).build()
+                    );
                     post.setFavourite(post.getFavourite() + 1);
                     postService.save(post);
                     return Optional.of(favourite);

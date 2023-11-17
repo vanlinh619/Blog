@@ -1,14 +1,22 @@
 package com.ale.blog.handler.utils;
 
 import com.ale.blog.entity.User;
+import jakarta.annotation.Nonnull;
 
 import java.text.Normalizer;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class Format {
+    public static String toUsername(@Nonnull List<User> actors) {
+        return actors.size() < 3
+                ? actors.get(0).getUsername()
+                : actors.get(0).getUsername() + ", " + actors.get(1).getUsername() + " và " + (actors.size() - 2) + "người khác.";
+    }
+
     public static String toNumber(Long number) {
         return number >= 1000000000
                 ? String.format("%.1fB", 1.0 * number / 1000000000)
