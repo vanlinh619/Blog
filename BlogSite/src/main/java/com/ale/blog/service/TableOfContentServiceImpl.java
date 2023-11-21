@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @AllArgsConstructor
-public class HeadTableServiceImpl implements HeadTableService {
+public class TableOfContentServiceImpl implements TableOfContentService {
     private final HeadTableRepository repository;
 
     @Override

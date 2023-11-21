@@ -4,6 +4,6 @@ import com.ale.blog.entity.Post;
 import com.ale.blog.entity.TableOfContent;
 import java.util.List;
 
-public interface HeadTableService {
+public interface TableOfContentService {
     List<TableOfContent> createHeaderTable(Post post);
 }
