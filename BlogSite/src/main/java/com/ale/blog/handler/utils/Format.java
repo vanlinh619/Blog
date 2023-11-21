@@ -14,7 +14,7 @@ public class Format {
     public static String toUsername(@Nonnull List<User> actors) {
         return actors.size() < 3
                 ? actors.get(0).getUsername()
-                : actors.get(0).getUsername() + ", " + actors.get(1).getUsername() + " và " + (actors.size() - 2) + "người khác.";
+                : actors.get(0).getUsername() + ", " + actors.get(1).getUsername() + " và " + (actors.size() - 2) + " người khác.";
     }
 
     public static String toNumber(Long number) {

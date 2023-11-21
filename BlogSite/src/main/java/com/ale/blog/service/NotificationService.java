@@ -5,7 +5,6 @@ import com.ale.blog.entity.User;
 import com.ale.blog.entity.state.NotificationType;
 import com.ale.blog.handler.mapper.pojo.request.NotificationObjectWrapper;
 import com.ale.blog.handler.mapper.pojo.request.QueryRequest;
-import com.ale.blog.handler.mapper.pojo.response.NotificationResponse;
 import jakarta.annotation.Nonnull;
 import org.springframework.data.domain.Page;
 

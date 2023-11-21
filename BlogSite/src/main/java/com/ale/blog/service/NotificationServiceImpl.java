@@ -8,7 +8,7 @@ import com.ale.blog.handler.mapper.pojo.request.QueryRequest;
 import com.ale.blog.handler.utils.Convert;
 import com.ale.blog.repository.NotificationRepository;
 import jakarta.annotation.Nonnull;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +17,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class NotificationServiceImpl implements NotificationService {
     private final NotificationRepository notificationRepository;
-    private final BroadcastService broadcastService;
 
     @Override
     public Optional<Notification> upsertNotification(

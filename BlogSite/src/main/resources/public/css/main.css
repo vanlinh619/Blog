@@ -617,6 +617,10 @@ video {
   right: 0px;
 }
 
+.right-4 {
+  right: 1rem;
+}
+
 .right-\[max\(0px\2c calc\(50\%-45rem\)\)\] {
   right: max(0px,calc(50% - 45rem));
 }
@@ -672,6 +676,11 @@ video {
   margin-right: 0.25rem;
 }
 
+.mx-2 {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
 .mx-7 {
   margin-left: 1.75rem;
   margin-right: 1.75rem;
@@ -682,19 +691,14 @@ video {
   margin-right: auto;
 }
 
-.my-5 {
-  margin-top: 1.25rem;
-  margin-bottom: 1.25rem;
-}
-
-.mx-2 {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-}
-
 .my-2 {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+}
+
+.my-5 {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
 }
 
 .-mb-px {
@@ -711,6 +715,10 @@ video {
 
 .-ml-\[1px\] {
   margin-left: -1px;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
 }
 
 .mb-10 {
@@ -840,6 +848,13 @@ video {
   -webkit-line-clamp: 2;
 }
 
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
 .block {
   display: block;
 }
@@ -896,16 +911,20 @@ video {
   height: 2rem;
 }
 
-.h-\[90vh\] {
-  height: 90vh;
-}
-
 .h-9 {
   height: 2.25rem;
 }
 
+.h-\[90vh\] {
+  height: 90vh;
+}
+
 .max-h-\[27rem\] {
   max-height: 27rem;
+}
+
+.max-h-\[90vh\] {
+  max-height: 90vh;
 }
 
 .min-h-\[1rem\] {
@@ -956,6 +975,10 @@ video {
   width: 20rem;
 }
 
+.w-9 {
+  width: 2.25rem;
+}
+
 .w-\[19\.5rem\] {
   width: 19.5rem;
 }
@@ -964,16 +987,16 @@ video {
   width: 19rem;
 }
 
+.w-\[25\%\] {
+  width: 25%;
+}
+
 .w-\[52rem\] {
   width: 52rem;
 }
 
 .w-full {
   width: 100%;
-}
-
-.w-9 {
-  width: 2.25rem;
 }
 
 .min-w-\[1rem\] {
@@ -998,10 +1021,6 @@ video {
 
 .flex-none {
   flex: none;
-}
-
-.flex-shrink-0 {
-  flex-shrink: 0;
 }
 
 .flex-grow {
@@ -1112,10 +1131,6 @@ video {
 
 .overscroll-none {
   overscroll-behavior: none;
-}
-
-.scroll-smooth {
-  scroll-behavior: smooth;
 }
 
 .truncate {
@@ -1338,10 +1353,6 @@ video {
   padding: 1rem;
 }
 
-.p-\[0\.1rem\] {
-  padding: 0.1rem;
-}
-
 .p-\[0\.05rem\] {
   padding: 0.05rem;
 }
@@ -1399,6 +1410,11 @@ video {
 .py-2 {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
+}
+
+.py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
 }
 
 .py-5 {
@@ -1650,14 +1666,6 @@ video {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
-.accent-emerald-500 {
-  accent-color: #10b981;
-}
-
-.accent-emerald-700 {
-  accent-color: #047857;
-}
-
 .accent-emerald-600 {
   accent-color: #059669;
 }
@@ -1766,6 +1774,11 @@ video {
   background-color: rgb(4 120 87 / var(--tw-bg-opacity));
 }
 
+.hover\:bg-slate-100:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+}
+
 .hover\:bg-slate-200:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(226 232 240 / var(--tw-bg-opacity));
@@ -1794,10 +1807,6 @@ video {
 
 .hover\:stroke-emerald-700:hover {
   stroke: #047857;
-}
-
-.hover\:stroke-slate-700:hover {
-  stroke: #334155;
 }
 
 .hover\:text-emerald-600:hover {
@@ -1840,30 +1849,18 @@ video {
   border-color: rgb(148 163 184 / var(--tw-border-opacity));
 }
 
-.focus\:border-slate-500:focus {
-  --tw-border-opacity: 1;
-  border-color: rgb(100 116 139 / var(--tw-border-opacity));
-}
-
 .focus\:outline-none:focus {
   outline: 2px solid transparent;
   outline-offset: 2px;
 }
 
-.focus\:ring-1:focus {
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-}
-
-.focus\:ring-slate-500:focus {
-  --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(100 116 139 / var(--tw-ring-opacity));
-}
-
 .active\:border-emerald-400:active {
   --tw-border-opacity: 1;
   border-color: rgb(52 211 153 / var(--tw-border-opacity));
+}
+
+.active\:fill-slate-500:active {
+  fill: #64748b;
 }
 
 .active\:text-emerald-600:active {
@@ -1941,18 +1938,6 @@ video {
 
   .lg\:flex {
     display: flex;
-  }
-
-  .lg\:w-auto {
-    width: auto;
-  }
-
-  .lg\:flex-grow {
-    flex-grow: 1;
-  }
-
-  .lg\:items-center {
-    align-items: center;
   }
 }
 

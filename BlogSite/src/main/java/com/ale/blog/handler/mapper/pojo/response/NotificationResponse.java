@@ -19,6 +19,8 @@ public class NotificationResponse {
     private String updateDate;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String content;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String postSlug;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long relyForCommentId;

@@ -24,11 +24,13 @@ public class NotificationMapperImpl implements NotificationMapper {
             case COMMENT_POST -> {
                 notificationResponse.setCommentId(notification.getComment().getId());
                 notificationResponse.setPostSlug(notification.getPost().getSlug());
+                notificationResponse.setContent(notification.getComment().getContent());
             }
             case RELY_COMMENT -> {
                 notificationResponse.setRelyForCommentId(notification.getComment().getReplyFor().getId());
                 notificationResponse.setCommentId(notification.getComment().getId());
                 notificationResponse.setPostSlug(notification.getPost().getSlug());
+                notificationResponse.setContent(notification.getComment().getContent());
             }
         }
         return notificationResponse;
