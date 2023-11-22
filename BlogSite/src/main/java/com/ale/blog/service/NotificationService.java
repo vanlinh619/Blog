@@ -24,4 +24,7 @@ public interface NotificationService extends EntityService<Notification, Long> {
             @Nonnull NotificationObjectWrapper objectWrapper
     );
     Page<Notification> loadNotification(@Nonnull User receiver, @Nonnull QueryRequest queryRequest);
+
+    Integer countNewNotification(@Nonnull User receiver);
+    void seen(Notification notification);
 }

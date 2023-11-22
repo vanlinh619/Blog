@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 @RestController
 @RolesAllowed(value = {UserRole.Fields.ADMIN, UserRole.Fields.CONTENT_CREATOR, UserRole.Fields.USER})
@@ -49,6 +50,17 @@ public class ApiNotificationController {
                 .status(Status.SUCCESS)
                 .code(MessageCode.SUCCESS)
                 .data(pageMapper.toPageResponse(notificationPage, notificationMapper::toNotificationResponse))
+                .build();
+    }
+
+    @GetMapping("/count")
+    public DataResponse countNewNotification(Authentication authentication) {
+        UserAccess userAccess = (UserAccess) authentication.getPrincipal();
+        Integer countNewComment = notificationService.countNewNotification(userAccess.getUser());
+        return DataResponse.builder()
+                .status(Status.SUCCESS)
+                .code(MessageCode.SUCCESS)
+                .data(countNewComment)
                 .build();
     }
 }

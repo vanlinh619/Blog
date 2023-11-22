@@ -86,6 +86,20 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    public Integer countNewNotification(@Nonnull User receiver) {
+        return notificationRepository.countNewNotification(receiver);
+    }
+
+    @Override
+    public void seen(Notification notification) {
+        if (!notification.getSeen()) {
+            notification.setSeen(true);
+            notificationRepository.save(notification);
+            notification.setSeen(false);
+        }
+    }
+
+    @Override
     public Class<Notification> getEntityClass() {
         return Notification.class;
     }

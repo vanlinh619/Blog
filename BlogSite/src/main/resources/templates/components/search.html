@@ -55,7 +55,7 @@
               </path>
             </svg>
           </button>
-          <div v-if="searchResponse && searchResponse.length !== 0" class="absolute bg-white w-full rounded border p-3 mt-1">
+          <div v-if="searchResponse && searchResponse.length !== 0" class="absolute shadow bg-white w-full rounded border p-3 mt-1">
             <ul class="space-y-1">
               <template v-for="search in searchResponse">
                 <li v-if="search.type === 'POST'" class="border-b pb-2 mt-2 hover:text-emerald-600 stroke-slate-700 fill-slate-700 hover:stroke-emerald-600 hover:fill-emerald-600">

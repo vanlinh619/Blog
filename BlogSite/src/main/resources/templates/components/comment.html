@@ -72,6 +72,51 @@
                           console.log(error)
                       })
               },
+              loadComment() {
+                  let commentId = localStorage.getItem('commentId')
+                  let relyForCommentId = localStorage.getItem('relyForCommentId')
+                  let comment = () => {
+                      this.loadCommentId(commentId, () => {
+                          localStorage.removeItem('commentId')
+                      })
+                      window.location.hash = 'comment'
+                  }
+                  let relyForComment = () => {
+                      this.loadCommentId(relyForCommentId, () => {
+                          comment()
+                          localStorage.removeItem('relyForCommentId')
+                      })
+                  }
+                  if (relyForCommentId) {
+                      relyForComment()
+                  } else if (commentId){
+                      comment()
+                  }
+              },
+              loadCommentId(id, callback) {
+                  axios.get(ApiUtil.getCommentByIdUrl(postSlug, id))
+                      .then(response => {
+                          let comment = response?.data?.data
+                          if (comment.supperCommentId) {
+                              this.newComment = comment
+                          } else {
+                              let index = null
+                              this.comments.find((cmt, ind) => {
+                                  index = ind
+                                  return cmt.id === comment?.id
+                              })
+                              if (index !== null) {
+                                  this.comments.splice(index, 1)
+                              }
+                              this.comments.unshift(comment)
+                          }
+                          callback()
+                      })
+                      .catch(error => {
+                          console.log(error)
+                          callback()
+                      })
+              },
               broadcastPlugin() {
                   if (!broadcastService) return
                   // this.socket = new SockJS("//localhost:8440/comment")
@@ -100,6 +145,7 @@
           mounted() {
               this.broadcastPlugin()
               this.loadComments(0)
+              this.loadComment()
           },
           watch: {
               page(value) {
@@ -202,7 +248,7 @@
           },
           watch: {
               newComment(comment) {
-                  if(comment.supperCommentId === this.supperCommentId) {
+                  if (comment.supperCommentId === this.supperCommentId) {
                       this.childComments.push(comment)
                   }
               }

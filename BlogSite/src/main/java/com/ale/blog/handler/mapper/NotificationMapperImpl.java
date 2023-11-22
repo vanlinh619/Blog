@@ -20,6 +20,7 @@ public class NotificationMapperImpl implements NotificationMapper {
         switch (notification.getType()) {
             case FAVOURITE_POST -> {
                 notificationResponse.setPostSlug(notification.getPost().getSlug());
+                notificationResponse.setContent(notification.getPost().getTitle());
             }
             case COMMENT_POST -> {
                 notificationResponse.setCommentId(notification.getComment().getId());
