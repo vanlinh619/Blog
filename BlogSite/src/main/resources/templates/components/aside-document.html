@@ -21,8 +21,8 @@
       </a>
     </div>
     <ul th:each="section: ${document.getSections()}" class="mt-4 text-sm text-slate-500">
-      <li th:text="${section.getTitle()}" class="leading-8 font-semibold text-slate-700"></li>
-      <li th:each="linked: ${section.getLinked()}" class="leading-7">
+      <li th:text="${section.getTitle()}" class="py-1 font-semibold text-slate-700"></li>
+      <li th:each="linked: ${section.getLinked()}" class="py-1">
         <a th:if="${post.getSlug() == linked.getSlug()}" th:href="${'/post/'+linked.getSlug()}"
            th:text="${linked.getTitle()}" class="font-medium text-emerald-600"></a>
         <a th:unless="${post.getSlug() == linked.getSlug()}" th:href="${'/post/'+linked.getSlug()}"

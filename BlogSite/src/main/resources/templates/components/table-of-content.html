@@ -6,12 +6,12 @@
   <div>
     <span class="text-sm font-semibold px-2 text-slate-700">NỘI DUNG</span>
     <ul class="space-y-0.5 mt-3 text-slate-700">
-      <li th:each="index: ${tableOfContents}" class="hover:text-emerald-600 active:text-emerald-600">
-        <a th:if="${index.getTag().name()}  == 'h2'" class="block pl-2 text-sm font-medium mt-1"
+      <li th:each="index: ${tableOfContents}" class="hover:text-emerald-600 active:text-emerald-600 py-1">
+        <a th:if="${index.getTag().name()}  == 'h2'" class="block pl-2 text-sm font-medium"
            th:href="'#'+${index.getHref()}" th:text="${index.getContent()}"></a>
-        <a th:if="${index.getTag().name()}  == 'h3'" class="block pl-6 text-sm font-medium mt-1"
+        <a th:if="${index.getTag().name()}  == 'h3'" class="block pl-6 text-sm font-medium"
            th:href="'#'+${index.getHref()}" th:text="${index.getContent()}"></a>
-        <a th:if="${index.getTag().name()}  == 'h4'" class="block pl-10 text-sm font-medium mt-1"
+        <a th:if="${index.getTag().name()}  == 'h4'" class="block pl-10 text-sm font-medium"
            th:href="'#'+${index.getHref()}" th:text="${index.getContent()}"></a>
       </li>
     </ul>

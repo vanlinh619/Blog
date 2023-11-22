@@ -26,11 +26,13 @@
 
                   content: '',
                   replyComment: null,
-                  newComment: null
+                  newComment: null,
+                  disableButtonSend: false
               }
           },
           methods: {
               addComment() {
+                  this.disableButtonSend = true
                   axios.post(ApiUtil.commentUrl, {
                       postSlug: postSlug,
                       content: this.content,
@@ -50,9 +52,11 @@
 
                           this.content = ''
                           this.replyComment = null
+                          this.disableButtonSend = false
                       })
                       .catch(error => {
                           console.log(error)
+                          this.disableButtonSend = false
                       })
               },
               loadComments(page) {
@@ -66,6 +70,53 @@
                       })
                       .catch(error => {
                           console.log(error)
+                      })
+              },
+              loadComment() {
+                  let commentId = localStorage.getItem('commentId')
+                  let supperCommentId = localStorage.getItem('supperCommentId')
+                  let comment = () => {
+                      this.loadCommentId(commentId, () => {
+                          localStorage.removeItem('commentId')
+                      })
+                      window.location.hash = 'comment'
+                  }
+                  let supperComment = () => {
+                      this.loadCommentId(supperCommentId, () => {
+                          comment()
+                          localStorage.removeItem('supperCommentId')
+                      })
+                  }
+                  if (supperCommentId) {
+                      supperComment()
+                  } else if (commentId){
+                      comment()
+                  }
+              },
+              loadCommentId(id, callback) {
+                  axios.get(ApiUtil.getCommentByIdUrl(postSlug, id))
+                      .then(response => {
+                          let comment = response?.data?.data
+                          comment.highlight = true
+                          if (comment.supperCommentId) {
+                              comment.type = 'LOAD'
+                              this.newComment = comment
+                          } else {
+                              let index = null
+                              this.comments.find((cmt, ind) => {
+                                  index = ind
+                                  return cmt.id === comment?.id
+                              })
+                              if (index !== null) {
+                                  this.comments.splice(index, 1)
+                              }
+                              this.comments.unshift(comment)
+                          }
+                          callback()
+                      })
+                      .catch(error => {
+                          console.log(error)
+                          callback()
                       })
               },
               broadcastPlugin() {
@@ -96,10 +147,16 @@
           mounted() {
               this.broadcastPlugin()
               this.loadComments(0)
+              this.loadComment()
           },
           watch: {
               page(value) {
                   this.loadComments(value)
+              }
+          },
+          computed: {
+              isDisableButton() {
+                  return !(postSlug && this.content && !this.disableButtonSend)
               }
           },
           template: `
@@ -125,7 +182,7 @@
         <input v-model="content" type="text" placeholder="Thêm bình luận..."
                class="ml-2 grow outline-0 bg-slate-50"/>
       </div>
-      <button @click="addComment" class="px-3 py-2 border rounded text-emerald-700 active:text-emerald-900 active:border-emerald-400">
+      <button :disabled="isDisableButton" @click="addComment" class="px-3 py-2 border rounded text-emerald-700 active:text-emerald-900 active:border-emerald-400">
         Đăng
       </button>
     </div>
@@ -138,7 +195,8 @@
         <img class="w-10 h-10 rounded-full object-center object-cover"
              src="https://stcv4.hnammobile.com/downloads/f/cach-chup-anh-chan-dung-bang-dien-thoai-lung-linh-nhu-may-anh-01676344756.jpg">
         <div class="ml-3">
-          <label class="font-medium truncate">{{comment.username}}</label>
+          <label v-if="comment.highlight" class="font-medium truncate text-emerald-600">{{comment.username}}</label>
+          <label v-else class="font-medium truncate">{{comment.username}}</label>
           <div>{{comment.content}}</div>
           <div class="mt-1 text-sm text-slate-500">
             <label>{{comment.createDate}}</label>
@@ -185,16 +243,24 @@
                           this.childComments.push(...child)
                           this.page++
                           this.childrenSize -= child.length
+                          this.sort()
                       })
                       .catch(error => {
                           console.log(error)
                       })
               },
+              sort() {
+                  this.childComments.sort((cmt1, cmt2) => cmt1.id > cmt2.id ? 1 : -1)
+              },
           },
           watch: {
               newComment(comment) {
-                  if(comment.supperCommentId === this.supperCommentId) {
+                  if (comment.supperCommentId === this.supperCommentId) {
                       this.childComments.push(comment)
+                      if (comment.type === 'LOAD') {
+                          this.childrenSize--
+                      }
+                      this.sort()
                   }
               }
           },
@@ -204,7 +270,8 @@
               <img class="w-7 h-7 rounded-full object-center object-cover"
                    src="https://stcv4.hnammobile.com/downloads/f/cach-chup-anh-chan-dung-bang-dien-thoai-lung-linh-nhu-may-anh-01676344756.jpg">
               <div class="ml-3">
-                <label class="font-medium truncate">{{childComment.username}}</label>
+                <label v-if="childComment.highlight" class="font-medium truncate text-emerald-600">{{childComment.username}}</label>
+                <label v-else class="font-medium truncate">{{childComment.username}}</label>
                 <label> > </label>
                 <label>{{childComment.relyUsername}}</label>
                 <div>{{childComment.content}}</div>

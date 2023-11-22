@@ -36,7 +36,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final SlugIdService slugIdService;
     private final PostMapper postMapper;
-    private final HeadTableService headTableService;
+    private final TableOfContentService tableOfContentService;
     private final CategoryService categoryService;
     private final ExecutorService executorService;
     private final ShareService shareService;
@@ -56,7 +56,7 @@ public class PostServiceImpl implements PostService {
         post.setRawContent(rawText);
         post.setSlug(slugIdService.getId(SlugType.POST) + "-" + Format.toHref(post.getTitle()));
 
-        List<TableOfContent> headTables = headTableService.createHeaderTable(post);
+        List<TableOfContent> headTables = tableOfContentService.createHeaderTable(post);
         post.setTableOfContents(headTables);
         post.setCategory(categoryService.getCategoryByIdAndAuthor(postRequest.getCategoryId(), author));
 
@@ -142,16 +142,6 @@ public class PostServiceImpl implements PostService {
                             ? Optional.of(post)
                             : Optional.empty();
                 });
-    }
-
-    @Override
-    public void increaseView(Long id) {
-        postRepository.increaseView(id);
-    }
-
-    @Override
-    public void increaseComment(Long id) {
-        postRepository.increaseComment(id);
     }
 
     @Override
