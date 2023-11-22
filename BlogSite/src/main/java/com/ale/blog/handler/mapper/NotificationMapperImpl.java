@@ -16,19 +16,17 @@ public class NotificationMapperImpl implements NotificationMapper {
                 .type(notification.getType().name())
                 .updateDate(Format.toTimeDifference(notification.getUpdateDate()))
                 .username(Format.toUsername(notification.getActors()))
+                .count((long) notification.getActors().size())
                 .build();
         switch (notification.getType()) {
             case FAVOURITE_POST -> {
                 notificationResponse.setPostSlug(notification.getPost().getSlug());
                 notificationResponse.setContent(notification.getPost().getTitle());
             }
-            case COMMENT_POST -> {
-                notificationResponse.setCommentId(notification.getComment().getId());
-                notificationResponse.setPostSlug(notification.getPost().getSlug());
-                notificationResponse.setContent(notification.getComment().getContent());
-            }
-            case RELY_COMMENT -> {
-                notificationResponse.setRelyForCommentId(notification.getComment().getReplyFor().getId());
+            case COMMENT_POST, RELY_COMMENT -> {
+                if(notification.getComment().getSuperParent() != null) {
+                    notificationResponse.setSupperCommentId(notification.getComment().getSuperParent().getId());
+                }
                 notificationResponse.setCommentId(notification.getComment().getId());
                 notificationResponse.setPostSlug(notification.getPost().getSlug());
                 notificationResponse.setContent(notification.getComment().getContent());

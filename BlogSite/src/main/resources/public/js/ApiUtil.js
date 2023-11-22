@@ -7,7 +7,8 @@ const ApiUtil = {
     getAllChildCommentUrl: (postSlug, supperCommentId, page) => `/api/public/comment/${postSlug}/${supperCommentId}?page=${page}`,
     favouritePostUrl: (postSlug) => `/api/authorize/favourite/${postSlug}`,
     loadNotificationUrl: (page) => `/api/authorize/notification?page=${page}`,
-    countNewNotificationUrl: `/api/authorize/notification/count`
+    countNewNotificationUrl: `/api/authorize/notification/count`,
+    seenUrl: `/api/authorize/notification`,
 }
 
 export default ApiUtil

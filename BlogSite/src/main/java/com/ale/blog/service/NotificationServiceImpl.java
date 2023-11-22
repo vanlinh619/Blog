@@ -91,12 +91,8 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void seen(Notification notification) {
-        if (!notification.getSeen()) {
-            notification.setSeen(true);
-            notificationRepository.save(notification);
-            notification.setSeen(false);
-        }
+    public void seen(@Nonnull User receiver, @Nonnull List<Long> ids) {
+        notificationRepository.seen(receiver, ids);
     }
 
     @Override

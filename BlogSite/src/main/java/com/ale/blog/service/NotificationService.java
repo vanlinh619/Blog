@@ -8,6 +8,7 @@ import com.ale.blog.handler.mapper.pojo.request.QueryRequest;
 import jakarta.annotation.Nonnull;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface NotificationService extends EntityService<Notification, Long> {
@@ -26,5 +27,5 @@ public interface NotificationService extends EntityService<Notification, Long> {
     Page<Notification> loadNotification(@Nonnull User receiver, @Nonnull QueryRequest queryRequest);
 
     Integer countNewNotification(@Nonnull User receiver);
-    void seen(Notification notification);
+    void seen(@Nonnull User receiver, @Nonnull List<Long> ids);
 }

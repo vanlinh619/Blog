@@ -17,11 +17,21 @@
               }
           },
           methods: {
-              loadNotifications() {
-                  axios.get(ApiUtil.loadNotificationUrl(this.page))
+              loadNotifications(page) {
+                  axios.get(ApiUtil.loadNotificationUrl(page))
                       .then(response => {
-                          console.log(response)
-                          this.notifications.push(...response?.data?.data?.content)
+                          let newNotify = response?.data?.data?.content
+                          this.notifications.push(...newNotify)
+                          let count = 0;
+                          let listId = newNotify.filter(notification => !notification.seen)
+                              .map(notification => {
+                                  count += notification.count
+                                  return notification.id
+                              })
+                          this.seen(listId)
+                          this.newNotificationCount -= count
+                          this.page = response?.data?.data?.page
+                          this.totalPage = response?.data?.data?.totalPage
                       })
                       .catch(error => {
                           console.log(error)
@@ -40,20 +50,32 @@
                   if (notification.commentId) {
                       localStorage.setItem('commentId', notification.commentId)
                   }
-                  if (notification.relyForCommentId) {
-                      localStorage.setItem('relyForCommentId', notification.relyForCommentId)
+                  if (notification.supperCommentId) {
+                      localStorage.setItem('supperCommentId', notification.supperCommentId)
                   }
-                  window.location.href =  '/post/' + notification.postSlug
+                  window.location.href = '/post/' + notification.postSlug
               },
+              seen(listId) {
+                  if (!listId || listId.length === 0) return
+                  axios.put(ApiUtil.seenUrl, listId)
+                      .then(response => {
+                          console.log(response)
+                      })
+                      .catch(error => {
+                          console.log(error)
+                      })
+              }
           },
           watch: {
               expanded(value) {
                   if (value) {
-                      this.loadNotifications()
+                      this.loadNotifications(0)
                   } else {
                       this.notifications.splice(0, this.notifications.length)
+                      this.page = 0
+                      this.totalPage = 0
                   }
-              }
+              },
           },
           mounted() {
               this.countNewNotification()
@@ -67,8 +89,8 @@
                   </path>
                 </svg>
               </a>
-              <span class="absolute -top-1 -right-1 bg-red-600 rounded-full p-[0.2rem] text-xs font-medium text-white leading-none">
-                <span v-if="newNotificationCount > 0 && newNotificationCount < 100">{{newNotificationCount}}</span>
+              <span v-if="newNotificationCount > 0" class="absolute -top-1 -right-1 bg-red-600 rounded-full p-[0.2rem] text-xs font-medium text-white leading-none">
+                <span v-if="newNotificationCount < 100">{{newNotificationCount}}</span>
                 <span v-else-if="newNotificationCount >= 100">99+</span>
               </span>
             </div>
@@ -97,7 +119,11 @@
                     </a>
                   </li>
                 </template>
-
+                <li class="py-3 flex justify-center">
+                  <button v-if="page < totalPage - 1" @click="loadNotifications(page + 1)" class="italic text-sm hover:text-emerald-600">
+                    Xem thêm
+                  </button>
+                </li>
               </ul>
             </div>
           </div>

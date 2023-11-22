@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
-
 @Data
 @Builder
 @AllArgsConstructor
@@ -17,13 +15,14 @@ public class NotificationResponse {
     private String type;
     private Boolean seen;
     private String updateDate;
+    private Long count;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String content;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String postSlug;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Long relyForCommentId;
+    private Long supperCommentId;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long commentId;
 

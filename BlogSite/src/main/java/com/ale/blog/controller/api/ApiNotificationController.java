@@ -14,15 +14,16 @@ import com.ale.blog.handler.utils.SortType;
 import com.ale.blog.handler.utils.StaticVariable;
 import com.ale.blog.security.UserAccess;
 import com.ale.blog.service.NotificationService;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -61,6 +62,17 @@ public class ApiNotificationController {
                 .status(Status.SUCCESS)
                 .code(MessageCode.SUCCESS)
                 .data(countNewComment)
+                .build();
+    }
+
+    @PutMapping
+    public DataResponse seen(Authentication authentication, @RequestBody List<Long> ids) {
+        UserAccess userAccess = (UserAccess) authentication.getPrincipal();
+        System.out.println(ids);
+        notificationService.seen(userAccess.getUser(), ids);
+        return DataResponse.builder()
+                .status(Status.SUCCESS)
+                .code(MessageCode.SUCCESS)
                 .build();
     }
 }
