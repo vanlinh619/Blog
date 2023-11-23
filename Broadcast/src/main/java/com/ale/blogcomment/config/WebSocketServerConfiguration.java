@@ -1,17 +1,19 @@
 package com.ale.blogcomment.config;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.messaging.support.ChannelInterceptor;
+import org.springframework.session.Session;
+import org.springframework.session.web.socket.config.annotation.AbstractSessionWebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.*;
 
 @Configuration
 @EnableWebSocketMessageBroker
-public class WebSocketServerConfiguration implements WebSocketMessageBrokerConfigurer {
+public class WebSocketServerConfiguration extends AbstractSessionWebSocketMessageBrokerConfigurer<Session> {
+
     @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/comment")
+    protected void configureStompEndpoints(StompEndpointRegistry stompEndpointRegistry) {
+        stompEndpointRegistry
+                .addEndpoint("/comment")
                 .setAllowedOrigins("https://localhost:8443");
 //                .withSockJS();
     }
@@ -22,8 +24,8 @@ public class WebSocketServerConfiguration implements WebSocketMessageBrokerConfi
         registry.setApplicationDestinationPrefixes("/app");
     }
 
-    @Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(new TopicSubscriptionInterceptor());
-    }
+//    @Override
+//    public void configureClientInboundChannel(ChannelRegistration registration) {
+//        registration.interceptors(new TopicSubscriptionInterceptor());
+//    }
 }

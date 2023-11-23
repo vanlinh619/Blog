@@ -6,10 +6,8 @@ import com.ale.blogcomment.handler.pojo.CommentResponse;
 import com.ale.blogcomment.service.CommentService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.handler.annotation.*;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 
@@ -18,17 +16,14 @@ import org.springframework.stereotype.Controller;
 public class CommentController {
     private final CommentService commentService;
 
-    @SubscribeMapping("/topic")
-    public void rejectRequest() {
-        throw new RuntimeException("Bad request");
-    }
-
     @MessageMapping("/post/{id}")
     @SendTo("/topic/post/{id}")
-    public Object commentToPost(@DestinationVariable String id, @Payload BroadcastResponse broadcastResponse) {
+    public Object commentToPost(@DestinationVariable String id, @Payload BroadcastResponse broadcastResponse, SimpMessageHeaderAccessor headerAccessor) {
         if (!commentService.isAdminBroadcast(broadcastResponse)) {
             throw new RuntimeException("User role is not admin");
         }
+        String sessionId = headerAccessor.getSessionAttributes().get("sessionId").toString();
+        System.out.println(sessionId);
         return broadcastResponse.getPayload();
     }
 }

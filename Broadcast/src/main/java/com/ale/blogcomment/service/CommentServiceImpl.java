@@ -1,11 +1,10 @@
 package com.ale.blogcomment.service;
 
-import com.ale.blogcomment.entity.UserRole;
+import com.ale.blog.entity.state.UserRole;
 import com.ale.blogcomment.handler.pojo.BroadcastResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service

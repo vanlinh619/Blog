@@ -15,6 +15,7 @@ public class TopicSubscriptionInterceptor implements ChannelInterceptor {
     @Override
     public Message<?> preSend(@Nonnull Message<?> message, @Nonnull MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
+        System.out.println(accessor.getCommand());
         return Optional.ofNullable(accessor.getCommand())
                 .map(stompCommand -> {
                     switch (stompCommand) {
