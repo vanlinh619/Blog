@@ -63,9 +63,10 @@ public class SecurityConfiguration {
                 .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer
                         .authenticationEntryPoint(redirectAuthenticationEntryPoint)
                 )
-                .requiresChannel(channelRequestMatcherRegistry ->
-                        channelRequestMatcherRegistry.anyRequest().requiresSecure()
-                )
+                //SSL
+//                .requiresChannel(channelRequestMatcherRegistry ->
+//                        channelRequestMatcherRegistry.anyRequest().requiresSecure()
+//                )
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(
                                 "/",

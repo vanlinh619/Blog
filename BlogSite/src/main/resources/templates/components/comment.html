@@ -119,29 +119,42 @@
                           callback()
                       })
               },
+              getAccessToken(callback) {
+                  axios.get(ApiUtil.accessTokenUrl)
+                      .then(response => {
+                          callback(response.data.data)
+                      })
+                      .catch(error => {
+                          console.log(error)
+                      })
+              },
               broadcastPlugin() {
-                  if (!broadcastService) return
-                  // this.socket = new SockJS("//localhost:8440/comment")
-                  let stomp = new Stomp.client(ApiUtil.socketUrl)
-                  stomp.connect(
-                      {},
-                      frame => {
-                          // console.log(frame);
-                          stomp.subscribe(`/topic/post/${postSlug}`, e => {
-                              // console.log(e.body);
-                              let newComment = JSON.parse(e.body)
-                              if (newComment.sender === username) return
-                              if (newComment.supperCommentId) {
-                                  this.newComment = newComment
-                              } else {
-                                  this.comments.unshift(newComment)
-                              }
-                          });
-                      },
-                      error => {
-                          console.log(error);
-                      }
-                  )
+                  if (!broadcastService || !isLogin) return
+                  this.getAccessToken((token) => {
+                      let socket = new SockJS(ApiUtil.socketUrl)
+                      let stomp = new Stomp.over(socket)
+                      stomp.connect(
+                          {
+                              // Authorization: `Bearer ${token}`
+                          },
+                          frame => {
+                              // console.log(frame);
+                              stomp.subscribe(`/topic/post/${postSlug}`, e => {
+                                  // console.log(e.body);
+                                  let newComment = JSON.parse(e.body)
+                                  if (newComment.sender === username) return
+                                  if (newComment.supperCommentId) {
+                                      this.newComment = newComment
+                                  } else {
+                                      this.comments.unshift(newComment)
+                                  }
+                              });
+                          },
+                          error => {
+                              console.log(error);
+                          }
+                      )
+                  })
               }
           },
           mounted() {

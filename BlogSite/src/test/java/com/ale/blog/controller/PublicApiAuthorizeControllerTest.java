@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-test.properties")
 @Import(TestConfig.class)
-public class ApiAuthorizeControllerTest {
+public class PublicApiAuthorizeControllerTest {
     @Autowired
     private TestUtil testUtil;
     @Autowired

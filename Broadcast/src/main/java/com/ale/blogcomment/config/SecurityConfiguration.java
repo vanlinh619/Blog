@@ -1,5 +1,10 @@
 package com.ale.blogcomment.config;
 
+import com.ale.blog.entity.state.UserRole;
+import com.ale.blog.security.JwtAuthenticationFilter;
+import com.ale.blog.security.JwtTokenProvider;
+import com.ale.blog.security.TokenProvider;
+import com.ale.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +20,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.util.List;
 
@@ -33,34 +40,17 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
-            OAuth2UserService oAuth2UserService
+            OncePerRequestFilter oncePerRequestFilter
     ) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(
                                 "/comment/**"
-                        ).permitAll()
-                        .anyRequest().authenticated()
+                        ).hasAnyAuthority(UserRole.ADMIN.name(), UserRole.CONTENT_CREATOR.name(), UserRole.USER.name())
+                        .anyRequest().permitAll()
                 )
-                .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer
-//                        .loginPage("/login")
-                        .usernameParameter("username")
-                        .passwordParameter("password")
-//                        .defaultSuccessUrl("/profile", true)
-                )
-                .rememberMe(httpSecurityRememberMeConfigurer -> httpSecurityRememberMeConfigurer
-                        .key(SECRET_KEY)
-                        .rememberMeParameter("remember-me")
-                        .tokenValiditySeconds(604800)
-                )
-                .oauth2Login(httpSecurityOAuth2LoginConfigurer -> httpSecurityOAuth2LoginConfigurer
-//                        .loginPage("/login")
-                        .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
-                                .userService(oAuth2UserService)
-                        )
-                        .defaultSuccessUrl("/profile", true)
-                )
+                .addFilterBefore(oncePerRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
@@ -78,5 +68,15 @@ public class SecurityConfiguration {
     @Bean
     public GrantedAuthorityDefaults grantedAuthorityDefaults() {
         return new GrantedAuthorityDefaults("");
+    }
+
+    @Bean
+    public OncePerRequestFilter oncePerRequestFilter(TokenProvider tokenProvider, UserService userService) {
+        return new JwtAuthenticationFilter(tokenProvider, userService);
+    }
+
+    @Bean
+    public TokenProvider tokenProvider() {
+        return new JwtTokenProvider();
     }
 }

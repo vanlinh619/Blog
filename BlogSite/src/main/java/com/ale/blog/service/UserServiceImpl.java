@@ -27,8 +27,8 @@ import java.util.concurrent.atomic.AtomicReference;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    protected final UserRepository userRepository;
+    protected final PasswordEncoder passwordEncoder;
 
     @Value("${account.admin.username}")
     private String username;

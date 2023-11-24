@@ -10,6 +10,8 @@ import org.springframework.scheduling.annotation.Async;
 
 @RequiredArgsConstructor
 public class BroadcastServiceImpl implements BroadcastService {
+    public static final String BROADCAST_DESTINATION = "/system";
+
     private final StompSession stompSession;
     private final UserService userService;
 
@@ -26,8 +28,6 @@ public class BroadcastServiceImpl implements BroadcastService {
                 .type(type)
                 .payload(payload)
                 .build();
-        stompSession.send(topic, broadcastResponse);
-        broadcastResponse.setUserId(content.getUuid().toString());
-        stompSession.send(topic.replace("app", "topic"), broadcastResponse);
+        stompSession.send(BROADCAST_DESTINATION + topic, broadcastResponse);
     }
 }
