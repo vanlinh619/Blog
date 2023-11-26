@@ -7,6 +7,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
+import java.security.Principal;
+
 @Controller
 @AllArgsConstructor
 public class BroadcastController {
@@ -19,10 +21,11 @@ public class BroadcastController {
     }
 
     @MessageMapping("/notification")
-    public void notification(@Payload BroadcastRequest broadcastRequest) {
+    public void notification(Principal principal, @Payload BroadcastRequest broadcastRequest) {
+        System.out.println("Sender : " + principal.getName() + " receiver: " + broadcastRequest.getReceiver());
         simpMessagingTemplate.convertAndSendToUser(
                 broadcastRequest.getReceiver(),
-                "queue/notification",
+                "/notification",
                 broadcastRequest.getPayload()
         );
     }

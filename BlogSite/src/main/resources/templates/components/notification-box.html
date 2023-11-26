@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<div th:fragment="notification">
+<div th:fragment="notification(user)">
   <div id="notification"></div>
   <script th:inline="javascript" type="module">
       /*<![CDATA[*/
       import ApiUtil from /*[[@{/js/ApiUtil.js}]]*/ "../../public/js/ApiUtil";
-
       let broadcastService = /*[[${@environment.getProperty('microservice.broadcast')}]]*/ false
+      let isLogin = /*[[${user != null ? true : false}]]*/ false
+      let username = /*[[${user != null ? user.getUsername() : ''}]]*/ ''
       /*]]>*/
       Vue.createApp({
           data() {
@@ -68,17 +69,20 @@
                       })
               },
               broadcastPlugin() {
-                  if (!broadcastService) return
+                  if (!broadcastService || !isLogin) return
                   let socket = new SockJS(ApiUtil.socketUrl)
                   let stomp = new Stomp.over(socket)
                   stomp.connect(
                       {},
                       frame => {
-                          // console.log(frame);
-                          stomp.subscribe(ApiUtil.subscribeNotificationUrl, e => {
-                              // console.log(e.body);
+                          stomp.subscribe(ApiUtil.subscribeNotificationUrl(username), e => {
                               let notification = JSON.parse(e.body)
+                              this.newNotificationCount++
+                              if(this.expanded) {
+                                  this.notifications.unshift(notification)
+                              }
                           });
+                          // stomp.send("/system/notification",{}, "AAAAAAAAAAAA")
                       },
                       error => {
                           console.log(error);

@@ -1,5 +1,7 @@
 package com.ale.broadcast.config;
 
+import com.ale.blog.entity.User;
+import com.ale.blog.security.UserAccess;
 import jakarta.annotation.Nonnull;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -13,6 +15,7 @@ public class AuthenticationChannelInterceptor implements ChannelInterceptor {
     @Override
     public Message<?> preSend(@Nonnull Message<?> message, @Nonnull MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
+        System.out.println(accessor.getCommand() + ": " + accessor.getDestination());
         return Optional.ofNullable(accessor.getCommand())
                 .map(stompCommand -> {
                     String destination = accessor.getDestination();
@@ -23,7 +26,7 @@ public class AuthenticationChannelInterceptor implements ChannelInterceptor {
 //                            }
 //                        }
 //                        case SEND -> {
-//                            if (destination == null || !destination.startsWith("/app/")) {
+//                            if (destination == null || !destination.startsWith("/system/")) {
 //                                return null;
 //                            }
 //                        }
