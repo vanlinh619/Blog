@@ -1,4 +1,4 @@
-package com.ale.blogcomment.config;
+package com.ale.broadcast.config;
 
 import jakarta.annotation.Nonnull;
 import org.springframework.messaging.Message;
@@ -13,27 +13,23 @@ public class AuthenticationChannelInterceptor implements ChannelInterceptor {
     @Override
     public Message<?> preSend(@Nonnull Message<?> message, @Nonnull MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-        System.out.println(accessor.getCommand());
-        return message;
-//        return Optional.ofNullable(accessor.getCommand())
-//                .map(stompCommand -> {
+        return Optional.ofNullable(accessor.getCommand())
+                .map(stompCommand -> {
+                    String destination = accessor.getDestination();
 //                    switch (stompCommand) {
 //                        case SUBSCRIBE -> {
-//                            if (!Objects.requireNonNull(accessor.getDestination()).startsWith("/topic/")) {
+//                            if (destination == null || !destination.startsWith("/topic/")) {
 //                                return null;
 //                            }
 //                        }
 //                        case SEND -> {
-//                            if (!Objects.requireNonNull(accessor.getDestination()).startsWith("/app/")) {
+//                            if (destination == null || !destination.startsWith("/app/")) {
 //                                return null;
 //                            }
 //                        }
-//                        default -> {
-//                            return message;
-//                        }
 //                    }
-//                    return message;
-//                })
-//                .orElse(null);
+                    return message;
+                })
+                .orElse(null);
     }
 }

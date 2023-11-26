@@ -1,4 +1,4 @@
-package com.ale.blogcomment.service;
+package com.ale.broadcast.service;
 
 import com.ale.blog.entity.User;
 import com.ale.blog.repository.UserRepository;

@@ -1,7 +1,7 @@
 package com.ale.blog.service;
 
-import com.ale.blog.entity.User;
-import com.ale.blog.handler.mapper.pojo.response.BroadcastResponse;
+import com.ale.blog.handler.mapper.pojo.request.BroadcastRequest;
+import com.ale.blog.handler.mapper.pojo.response.NotificationResponse;
 import com.ale.blog.handler.mapper.pojo.response.state.BroadcastType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,14 +20,21 @@ public class BroadcastServiceImpl implements BroadcastService {
 
     @Async
     @Override
-    public void broadcast(String topic, BroadcastType type, Object payload) {
-        User user = userService.getByUsername(admin);
-        User content = userService.getByUsername("content");
-        BroadcastResponse broadcastResponse = BroadcastResponse.builder()
-                .userId(user.getUuid().toString())
+    public void broadcastComment(String url, BroadcastType type, Object payload) {
+        BroadcastRequest broadcastRequest = BroadcastRequest.builder()
                 .type(type)
                 .payload(payload)
                 .build();
-        stompSession.send(BROADCAST_DESTINATION + topic, broadcastResponse);
+        stompSession.send(BROADCAST_DESTINATION + url, broadcastRequest);
+    }
+
+    @Override
+    public void broadcastNotification(String username, NotificationResponse notificationResponse) {
+        BroadcastRequest broadcastRequest = BroadcastRequest.builder()
+                .type(BroadcastType.NOTIFICATION)
+                .payload(notificationResponse)
+                .receiver(username)
+                .build();
+        stompSession.send(BROADCAST_DESTINATION + "/notification", broadcastRequest);
     }
 }

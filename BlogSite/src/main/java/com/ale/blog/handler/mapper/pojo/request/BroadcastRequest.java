@@ -1,5 +1,6 @@
-package com.ale.blogcomment.handler.pojo;
+package com.ale.blog.handler.mapper.pojo.request;
 
+import com.ale.blog.handler.mapper.pojo.response.state.BroadcastType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,8 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BroadcastResponse {
-    private String userId;
+public class BroadcastRequest {
     private BroadcastType type;
     private Object payload;
+    private String receiver;
 }

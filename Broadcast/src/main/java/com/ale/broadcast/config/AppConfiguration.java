@@ -1,4 +1,4 @@
-package com.ale.blogcomment.config;
+package com.ale.broadcast.config;
 
 import com.google.gson.Gson;
 import org.modelmapper.ModelMapper;

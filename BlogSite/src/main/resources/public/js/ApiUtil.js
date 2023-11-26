@@ -9,7 +9,7 @@ const ApiUtil = {
     loadNotificationUrl: (page) => `/api/authorize/notification?page=${page}`,
     countNewNotificationUrl: `/api/authorize/notification/count`,
     seenUrl: `/api/authorize/notification`,
-    accessTokenUrl: '/api/authorize/token'
+    subscribeNotificationUrl: '/user/queue/notification'
 }
 
 export default ApiUtil

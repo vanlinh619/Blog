@@ -1,4 +1,4 @@
-package com.ale.blogcomment.reponsitory;
+package com.ale.broadcast.reponsitory;
 
 import com.ale.blog.entity.User;
 import org.springframework.stereotype.Repository;

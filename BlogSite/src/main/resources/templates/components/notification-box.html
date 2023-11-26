@@ -5,6 +5,8 @@
   <script th:inline="javascript" type="module">
       /*<![CDATA[*/
       import ApiUtil from /*[[@{/js/ApiUtil.js}]]*/ "../../public/js/ApiUtil";
+
+      let broadcastService = /*[[${@environment.getProperty('microservice.broadcast')}]]*/ false
       /*]]>*/
       Vue.createApp({
           data() {
@@ -64,6 +66,24 @@
                       .catch(error => {
                           console.log(error)
                       })
+              },
+              broadcastPlugin() {
+                  if (!broadcastService) return
+                  let socket = new SockJS(ApiUtil.socketUrl)
+                  let stomp = new Stomp.over(socket)
+                  stomp.connect(
+                      {},
+                      frame => {
+                          // console.log(frame);
+                          stomp.subscribe(ApiUtil.subscribeNotificationUrl, e => {
+                              // console.log(e.body);
+                              let notification = JSON.parse(e.body)
+                          });
+                      },
+                      error => {
+                          console.log(error);
+                      }
+                  )
               }
           },
           watch: {
@@ -79,6 +99,7 @@
           },
           mounted() {
               this.countNewNotification()
+              this.broadcastPlugin()
           },
           template: `
           <div>

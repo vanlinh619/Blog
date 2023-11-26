@@ -1,4 +1,4 @@
-package com.ale.blogcomment.config;
+package com.ale.broadcast.config;
 
 import com.ale.blog.entity.state.UserRole;
 import com.ale.blog.security.JwtAuthenticationFilter;

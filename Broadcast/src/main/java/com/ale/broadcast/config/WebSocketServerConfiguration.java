@@ -1,4 +1,4 @@
-package com.ale.blogcomment.config;
+package com.ale.broadcast.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
@@ -28,7 +28,7 @@ public class WebSocketServerConfiguration implements WebSocketMessageBrokerConfi
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-//        registry.enableSimpleBroker("/topic/", "/queue/");
+        registry.enableSimpleBroker("/topic/", "/queue/");
         registry.setApplicationDestinationPrefixes("/system");
     }
 
@@ -36,4 +36,19 @@ public class WebSocketServerConfiguration implements WebSocketMessageBrokerConfi
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(new AuthenticationChannelInterceptor());
     }
+
+//    @Override
+//    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+//        argumentResolvers.add(new AuthenticationPrincipalArgumentResolver());
+//    }
+//
+//    @Override
+//    public void configureClientInboundChannel(ChannelRegistration registration) {
+//        AuthorizationManager<Message<?>> myAuthorizationRules = AuthenticatedAuthorizationManager
+//                .authenticated();
+//        AuthorizationChannelInterceptor authz = new AuthorizationChannelInterceptor(myAuthorizationRules);
+////        AuthorizationEventPublisher publisher = new SpringAuthorizationEventPublisher(this);
+////        authz.setAuthorizationEventPublisher(publisher);
+//        registration.interceptors(new SecurityContextChannelInterceptor(), authz);
+//    }
 }
