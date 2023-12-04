@@ -76,11 +76,12 @@ public class SecurityConfiguration {
                                 "/home/**",
                                 "/document/**",
                                 "/image/**",
+                                "/profile/**",
                                 "/css/**",
                                 "/js/**"
                         ).permitAll()
                         .requestMatchers("/api/authorize/**").authenticated()
-                        .requestMatchers("/profile/**").authenticated()
+//                        .requestMatchers("/profile/**").authenticated()
                         .requestMatchers("/api/public/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -91,7 +92,7 @@ public class SecurityConfiguration {
                         .loginPage("/login")
                         .usernameParameter("username")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/profile", true)
+                        .defaultSuccessUrl("/", true)
                 )
                 .rememberMe(httpSecurityRememberMeConfigurer -> httpSecurityRememberMeConfigurer
                         .key(SECRET_KEY)
@@ -103,7 +104,7 @@ public class SecurityConfiguration {
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
                                 .userService(oAuth2UserService)
                         )
-                        .defaultSuccessUrl("/profile", true)
+                        .defaultSuccessUrl("/", true)
                 )
                 .addFilterBefore(oncePerRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

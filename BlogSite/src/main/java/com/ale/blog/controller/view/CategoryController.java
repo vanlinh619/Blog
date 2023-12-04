@@ -14,6 +14,7 @@ import com.ale.blog.handler.utils.StaticVariable;
 import com.ale.blog.handler.utils.TextUtil;
 import com.ale.blog.handler.utils.UserUtil;
 import com.ale.blog.service.CategoryService;
+import com.ale.blog.service.ImageService;
 import com.ale.blog.service.PostService;
 import com.ale.blog.service.UserService;
 import jakarta.validation.Valid;
@@ -35,10 +36,11 @@ public class CategoryController {
     private final CategoryService categoryService;
     private final PostService postService;
     private final UserService userService;
+    private final ImageService imageService;
 
     @GetMapping("{username}")
     public String getAllPost(@PathVariable String username, @Valid PageDocumentRequest pageRequest, Model model, Authentication authentication) {
-        Optional<User> userOptional = UserUtil.owner(authentication);
+        Optional<User> userOptional = UserUtil.owner(authentication, imageService);
         User author = userService.getByUsername(username);
         Page<Post> postPage = postService.findAllByAuthor(
                 userOptional.orElse(null),
@@ -71,7 +73,7 @@ public class CategoryController {
             Model model,
             Authentication authentication
     ) {
-        Optional<User> userOptional = UserUtil.owner(authentication);
+        Optional<User> userOptional = UserUtil.owner(authentication, imageService);
         User author = userService.getByUsername(username);
         Category category = categoryService.getCategoryBySlugAndAuthor(categoryUrl, author);
         Page<Post> postPage = postService.findAllByCategory(

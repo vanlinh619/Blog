@@ -1,14 +1,19 @@
 package com.ale.blog.service;
 
+import com.ale.blog.entity.Image;
 import com.ale.blog.entity.User;
+import com.ale.blog.entity.state.ImageType;
 import com.ale.blog.entity.state.OAuthProvider;
 import com.ale.blog.entity.state.UserRole;
 import com.ale.blog.handler.exception.AppException;
+import com.ale.blog.handler.mapper.pojo.request.UserInfoRequest;
 import com.ale.blog.handler.mapper.pojo.response.DataResponse;
 import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
 import com.ale.blog.handler.mapper.pojo.response.state.Status;
 import com.ale.blog.repository.UserRepository;
 import com.ale.blog.security.UserAccessDetails;
+import jakarta.annotation.Nonnull;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.internal.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +34,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class UserServiceImpl implements UserService, UserDetailsService {
     protected final UserRepository userRepository;
     protected final PasswordEncoder passwordEncoder;
+    private final ImageService imageService;
 
     @Value("${account.admin.username}")
     private String username;
@@ -137,6 +143,23 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             userRepository.save(user);
             return user;
         });
+    }
+
+    @Transactional(rollbackOn = {Exception.class})
+    @Override
+    public User updateInfo(@Nonnull User user, @Nonnull UserInfoRequest userInfoRequest) {
+        user.setFullName(userInfoRequest.getFullName());
+        user.setStory(userInfoRequest.getStory());
+        if(userInfoRequest.getAvatar() != null) {
+            Image old = user.getAvatar();
+            if (old != null) {
+                imageService.deleteAvatar(old.getId());
+            }
+
+            Image image = imageService.upsertImage(userInfoRequest.getAvatar(), user, ImageType.AVATAR);
+            user.setAvatar(image);
+        }
+        return userRepository.save(user);
     }
 
     @Override

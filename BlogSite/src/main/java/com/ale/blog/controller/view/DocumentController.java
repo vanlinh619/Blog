@@ -12,6 +12,7 @@ import com.ale.blog.handler.utils.StaticVariable;
 import com.ale.blog.handler.utils.TextUtil;
 import com.ale.blog.handler.utils.UserUtil;
 import com.ale.blog.service.DocumentService;
+import com.ale.blog.service.ImageService;
 import com.ale.blog.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,7 @@ import java.util.Optional;
 public class DocumentController {
     private final UserService userService;
     private final DocumentService documentService;
+    private final ImageService imageService;
 
     @GetMapping("{username}")
     public String viewAllDocument(
@@ -39,7 +41,7 @@ public class DocumentController {
             Model model,
             Authentication authentication
     ) {
-        Optional<User> userOptional = UserUtil.owner(authentication);
+        Optional<User> userOptional = UserUtil.owner(authentication, imageService);
         User author = userService.getByUsername(username);
         Page<Document> documentPage = documentService.findAllByAuthor(author, userOptional.orElse(null), DocumentState.valueOf(pageRequest.getScope().toUpperCase()), QueryRequest.builder()
                 .page(pageRequest.getPage() - 1)
@@ -59,7 +61,7 @@ public class DocumentController {
 
     @GetMapping("{username}/{slug}")
     public String viewDocument(@PathVariable String username, @PathVariable String slug, Model model, Authentication authentication) {
-        Optional<User> userOptional = UserUtil.owner(authentication);
+        Optional<User> userOptional = UserUtil.owner(authentication, imageService);
         User author = userService.getByUsername(username);
         Document document = documentService.getDocumentBySlug(slug, author, userOptional.orElse(null));
         documentService.setEntriesOfDocument(document);

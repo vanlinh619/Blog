@@ -6,10 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
@@ -26,11 +23,13 @@ import java.util.UUID;
 @Data
 @Builder
 @FieldNameConstants(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @EqualsAndHashCode.Include
     private UUID uuid;
 
     @NotBlank
@@ -48,6 +47,7 @@ public class User implements Serializable {
     @Column(length = 50)
     private String lastName;
 
+    @NotBlank
     @FieldNameConstants.Include
     @FullTextField
     @Column(length = 101)
@@ -64,13 +64,16 @@ public class User implements Serializable {
     @NotNull
     private Instant registered;
 
-    private String intro;
+    private String story;
 
     @NotNull
     private UserRole role;
 
     @NotNull
     private OAuthProvider provider;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private Image avatar;
 
     @Version
     @ColumnDefault("0")

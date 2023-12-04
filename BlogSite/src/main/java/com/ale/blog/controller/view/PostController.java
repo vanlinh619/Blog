@@ -12,10 +12,7 @@ import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
 import com.ale.blog.handler.utils.SortType;
 import com.ale.blog.handler.utils.StaticVariable;
 import com.ale.blog.handler.utils.UserUtil;
-import com.ale.blog.service.DocumentService;
-import com.ale.blog.service.FavouriteService;
-import com.ale.blog.service.PostService;
-import com.ale.blog.service.ViewService;
+import com.ale.blog.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,6 +36,7 @@ public class PostController {
     private final DocumentService documentService;
     private final ViewService viewService;
     private final FavouriteService favouriteService;
+    private final ImageService imageService;
 
     @GetMapping("{postUrl}")
     public String getPost(
@@ -47,7 +45,7 @@ public class PostController {
             Authentication authentication,
             HttpServletRequest request
     ) {
-        Optional<User> userOptional = UserUtil.owner(authentication);
+        Optional<User> userOptional = UserUtil.owner(authentication, imageService);
         Post post = postService.getPostBySlug(postUrl, userOptional.orElse(null));
         Page<Post> postPage = postService.findAllByCategory(post.getCategory(), QueryRequest.builder()
                 .page(0)

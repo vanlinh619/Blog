@@ -1,6 +1,7 @@
 package com.ale.blog.controller.api;
 
 import com.ale.blog.entity.Image;
+import com.ale.blog.entity.state.ImageType;
 import com.ale.blog.entity.state.UserRole;
 import com.ale.blog.handler.mapper.ImageMapper;
 import com.ale.blog.handler.mapper.PageMapper;
@@ -8,7 +9,6 @@ import com.ale.blog.handler.mapper.pojo.request.PageRequest;
 import com.ale.blog.handler.mapper.pojo.request.QueryRequest;
 import com.ale.blog.handler.mapper.pojo.response.DataResponse;
 import com.ale.blog.handler.mapper.pojo.response.ImageResponse;
-import com.ale.blog.handler.mapper.pojo.response.PageResponse;
 import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
 import com.ale.blog.handler.mapper.pojo.response.state.Status;
 import com.ale.blog.handler.utils.SortType;
@@ -37,7 +37,7 @@ public class ApiImageController {
     @PostMapping
     public DataResponse uploadFile(Authentication authentication, @RequestParam MultipartFile image) {
         UserAccess userAccess = (UserAccess) authentication.getPrincipal();
-        Image newImage = imageService.saveImage(image, userAccess.getUser());
+        Image newImage = imageService.upsertImage(image, userAccess.getUser(), ImageType.IMAGE);
         return DataResponse.builder()
                 .status(Status.SUCCESS)
                 .code(MessageCode.SUCCESS)

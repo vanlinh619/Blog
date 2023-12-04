@@ -4,6 +4,7 @@ import com.ale.blog.entity.Image;
 import com.ale.blog.entity.User;
 import com.ale.blog.entity.state.ImageExtension;
 import com.ale.blog.entity.state.ImageState;
+import com.ale.blog.entity.state.ImageType;
 import com.ale.blog.handler.exception.AppException;
 import com.ale.blog.handler.mapper.pojo.request.QueryRequest;
 import com.ale.blog.handler.mapper.pojo.response.DataResponse;
@@ -14,6 +15,8 @@ import com.ale.blog.handler.utils.StaticMessage;
 import com.ale.blog.handler.utils.StaticVariable;
 import com.ale.blog.repository.ImageRepository;
 import com.google.common.hash.Hashing;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -34,32 +37,24 @@ import java.util.concurrent.ExecutorService;
 
 @Service
 @AllArgsConstructor
-public class ImageServiceImpl implements ImageService {
-    private final ExecutorService executorService;
+public class ImageServiceImpl implements ImageService, EntityService<Image, UUID> {
     private final ImageRepository imageRepository;
 
     @Override
-    public Image saveImage(MultipartFile multipartFile, User author) {
+    public Image upsertImage(@Nonnull MultipartFile multipartFile, @Nonnull User author, @Nonnull ImageType type) {
         try {
             String hash = Hashing.sha256().hashBytes(multipartFile.getBytes()).toString();
             String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
-            String type = StringUtils.getFilenameExtension(fileName);
-            ImageExtension extension = ImageExtension.valueOf(Objects.requireNonNull(type).toUpperCase());
+            String extensionStr = StringUtils.getFilenameExtension(fileName);
+            ImageExtension extension = ImageExtension.valueOf(Objects.requireNonNull(extensionStr).toUpperCase());
 
-            return imageRepository.findFirstByHashAndAuthor(hash, author).map(image -> {
-                if (image.getState() == ImageState.DELETED) {
-                    image.setState(ImageState.PERSIST);
-                    image.setName(fileName);
-                    image.setCreateDate(Instant.now());
-                    image.setExtension(extension);
-                    imageRepository.save(image);
-                } else {
-                    throw new AppException(DataResponse.builder()
-                            .status(Status.FAILED)
-                            .code(MessageCode.DUPLICATE_ENTRY)
-                            .message(image.getId().toString())
-                            .build());
-                }
+            return imageRepository.findFirstByHashAndAuthorAndType(hash, author, type).map(image -> {
+                image.setState(ImageState.PERSIST);
+                image.setName(fileName);
+                image.setCreateDate(Instant.now());
+                image.setExtension(extension);
+                image.setType(type);
+                imageRepository.save(image);
                 return image;
             }).orElseGet(() -> {
                 Image image = new Image();
@@ -71,6 +66,7 @@ public class ImageServiceImpl implements ImageService {
                 image.setAuthor(author);
                 image.setCreateDate(Instant.now());
                 image.setState(ImageState.PERSIST);
+                image.setType(type);
                 imageRepository.save(image);
                 saveToFile(multipartFile, image, author);
                 return image;
@@ -98,7 +94,12 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public Page<Image> getAllByAuthor(User author, QueryRequest queryRequest) {
-        return imageRepository.findAllByAuthorAndState(author, ImageState.PERSIST, Convert.pageRequest(queryRequest));
+        return imageRepository.findAllByAuthorAndStateAndType(
+                author,
+                ImageState.PERSIST,
+                ImageType.IMAGE,
+                Convert.pageRequest(queryRequest)
+        );
     }
 
     @Override
@@ -114,6 +115,26 @@ public class ImageServiceImpl implements ImageService {
                     .build());
         });
         return true;
+    }
+
+    @Override
+    public Boolean deleteAvatar(UUID id) {
+        defaultFindById(id, imageRepository).ifPresentOrElse(image -> {
+            imageRepository.updateStateById(id, ImageState.DELETED);
+        }, () -> {
+            throw new AppException(DataResponse.builder()
+                    .status(Status.FAILED)
+                    .code(MessageCode.NOT_FOUND)
+                    .message(StaticMessage.FILE_NOT_FOUND)
+                    .build());
+        });
+        return true;
+    }
+
+    @Override
+    public Optional<Image> getAvatar(@Nullable User user) {
+        if (user == null) return Optional.empty();
+        return imageRepository.findFirstByAuthorAndStateAndType(user, ImageState.PERSIST, ImageType.AVATAR);
     }
 
     private Optional<Resource> findImageResource(String id) {
