@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.io.Serializable;
+
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"section_id", "post_id"}))
 @Data
@@ -17,7 +19,7 @@ import org.hibernate.annotations.ColumnDefault;
 @FieldNameConstants(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class DocumentLinked {
+public class DocumentLinked implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

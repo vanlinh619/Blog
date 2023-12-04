@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <div th:fragment="notification(user)">
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/stomp-websocket@2.3.4-next/lib/stomp.min.js"></script>
+
   <div id="notification"></div>
   <script th:inline="javascript" type="module">
       /*<![CDATA[*/
       import ApiUtil from /*[[@{/js/ApiUtil.js}]]*/ "../../public/js/ApiUtil";
-      let broadcastService = /*[[${@environment.getProperty('microservice.broadcast')}]]*/ false
+      let broadcastService = /*[[${@environment.getProperty('microservice.broadcast')} == 'true']]*/ false
       let isLogin = /*[[${user != null ? true : false}]]*/ false
       let username = /*[[${user != null ? user.getUsername() : ''}]]*/ ''
       /*]]>*/

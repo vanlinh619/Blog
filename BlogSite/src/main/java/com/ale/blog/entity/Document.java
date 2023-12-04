@@ -14,6 +14,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
 
@@ -24,7 +25,7 @@ import java.util.List;
 @FieldNameConstants(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class Document {
+public class Document implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

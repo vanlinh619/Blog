@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
@@ -19,7 +20,7 @@ import java.util.List;
 @FieldNameConstants(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class DocumentSection {
+public class DocumentSection implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

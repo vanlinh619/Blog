@@ -1,6 +1,8 @@
 package com.ale.blog.service;
 
 import com.ale.blog.entity.User;
+import com.ale.blog.handler.mapper.pojo.request.UserInfoRequest;
+import jakarta.annotation.Nonnull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
@@ -18,4 +20,5 @@ public interface UserService extends EntityService<User, UUID> {
     User getByUsername(String username);
     Optional<User> findUserByEmail(String email);
     User loadUserByOidcUser(OidcUser oidcUser);
+    User updateInfo(@Nonnull User user, @Nonnull UserInfoRequest userInfoRequest);
 }

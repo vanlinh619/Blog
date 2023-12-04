@@ -2,6 +2,7 @@ package com.ale.blog.entity;
 
 import com.ale.blog.entity.state.ImageExtension;
 import com.ale.blog.entity.state.ImageState;
+import com.ale.blog.entity.state.ImageType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,7 +20,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"folder", "hash"}) )
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"folder", "hash", "type"}) )
 @Data
 @Builder
 @AllArgsConstructor
@@ -56,6 +57,9 @@ public class Image implements Serializable {
 
     @NotNull
     private ImageState state;
+
+    @NotNull
+    private ImageType type;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

@@ -38,9 +38,9 @@
            class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">
           Login
         </a>
-        <a th:unless="${user == null}" href="/profile"
+        <a th:if="${user != null}" th:href="'/profile/'+${user.getUsername()}"
            class="stroke-white text-white">
-          <div class="p-[0.05rem] rounded-full bg-white stroke-slate-500">
+          <div th:if="${user.getAvatar() == null}" class="p-[0.05rem] rounded-full bg-white stroke-slate-500">
             <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 24 24"
                  class="w-9 h-9 min-w-[1rem] min-h-[1rem]">
               <path class="fill-white"
@@ -54,6 +54,7 @@
                     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>
           </div>
+          <img th:if="${user.getAvatar() != null}" th:src="'/image/'+${user.getAvatar().getId().toString()}" class="rounded-full border object-center object-cover w-9 h-9" alt="avatarUpload"/>
         </a>
       </div>
     </div>
