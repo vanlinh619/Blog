@@ -40,9 +40,6 @@ public class PostController {
     private final ViewService viewService;
     private final FavouriteService favouriteService;
 
-    @Value("${microservice.broadcast}")
-    private Boolean broadcastService;
-
     @GetMapping("{postUrl}")
     public String getPost(
             @PathVariable String postUrl,
@@ -65,7 +62,6 @@ public class PostController {
         documentService.setEntriesOfDocument(post.getDocument());
         model.addAttribute("document", post.getDocument());
         model.addAttribute("user", userOptional.orElse(null));
-        model.addAttribute("broadcastService", broadcastService);
         model.addAttribute("favourite",favouriteService.ifFavourite(userOptional.orElse(null), post));
 
         viewService.increaseView(userOptional.orElse(null), post, request);

@@ -20,7 +20,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.util.List;
 
 @Configuration
@@ -63,9 +62,10 @@ public class SecurityConfiguration {
                 .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer
                         .authenticationEntryPoint(redirectAuthenticationEntryPoint)
                 )
-                .requiresChannel(channelRequestMatcherRegistry ->
-                        channelRequestMatcherRegistry.anyRequest().requiresSecure()
-                )
+                //SSL
+//                .requiresChannel(channelRequestMatcherRegistry ->
+//                        channelRequestMatcherRegistry.anyRequest().requiresSecure()
+//                )
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(
                                 "/",
@@ -83,6 +83,9 @@ public class SecurityConfiguration {
                         .requestMatchers("/profile/**").authenticated()
                         .requestMatchers("/api/public/**").permitAll()
                         .anyRequest().authenticated()
+                )
+                .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer
+                        .logoutSuccessUrl("/login")
                 )
                 .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer
                         .loginPage("/login")

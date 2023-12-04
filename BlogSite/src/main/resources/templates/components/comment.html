@@ -4,7 +4,7 @@
 <!--/*@thymesVar id="user" type="com.ale.blog.entity.User"*/-->
 <!--/*@thymesVar id="broadcastService" type="java.lang.Boolean"*/-->
 
-<div th:fragment="comment(user, post, broadcastService)">
+<div th:fragment="comment(user, post)">
   <div id="comment-service" th:text="${post.getSlug()}"></div>
   <script th:inline="javascript" type="module">
       /*<![CDATA[*/
@@ -13,7 +13,7 @@
       let isLogin = /*[[${user != null ? true : false}]]*/ false
       let username = /*[[${user != null ? user.getUsername() : ''}]]*/ ''
       let postSlug = /*[[${post.getSlug()}]]*/  ''
-      let broadcastService = /*[[${broadcastService}]]*/ false
+      let broadcastService = /*[[${@environment.getProperty('microservice.broadcast')}]]*/ false
       /*]]>*/
 
       Vue.createApp({
@@ -120,9 +120,9 @@
                       })
               },
               broadcastPlugin() {
-                  if (!broadcastService) return
-                  // this.socket = new SockJS("//localhost:8440/comment")
-                  let stomp = new Stomp.client(ApiUtil.socketUrl)
+                  if (!broadcastService || !isLogin) return
+                  let socket = new SockJS(ApiUtil.socketUrl)
+                  let stomp = new Stomp.over(socket)
                   stomp.connect(
                       {},
                       frame => {

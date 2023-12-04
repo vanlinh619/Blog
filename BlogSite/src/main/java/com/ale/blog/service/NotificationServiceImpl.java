@@ -3,6 +3,7 @@ package com.ale.blog.service;
 import com.ale.blog.entity.Notification;
 import com.ale.blog.entity.User;
 import com.ale.blog.entity.state.NotificationType;
+import com.ale.blog.handler.mapper.NotificationMapper;
 import com.ale.blog.handler.mapper.pojo.request.NotificationObjectWrapper;
 import com.ale.blog.handler.mapper.pojo.request.QueryRequest;
 import com.ale.blog.handler.utils.Convert;
@@ -20,6 +21,8 @@ import java.util.Optional;
 @AllArgsConstructor
 public class NotificationServiceImpl implements NotificationService {
     private final NotificationRepository notificationRepository;
+    private final BroadcastService broadcastService;
+    private final NotificationMapper notificationMapper;
 
     @Override
     public Optional<Notification> upsertNotification(
@@ -53,6 +56,10 @@ public class NotificationServiceImpl implements NotificationService {
                 })
                 .map(notification -> {
                     notificationRepository.save(notification);
+                    broadcastService.broadcastNotification(
+                            receiver.getUsername(),
+                            notificationMapper.toNotificationResponse(notification)
+                    );
                     return notification;
                 });
     }

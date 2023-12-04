@@ -1,5 +1,6 @@
 package com.ale.blog.security;
 
+import com.ale.blog.entity.User;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,15 +19,32 @@ public class JwtTokenProvider implements TokenProvider {
     private Long EXPIRATION;
 
     @Override
-    public String generateToken(UserAccess userAccess) {
+    public String generateToken(User user, Long expiration) {
         Instant instant = Instant.now();
-        Instant expiryDate = instant.plusMillis(EXPIRATION);
+        Instant expiryDate = instant.plusMillis(expiration);
         return Jwts.builder()
-                .setSubject(userAccess.getUser().getUuid().toString())
+                .setSubject(user.getUuid().toString())
                 .setIssuedAt(Date.from(instant))
                 .setExpiration(Date.from(expiryDate))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
                 .compact();
+    }
+
+    @Override
+    public String generateToken(User user) {
+        Instant instant = Instant.now();
+        Instant expiryDate = instant.plusMillis(EXPIRATION);
+        return Jwts.builder()
+                .setSubject(user.getUuid().toString())
+                .setIssuedAt(Date.from(instant))
+                .setExpiration(Date.from(expiryDate))
+                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .compact();
+    }
+
+    @Override
+    public String generateToken(UserAccess userAccess) {
+        return generateToken(userAccess.getUser());
     }
 
     @Override
