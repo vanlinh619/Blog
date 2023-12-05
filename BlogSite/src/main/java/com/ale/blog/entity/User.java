@@ -2,6 +2,7 @@ package com.ale.blog.entity;
 
 import com.ale.blog.entity.state.OAuthProvider;
 import com.ale.blog.entity.state.UserRole;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
