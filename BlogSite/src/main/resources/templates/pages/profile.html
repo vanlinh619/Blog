@@ -14,7 +14,9 @@
   <main class="mt-10 flex">
     <div class="basis-80">
       <div class="order-last">
-        <a href="/logout">Đăng xuất</a>
+        <form method="post" th:action="@{/logout}">
+          <button type="submit">Đăng xuất</button>
+        </form>
       </div>
     </div>
     <div class="flex-1 max-w-[50rem]">

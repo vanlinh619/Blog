@@ -6,7 +6,6 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

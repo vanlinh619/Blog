@@ -12,12 +12,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.*;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.util.List;
@@ -46,7 +48,12 @@ public class SecurityConfiguration {
             RedirectAuthenticationEntryPoint redirectAuthenticationEntryPoint
     ) throws Exception {
         return http
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer
+                        .ignoringRequestMatchers(
+                                "/api/**"
+                        )
+                        .csrfTokenRepository(new HttpSessionCsrfTokenRepository())
+                )
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer
                         .configurationSource(request -> {
                             CorsConfiguration config = new CorsConfiguration();
@@ -56,9 +63,9 @@ public class SecurityConfiguration {
                             return config;
                         })
                 )
-//                .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer
-//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                )
+                .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                )
                 .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer
                         .authenticationEntryPoint(redirectAuthenticationEntryPoint)
                 )
