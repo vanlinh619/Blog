@@ -5,19 +5,20 @@ Sử dụng: **Spring Boot**, **PostgreSQL**, **Websocket**, **Vuejs**, **Tailwi
 
 Bao gồm 3 project:
 
-1. **BlogSite:** cho người dùng xem bài viết
+### 1. **BlogSite:** cho người dùng xem bài viết
    
-![image](https://github.com/vanlinh619/Blog/assets/71812422/6d70b3da-281a-46f2-9aa6-b8e309194dfb)
+![image](https://github.com/vanlinh619/Blog/assets/71812422/b5c83515-2be6-48e5-aabf-3814b9e9a5d2)
 
-
-2. **blog-app:** sử dụng để quản lý, đăng tải bài viết
+### 2. **blog-app:** sử dụng để quản lý, đăng tải bài viết
 
 ![image](https://github.com/vanlinh619/Blog/assets/71812422/a419f5ad-7498-49b1-b99f-fa4c69e551dc)
 
 
-3. **Broadcast:** hỗ trợ **bình luận**, thông báo, gửi tin nhắn thời gian thực
+### 3. **Broadcast:** hỗ trợ **bình luận**, thông báo, gửi tin nhắn thời gian thực
 
-![image](https://github.com/vanlinh619/Blog/assets/71812422/442e5f6a-803e-476d-9b78-47158876b24d)
+![image](https://github.com/vanlinh619/Blog/assets/71812422/a74a6842-c535-4b0f-94db-3248bd6cce9e)
+
+![image](https://github.com/vanlinh619/Blog/assets/71812422/fcee8755-12b9-4cce-888e-f22a6d2fcd71)
 
 
 ## 1. BlogSite
