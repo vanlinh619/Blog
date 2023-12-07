@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <!--/*@thymesVar id="user" type="com.ale.blog.entity.User"*/-->
+<!--/*@thymesVar id="avatar" type="com.ale.blog.entity.Image"*/-->
 
-<header th:fragment="header(user)" class="sticky top-0 z-50">
+<header th:fragment="header(user, avatar)" class="sticky top-0 z-50">
   <div class="flex items-center bg-emerald-600/80 backdrop-blur-md px-4 py-2">
     <div class="flex items-center text-white mr-6">
       <svg class="fill-current h-8 w-8 mr-2" width="54" height="54" viewBox="0 0 54 54"
@@ -40,7 +41,7 @@
         </a>
         <a th:if="${user != null}" th:href="'/profile/'+${user.getUsername()}"
            class="stroke-white text-white">
-          <div th:if="${user.getAvatar() == null}" class="p-[0.05rem] rounded-full bg-white stroke-slate-500">
+          <div th:if="${avatar == null}" class="p-[0.05rem] rounded-full bg-white stroke-slate-500">
             <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 24 24"
                  class="w-9 h-9 min-w-[1rem] min-h-[1rem]">
               <path class="fill-white"
@@ -54,7 +55,7 @@
                     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>
           </div>
-          <img th:if="${user.getAvatar() != null}" th:src="'/image/'+${user.getAvatar().getId().toString()}" class="rounded-full border object-center object-cover w-9 h-9" alt="avatarUpload"/>
+          <img th:if="${avatar != null}" th:src="'/image/'+${avatar.getId().toString()}" class="rounded-full border object-center object-cover w-9 h-9" alt="avatarUpload"/>
         </a>
       </div>
     </div>

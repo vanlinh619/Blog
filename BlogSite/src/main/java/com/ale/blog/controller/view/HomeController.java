@@ -25,8 +25,16 @@ public class HomeController {
 
     @GetMapping("home")
     public String homePage(Authentication authentication, Model model) {
-        Optional<User> userOptional = UserUtil.owner(authentication, imageService);
-        model.addAttribute("user", userOptional.orElse(null));
+        Optional<User> userOptional = UserUtil.owner(authentication);
+        userOptional
+                .map(user -> {
+                    model.addAttribute("user", user);
+                    return user;
+                })
+                .flatMap(imageService::getAvatar)
+                .ifPresent(image -> {
+                    model.addAttribute("avatar", image);
+                });
         return "home";
     }
 }

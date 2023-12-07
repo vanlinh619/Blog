@@ -9,7 +9,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
 </head>
 <body>
-<header th:replace="components/header::header(${user})"></header>
+<header th:replace="components/header::header(${user}, ${avatar})"></header>
 <div class="max-w-8xl mx-auto px-4">
   <div
       class="lg:block fixed z-20 inset-0 top-16 left-[max(0px,calc(50%-45rem))] right-auto w-[19rem] pb-10 pl-8 pr-6 overflow-y-auto">
@@ -44,21 +44,7 @@
           <a class="font-semibold text-3xl hover:text-emerald-600" th:text="${post.getTitle()}"
              th:href="@{'/post/'+${post.getSlug()}}">
           </a>
-          <div class="mt-3 text-sm">
-            <label>
-              <span class="text-emerald-600 font-light">Ngày đăng: </span>
-              <span th:text="${T(com.ale.blog.handler.utils.Format).toLocalDate(post.getCreateDate())}"></span>
-            </label>
-            <label class="ml-3">
-              <span class="text-emerald-600 font-light">Tác giả: </span>
-              <span class="text-emerald-600 font-semibold"
-                    th:text="${post.getAuthor().getLastName() + ' ' + post.getAuthor().getLastName()}"></span>
-            </label>
-            <label class="ml-3">
-              <span class="text-emerald-600 font-light">Lượt xem: </span>
-              <span th:text="${post.getView()}"></span>
-            </label>
-          </div>
+          <div th:replace="components/post-info::post-info(${post})"></div>
           <div th:if="${type == T(com.ale.blog.controller.state.CategoryPage).ALL}" class="mt-3 text-sm">
             <a th:href="${'/category/'+username+'/'+post.getCategory().getSlug()+'?scope='+scope+'&page=1'}"
                class="flex items-center text-xs hover:text-emerald-700 text-emerald-600 stroke-emerald-600 fill-emerald-600 hover:stroke-emerald-700 hover:fill-emerald-700">

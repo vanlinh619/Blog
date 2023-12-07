@@ -18,16 +18,32 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
 
     @RequestMapping("404")
     public String getPage404(Authentication authentication, Model model) {
-        Optional<User> userOptional = UserUtil.owner(authentication, imageService);
-        model.addAttribute("user", userOptional.orElse(null));
+        Optional<User> userOptional = UserUtil.owner(authentication);
+        userOptional
+                .map(user -> {
+                    model.addAttribute("user", user);
+                    return user;
+                })
+                .flatMap(imageService::getAvatar)
+                .ifPresent(image -> {
+                    model.addAttribute("avatar", image);
+                });
         model.addAttribute("message", "Page not found");
         return "404";
     }
 
     @RequestMapping("un-authorize")
     public String getPageUnAuthorize(Authentication authentication, Model model) {
-        Optional<User> userOptional = UserUtil.owner(authentication, imageService);
-        model.addAttribute("user", userOptional.orElse(null));
+        Optional<User> userOptional = UserUtil.owner(authentication);
+        userOptional
+                .map(user -> {
+                    model.addAttribute("user", user);
+                    return user;
+                })
+                .flatMap(imageService::getAvatar)
+                .ifPresent(image -> {
+                    model.addAttribute("avatar", image);
+                });
         model.addAttribute("message", "Un Authorize");
         return "404";
     }

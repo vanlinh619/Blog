@@ -17,15 +17,20 @@ public class CommentMapperImpl implements CommentMapper {
     public CommentResponse toCommentResponse(Comment comment) {
         CommentResponse commentResponse = CommentResponse.builder()
                 .id(comment.getId())
-                .username(Format.nameOfUser(comment.getAuthor()))
+                .username(comment.getAuthor().getUsername())
+                .fullName(comment.getAuthor().getFullName())
                 .createDate(Format.toTimeDifference(comment.getCreateDate()))
                 .content(comment.getContent())
                 .childrenSize(comment.getChildrenSize())
                 .sender(comment.getAuthor().getUsername())
                 .build();
+        if (comment.getAuthor().getAvatar() != null) {
+            commentResponse.setAvatar(comment.getAuthor().getAvatar().getId().toString());
+        }
         if (comment.getSuperParent() != null) {
             commentResponse.setSupperCommentId(comment.getSuperParent().getId());
-            commentResponse.setRelyUsername(comment.getReplyUsername());
+            commentResponse.setRelyUsername(comment.getReplyFor().getAuthor().getUsername());
+            commentResponse.setRelyFullName(comment.getReplyFor().getAuthor().getFullName());
         }
         return commentResponse;
     }

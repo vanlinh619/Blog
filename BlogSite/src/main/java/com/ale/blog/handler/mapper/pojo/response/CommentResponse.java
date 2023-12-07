@@ -13,14 +13,18 @@ import lombok.NoArgsConstructor;
 public class CommentResponse {
     private Long id;
     private String username;
+    private String fullName;
     private String content;
     private String createDate;
     private Long childrenSize;
     private String sender;
+    private String avatar;
 
     //rely on comment
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long supperCommentId;
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String relyUsername;
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String relyFullName;
 }

@@ -28,7 +28,7 @@ public class ApiPostController {
     @ResponseStatus(HttpStatus.OK)
     public DataResponse postArticle(Authentication authentication, @Valid @RequestBody PostRequest postRequest) {
         UserAccess userAccess = (UserAccess) authentication.getPrincipal();
-        Post post = postService.createPostArticle(postRequest, userAccess.getUser());
+        Post post = postService.createPostArticle(postRequest, userAccess.getCurrentUser());
         return DataResponse.builder()
                 .status(Status.SUCCESS)
                 .code(MessageCode.SUCCESS)

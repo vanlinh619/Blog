@@ -45,7 +45,7 @@ public class PostController {
             Authentication authentication,
             HttpServletRequest request
     ) {
-        Optional<User> userOptional = UserUtil.owner(authentication, imageService);
+        Optional<User> userOptional = UserUtil.owner(authentication);
         Post post = postService.getPostBySlug(postUrl, userOptional.orElse(null));
         Page<Post> postPage = postService.findAllByCategory(post.getCategory(), QueryRequest.builder()
                 .page(0)
@@ -59,7 +59,15 @@ public class PostController {
         model.addAttribute("postPage", pageMapper.toPageResponse(postPage, postMapper::toPostResponse));
         documentService.setEntriesOfDocument(post.getDocument());
         model.addAttribute("document", post.getDocument());
-        model.addAttribute("user", userOptional.orElse(null));
+        userOptional
+                .map(user -> {
+                    model.addAttribute("user", user);
+                    return user;
+                })
+                .flatMap(imageService::getAvatar)
+                .ifPresent(image -> {
+                    model.addAttribute("avatar", image);
+                });
         model.addAttribute("favourite",favouriteService.ifFavourite(userOptional.orElse(null), post));
 
         viewService.increaseView(userOptional.orElse(null), post, request);

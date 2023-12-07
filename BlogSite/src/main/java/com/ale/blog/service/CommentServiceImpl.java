@@ -49,7 +49,6 @@ public class CommentServiceImpl implements CommentService, EntityService<Comment
                 .map(id -> {
                     Comment commentRely = getByIdAndPost(id, post);
                     comment.setReplyFor(commentRely);
-                    comment.setReplyUsername(Format.nameOfUser(commentRely.getAuthor()));
                     return commentRely.getSuperParent() == null ? commentRely : commentRely.getSuperParent();
                 })
                 .ifPresent(superParent -> {

@@ -31,7 +31,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     public AccessTokenResponse createAccessToken(RefreshTokenInput refreshTokenInput) throws AppException {
         AccessTokenResponse accessTokenResponse = new AccessTokenResponse();
         refreshTokenRepository.findFirstByToken(refreshTokenInput.getToken()).ifPresentOrElse(refreshToken -> {
-            String token = jwtTokenProvider.generateToken(new UserAccessDetails(refreshToken.getUser()));
+            String token = jwtTokenProvider.generateToken(refreshToken.getUser());
             if(refreshToken.getExpiration().compareTo(Instant.now()) < 0) {
                 refreshTokenRepository.delete(refreshToken);
                 throw new AppException();

@@ -29,7 +29,7 @@ public class ApiDocumentController {
     @PostMapping
     public DataResponse createDocument(Authentication authentication, @Valid @RequestBody DocumentRequest documentRequest) {
         UserAccess userAccess = (UserAccess) authentication.getPrincipal();
-        Document document = documentService.createDocument(documentRequest, userAccess.getUser());
+        Document document = documentService.createDocument(documentRequest, userAccess.getCurrentUser());
         return DataResponse.builder()
                 .status(Status.SUCCESS)
                 .code(MessageCode.SUCCESS)

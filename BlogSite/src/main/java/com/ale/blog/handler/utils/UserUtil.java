@@ -12,22 +12,14 @@ import java.util.Optional;
 public class UserUtil {
     public static User authenticated(Authentication authentication) {
         if (authentication != null && authentication.getPrincipal() instanceof UserAccess userAccess) {
-            return userAccess.getUser();
+            return userAccess.getCurrentUser();
         }
         return null;
     }
 
     public static Optional<User> owner(Authentication authentication) {
         if (authentication != null && authentication.getPrincipal() instanceof UserAccess userAccess) {
-            return Optional.of(userAccess.getUser());
-        }
-        return Optional.empty();
-    }
-
-    public static Optional<User> owner(Authentication authentication, ImageService imageService) {
-        if (authentication != null && authentication.getPrincipal() instanceof UserAccess userAccess) {
-            userAccess.getUser().setAvatar(imageService.getAvatar(userAccess.getUser()).orElse(null));
-            return Optional.of(userAccess.getUser());
+            return Optional.of(userAccess.getCurrentUser());
         }
         return Optional.empty();
     }
