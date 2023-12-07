@@ -14,11 +14,8 @@ import com.ale.blog.handler.utils.SortType;
 import com.ale.blog.handler.utils.StaticVariable;
 import com.ale.blog.security.UserAccess;
 import com.ale.blog.service.NotificationService;
-import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,7 +23,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 
 @RestController
 @RolesAllowed(value = {UserRole.Fields.ADMIN, UserRole.Fields.CONTENT_CREATOR, UserRole.Fields.USER})
@@ -40,7 +36,7 @@ public class ApiNotificationController {
     @GetMapping
     public DataResponse getAllNotification(Authentication authentication, @Valid PageRequest pageRequest) {
         UserAccess userAccess = (UserAccess) authentication.getPrincipal();
-        Page<Notification> notificationPage = notificationService.loadNotification(userAccess.getUser(), QueryRequest.builder()
+        Page<Notification> notificationPage = notificationService.loadNotification(userAccess.getCurrentUser(), QueryRequest.builder()
                 .page(pageRequest.getPage())
                 .size(StaticVariable.PAGE_SIZE)
                 .sortBy(List.of(Notification.Fields.updateDate))
@@ -57,7 +53,7 @@ public class ApiNotificationController {
     @GetMapping("/count")
     public DataResponse countNewNotification(Authentication authentication) {
         UserAccess userAccess = (UserAccess) authentication.getPrincipal();
-        Integer countNewComment = notificationService.countNewNotification(userAccess.getUser());
+        Integer countNewComment = notificationService.countNewNotification(userAccess.getCurrentUser());
         return DataResponse.builder()
                 .status(Status.SUCCESS)
                 .code(MessageCode.SUCCESS)
@@ -69,7 +65,7 @@ public class ApiNotificationController {
     public DataResponse seen(Authentication authentication, @RequestBody List<Long> ids) {
         UserAccess userAccess = (UserAccess) authentication.getPrincipal();
         System.out.println(ids);
-        notificationService.seen(userAccess.getUser(), ids);
+        notificationService.seen(userAccess.getCurrentUser(), ids);
         return DataResponse.builder()
                 .status(Status.SUCCESS)
                 .code(MessageCode.SUCCESS)

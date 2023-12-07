@@ -29,7 +29,7 @@ public class ApiCommentController {
     @PostMapping
     public DataResponse comment(Authentication authentication, @Valid @RequestBody CommentRequest commentRequest) {
         UserAccess userAccess = (UserAccess) authentication.getPrincipal();
-        Comment comment = commentService.comment(userAccess.getUser(), commentRequest);
+        Comment comment = commentService.comment(userAccess.getCurrentUser(), commentRequest);
         return DataResponse.builder()
                 .status(Status.SUCCESS)
                 .code(MessageCode.SUCCESS)
@@ -40,7 +40,7 @@ public class ApiCommentController {
     @GetMapping("{postSlug}/{commentId}")
     public DataResponse getCommentById(Authentication authentication, @PathVariable String postSlug, @PathVariable Long commentId) {
         UserAccess userAccess = (UserAccess) authentication.getPrincipal();
-        Post post = postService.getPostBySlug(postSlug, userAccess.getUser());
+        Post post = postService.getPostBySlug(postSlug, userAccess.getCurrentUser());
         Comment comment = commentService.getByIdAndPost(commentId, post);
         return DataResponse.builder()
                 .status(Status.SUCCESS)

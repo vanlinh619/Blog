@@ -29,7 +29,7 @@ public class ApiDocumentSectionController {
     @PostMapping
     public DataResponse addSection(Authentication authentication, @Valid @RequestBody DocumentSectionRequest sectionRequest) {
         UserAccess userAccess = (UserAccess) authentication.getPrincipal();
-        DocumentSection section = sectionService.addSection(sectionRequest, userAccess.getUser());
+        DocumentSection section = sectionService.addSection(sectionRequest, userAccess.getCurrentUser());
         return DataResponse.builder()
                 .status(Status.SUCCESS)
                 .code(MessageCode.SUCCESS)

@@ -9,7 +9,6 @@ import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
 import com.ale.blog.handler.mapper.pojo.response.state.Status;
 import com.ale.blog.security.UserAccess;
 import com.ale.blog.service.ShareService;
-import com.ale.blog.service.UserService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -30,7 +29,7 @@ public class ApiShareController {
     @PostMapping
     public DataResponse shareUser(Authentication authentication, @Valid @RequestBody ShareRequest shareRequest) {
         UserAccess userAccess = (UserAccess) authentication.getPrincipal();
-        Share share = shareService.shareWithUser(shareRequest, userAccess.getUser());
+        Share share = shareService.shareWithUser(shareRequest, userAccess.getCurrentUser());
         return DataResponse.builder()
                 .status(Status.SUCCESS)
                 .code(MessageCode.SUCCESS)

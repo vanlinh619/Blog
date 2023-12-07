@@ -36,11 +36,19 @@ public class UserController {
 
     @GetMapping("{username}")
     public String goToProfile(Authentication authentication, @PathVariable String username, Model model) {
-        Optional<User> userOptional = UserUtil.owner(authentication, imageService);
+        Optional<User> userOptional = UserUtil.owner(authentication);
 
         User user = userService.getByUsername(username);
         model.addAttribute("user", user);
-        model.addAttribute("owner", userOptional.orElse(null));
+        userOptional
+                .map(owner -> {
+                    model.addAttribute("owner", owner);
+                    return owner;
+                })
+                .flatMap(imageService::getAvatar)
+                .ifPresent(image -> {
+                    model.addAttribute("avatar", image);
+                });
         return "profile";
     }
 

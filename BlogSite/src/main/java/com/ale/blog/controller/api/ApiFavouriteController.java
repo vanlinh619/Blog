@@ -29,7 +29,7 @@ public class ApiFavouriteController {
     @PutMapping("{postSlug}")
     public DataResponse favourite(Authentication authentication, @PathVariable String postSlug) {
         UserAccess userAccess = (UserAccess) authentication.getPrincipal();
-        Optional<Favourite> favouriteOptional = favouriteService.persistOrDelete(userAccess.getUser(), postSlug);
+        Optional<Favourite> favouriteOptional = favouriteService.persistOrDelete(userAccess.getCurrentUser(), postSlug);
         return DataResponse.builder()
                 .status(Status.SUCCESS)
                 .code(favouriteOptional.map(favourite -> MessageCode.PERSIST).orElse(MessageCode.DELETED))

@@ -29,7 +29,7 @@ public class ApiDocumentLinkedController {
     @PostMapping
     public DataResponse linkedDocument(Authentication authentication, @Valid @RequestBody DocumentLinkedRequest linkedRequest){
         UserAccess userAccess = (UserAccess) authentication.getPrincipal();
-        DocumentLinked linked = linkedService.linkedDocument(linkedRequest, userAccess.getUser());
+        DocumentLinked linked = linkedService.linkedDocument(linkedRequest, userAccess.getCurrentUser());
         return DataResponse.builder()
                 .status(Status.SUCCESS)
                 .code(MessageCode.SUCCESS)

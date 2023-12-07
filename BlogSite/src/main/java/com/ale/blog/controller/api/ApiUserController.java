@@ -26,7 +26,7 @@ public class ApiUserController {
     @PutMapping("info")
     public DataResponse updateInfo(Authentication authentication, @Valid @ModelAttribute UserInfoRequest userInfoRequest) {
         UserAccess userAccess = (UserAccess) authentication.getPrincipal();
-        User user = userService.getByUsername(userAccess.getUser().getUsername());
+        User user = userService.getByUsername(userAccess.getCurrentUser().getUsername());
         User userNew = userService.updateInfo(user, userInfoRequest);
         return DataResponse.builder()
                 .status(Status.SUCCESS)

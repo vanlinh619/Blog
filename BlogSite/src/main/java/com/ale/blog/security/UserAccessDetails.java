@@ -1,8 +1,10 @@
 package com.ale.blog.security;
 
 import com.ale.blog.entity.User;
+import com.ale.blog.entity.state.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,15 +13,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
 
-@Data
+//@Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserAccessDetails implements UserAccess, UserDetails {
     private User user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        String role = user.getRole().toString();
-        return Collections.singleton(new SimpleGrantedAuthority(role));
+        return Collections.singleton(new SimpleGrantedAuthority(user.getRole().name()));
     }
 
     @Override
@@ -50,5 +52,10 @@ public class UserAccessDetails implements UserAccess, UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public User getCurrentUser() {
+        return user;
     }
 }

@@ -40,7 +40,7 @@ public class CategoryController {
 
     @GetMapping("{username}")
     public String getAllPost(@PathVariable String username, @Valid PageDocumentRequest pageRequest, Model model, Authentication authentication) {
-        Optional<User> userOptional = UserUtil.owner(authentication, imageService);
+        Optional<User> userOptional = UserUtil.owner(authentication);
         User author = userService.getByUsername(username);
         Page<Post> postPage = postService.findAllByAuthor(
                 userOptional.orElse(null),
@@ -57,7 +57,15 @@ public class CategoryController {
         model.addAttribute("author", author);
         model.addAttribute("type", CategoryPage.ALL);
         model.addAttribute("categoryName", "Tất cả bài viết");
-        model.addAttribute("user", userOptional.orElse(null));
+        userOptional
+                .map(user -> {
+                    model.addAttribute("user", user);
+                    return user;
+                })
+                .flatMap(imageService::getAvatar)
+                .ifPresent(image -> {
+                    model.addAttribute("avatar", image);
+                });
         model.addAttribute("scope", pageRequest.getScope().toLowerCase());
         model.addAttribute("breadcrumb", List.of(
                 List.of(TextUtil.ALL_CATEGORY, "")
@@ -73,7 +81,7 @@ public class CategoryController {
             Model model,
             Authentication authentication
     ) {
-        Optional<User> userOptional = UserUtil.owner(authentication, imageService);
+        Optional<User> userOptional = UserUtil.owner(authentication);
         User author = userService.getByUsername(username);
         Category category = categoryService.getCategoryBySlugAndAuthor(categoryUrl, author);
         Page<Post> postPage = postService.findAllByCategory(
@@ -92,7 +100,15 @@ public class CategoryController {
         model.addAttribute("author", author);
         model.addAttribute("type", CategoryPage.CATEGORY);
         model.addAttribute("categoryName", category.getTitle());
-        model.addAttribute("user", userOptional.orElse(null));
+        userOptional
+                .map(user -> {
+                    model.addAttribute("user", user);
+                    return user;
+                })
+                .flatMap(imageService::getAvatar)
+                .ifPresent(image -> {
+                    model.addAttribute("avatar", image);
+                });
         model.addAttribute("scope", pageRequest.getScope().toLowerCase());
         model.addAttribute("breadcrumb", List.of(
                 List.of(category.getTitle(), "")

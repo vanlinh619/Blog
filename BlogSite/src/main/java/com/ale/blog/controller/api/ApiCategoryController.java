@@ -5,7 +5,6 @@ import com.ale.blog.entity.state.CategoryLevel;
 import com.ale.blog.entity.state.UserRole;
 import com.ale.blog.handler.mapper.CategoryMapper;
 import com.ale.blog.handler.mapper.pojo.request.CategoryRequest;
-import com.ale.blog.handler.mapper.pojo.response.CategoryResponse;
 import com.ale.blog.handler.mapper.pojo.response.DataResponse;
 import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
 import com.ale.blog.handler.mapper.pojo.response.state.Status;
@@ -32,7 +31,7 @@ public class ApiCategoryController {
     @GetMapping
     public DataResponse getAllCategory(Authentication authentication) {
         UserAccess userAccess = (UserAccess) authentication.getPrincipal();
-        List<Category> categories = categoryService.getAllLevelByUser(CategoryLevel.LEVEL_1, userAccess.getUser());
+        List<Category> categories = categoryService.getAllLevelByUser(CategoryLevel.LEVEL_1, userAccess.getCurrentUser());
         return DataResponse.builder()
                 .status(Status.SUCCESS)
                 .code(MessageCode.SUCCESS)
@@ -43,7 +42,7 @@ public class ApiCategoryController {
     @PostMapping
     public DataResponse createCategory(Authentication authentication, @Valid @RequestBody CategoryRequest categoryRequest){
         UserAccess userAccess = (UserAccess) authentication.getPrincipal();
-        Category category = categoryService.createCategory(categoryRequest, userAccess.getUser());
+        Category category = categoryService.createCategory(categoryRequest, userAccess.getCurrentUser());
         return DataResponse.builder()
                 .status(Status.SUCCESS)
                 .code(MessageCode.SUCCESS)

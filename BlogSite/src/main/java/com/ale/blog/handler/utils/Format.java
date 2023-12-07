@@ -13,8 +13,8 @@ import java.util.Set;
 public class Format {
     public static String toUsername(@Nonnull List<User> actors) {
         return actors.size() < 3
-                ? actors.get(0).getUsername()
-                : actors.get(0).getUsername() + ", " + actors.get(1).getUsername() + " và " + (actors.size() - 2) + " người khác.";
+                ? actors.get(0).getFullName()
+                : actors.get(0).getFullName() + ", " + actors.get(1).getFullName() + " và " + (actors.size() - 2) + " người khác.";
     }
 
     public static String toNumber(Long number) {
@@ -25,10 +25,6 @@ public class Format {
                 : number >= 1000
                 ? String.format("%.1fK", 1.0 * number / 1000)
                 : String.valueOf(number);
-    }
-
-    public static String nameOfUser(User user) {
-        return user.getFirstName() + " " + user.getLastName();
     }
 
     public static String toTimeDifference(Instant instant) {

@@ -16,6 +16,7 @@ public class NotificationResponse {
     private Boolean seen;
     private String updateDate;
     private Long count;
+    private String avatar;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String content;
@@ -26,5 +27,5 @@ public class NotificationResponse {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long commentId;
 
-    private String username;
+    private String fullName;
 }

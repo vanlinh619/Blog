@@ -12,6 +12,7 @@ import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;
 import com.ale.blog.handler.mapper.pojo.response.state.Status;
 import com.ale.blog.repository.UserRepository;
 import com.ale.blog.security.UserAccessDetails;
+import com.ale.blog.security.UserOAuth2AccessDetail;
 import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +46,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         AtomicReference<UserDetails> atomicReference = new AtomicReference<>();
         userRepository.findUserByUsername(username).ifPresentOrElse(user -> {
-            atomicReference.set(new UserAccessDetails(user));
+            atomicReference.set(getUserAccessDetails(user));
         }, () -> {
             throw new UsernameNotFoundException(username);
         });
@@ -76,7 +77,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         AtomicReference<Optional<UserDetails>> atomicReference = new AtomicReference<>();
         userRepository.findByUuid(uuid).ifPresentOrElse(user -> {
             atomicReference.set(
-                    Optional.of(new UserAccessDetails(user))
+                    Optional.of(getUserAccessDetails(user))
             );
         }, () -> {
             atomicReference.set(Optional.empty());
@@ -165,5 +166,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public Class<User> getEntityClass() {
         return User.class;
+    }
+
+    @Override
+    public UserAccessDetails getUserAccessDetails(User user) {
+        user.setAvatar(null);
+        return new UserAccessDetails(user);
+    }
+
+    @Override
+    public UserOAuth2AccessDetail getUserOAuth2AccessDetail(User user, OidcUser oidcUser) {
+        user.setAvatar(null);
+        return new UserOAuth2AccessDetail(oidcUser, user);
     }
 }

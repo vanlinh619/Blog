@@ -41,7 +41,7 @@ public class DocumentController {
             Model model,
             Authentication authentication
     ) {
-        Optional<User> userOptional = UserUtil.owner(authentication, imageService);
+        Optional<User> userOptional = UserUtil.owner(authentication);
         User author = userService.getByUsername(username);
         Page<Document> documentPage = documentService.findAllByAuthor(author, userOptional.orElse(null), DocumentState.valueOf(pageRequest.getScope().toUpperCase()), QueryRequest.builder()
                 .page(pageRequest.getPage() - 1)
@@ -51,7 +51,15 @@ public class DocumentController {
                 .build());
         model.addAttribute("documentPage", documentPage);
         model.addAttribute("author", author);
-        model.addAttribute("user", userOptional.orElse(null));
+        userOptional
+                .map(user -> {
+                    model.addAttribute("user", user);
+                    return user;
+                })
+                .flatMap(imageService::getAvatar)
+                .ifPresent(image -> {
+                    model.addAttribute("avatar", image);
+                });
         model.addAttribute("breadcrumb", List.of(
                 List.of(TextUtil.ALL_DOCUMENT, "")
         ));
@@ -61,13 +69,21 @@ public class DocumentController {
 
     @GetMapping("{username}/{slug}")
     public String viewDocument(@PathVariable String username, @PathVariable String slug, Model model, Authentication authentication) {
-        Optional<User> userOptional = UserUtil.owner(authentication, imageService);
+        Optional<User> userOptional = UserUtil.owner(authentication);
         User author = userService.getByUsername(username);
         Document document = documentService.getDocumentBySlug(slug, author, userOptional.orElse(null));
         documentService.setEntriesOfDocument(document);
         model.addAttribute("document", document);
         model.addAttribute("author", author);
-        model.addAttribute("user", userOptional.orElse(null));
+        userOptional
+                .map(user -> {
+                    model.addAttribute("user", user);
+                    return user;
+                })
+                .flatMap(imageService::getAvatar)
+                .ifPresent(image -> {
+                    model.addAttribute("avatar", image);
+                });
         model.addAttribute("breadcrumb", List.of(
                 List.of(TextUtil.ALL_DOCUMENT, TextUtil.getLinkAllDocument(author)),
                 List.of(document.getTitle(), "")

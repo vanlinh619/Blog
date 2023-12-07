@@ -44,7 +44,7 @@ public class JwtTokenProvider implements TokenProvider {
 
     @Override
     public String generateToken(UserAccess userAccess) {
-        return generateToken(userAccess.getUser());
+        return generateToken(userAccess.getCurrentUser());
     }
 
     @Override

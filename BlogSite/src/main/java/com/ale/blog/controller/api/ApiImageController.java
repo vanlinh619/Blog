@@ -37,7 +37,7 @@ public class ApiImageController {
     @PostMapping
     public DataResponse uploadFile(Authentication authentication, @RequestParam MultipartFile image) {
         UserAccess userAccess = (UserAccess) authentication.getPrincipal();
-        Image newImage = imageService.upsertImage(image, userAccess.getUser(), ImageType.IMAGE);
+        Image newImage = imageService.upsertImage(image, userAccess.getCurrentUser(), ImageType.IMAGE);
         return DataResponse.builder()
                 .status(Status.SUCCESS)
                 .code(MessageCode.SUCCESS)
@@ -49,7 +49,7 @@ public class ApiImageController {
     @GetMapping()
     public DataResponse getAllImage(Authentication authentication, @Valid PageRequest pageRequest) {
         UserAccess userAccess = (UserAccess) authentication.getPrincipal();
-        Page<Image> page = imageService.getAllByAuthor(userAccess.getUser(), QueryRequest.builder()
+        Page<Image> page = imageService.getAllByAuthor(userAccess.getCurrentUser(), QueryRequest.builder()
                 .page(pageRequest.getPage())
                 .size(StaticVariable.PAGE_SIZE)
                 .sortBy(List.of(Image.Fields.createDate))
@@ -66,7 +66,7 @@ public class ApiImageController {
     @DeleteMapping("{id}")
     public DataResponse deleteImage(Authentication authentication, @PathVariable String id) {
         UserAccess userAccess = (UserAccess) authentication.getPrincipal();
-        imageService.deleteImageById(id, userAccess.getUser());
+        imageService.deleteImageById(id, userAccess.getCurrentUser());
         return DataResponse.builder()
                 .status(Status.SUCCESS)
                 .code(MessageCode.SUCCESS)

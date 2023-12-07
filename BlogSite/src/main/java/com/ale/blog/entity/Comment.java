@@ -32,8 +32,6 @@ public class Comment implements Serializable {
     @FieldNameConstants.Include
     private Instant createDate;
 
-    private String replyUsername;
-
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private Post post;
