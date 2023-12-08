@@ -145,6 +145,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public Page<Post> getAllPost(@Nullable User owner, QueryRequest queryRequest) {
+        return postRepository.findAllByAuthorNotAndState(owner, PostState.PUBLIC, Convert.pageRequest(queryRequest));
+    }
+
+    @Override
     public Class<Post> getEntityClass() {
         return Post.class;
     }

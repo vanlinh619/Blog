@@ -4,6 +4,7 @@ import com.ale.blog.entity.Post;
 import com.ale.blog.entity.state.PostState;
 import com.ale.blog.handler.mapper.pojo.request.PostRequest;
 import com.ale.blog.handler.mapper.pojo.response.PostResponse;
+import com.ale.blog.handler.utils.Format;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,8 @@ import java.time.Instant;
 @AllArgsConstructor
 public class PostMapperImpl implements PostMapper {
     private final ModelMapper mapper;
+    private final CategoryMapper categoryMapper;
+    private final UserMapper userMapper;
 
     @Override
     public Post toPost(PostRequest postRequest) {
@@ -25,6 +28,10 @@ public class PostMapperImpl implements PostMapper {
 
     @Override
     public PostResponse toPostResponse(Post post) {
-        return mapper.map(post, PostResponse.class);
+        PostResponse postResponse = mapper.map(post, PostResponse.class);
+        postResponse.setCategory(categoryMapper.toCategoryResponseForPostView(post.getCategory()));
+        postResponse.setAuthor(userMapper.toUserInfoResponseForPostView(post.getAuthor()));
+        postResponse.setDate(Format.toLocalDate(post.getCreateDate()));
+        return postResponse;
     }
 }

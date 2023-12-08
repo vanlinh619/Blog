@@ -10,7 +10,8 @@ const ApiUtil = {
     countNewNotificationUrl: `/api/authorize/notification/count`,
     seenUrl: `/api/authorize/notification`,
     subscribeNotificationUrl: (username) => `/user/${username}/notification`,
-    userInfoUrl: '/api/authorize/user/info'
+    userInfoUrl: '/api/authorize/user/info',
+    homeUrl: (page) => `api/public/home?page=${page}`
 }
 
 export default ApiUtil

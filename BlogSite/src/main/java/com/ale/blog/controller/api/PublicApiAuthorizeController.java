@@ -30,6 +30,7 @@ public class PublicApiAuthorizeController {
     private final TokenProvider jwtTokenProvider;
     private final RefreshTokenService refreshTokenService;
     private final ModelMapper mapper;
+    private final UserMapper userMapper;
 
     @PostMapping("login")
     public ResponseEntity<?> login(@Valid @RequestBody AuthRequest request) {
@@ -45,7 +46,7 @@ public class PublicApiAuthorizeController {
             String token = jwtTokenProvider.generateToken(userAccess);
             RefreshToken refreshToken = refreshTokenService.createRefreshToken(userAccess.getCurrentUser());
 
-            UserView userView = UserMapper.getInstance().toUserView(userAccess.getCurrentUser(),token, refreshToken.getToken(), mapper);
+            UserView userView = userMapper.toUserView(userAccess.getCurrentUser(),token, refreshToken.getToken(), mapper);
             return ResponseEntity.ok().body(userView);
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
