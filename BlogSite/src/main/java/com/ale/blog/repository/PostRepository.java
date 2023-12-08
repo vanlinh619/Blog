@@ -29,4 +29,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findAllByCategoryAndShareWith(Category category, User owner, Pageable pageable);
     @Query("select p from Post p join Share s on p = s.post where p.author = :author and s.shareWith = :owner")
     Page<Post> findAllByAuthorAndShareWith(User author, User owner, Pageable pageable);
+    Page<Post> findAllByAuthorNotAndState(User author, PostState state, Pageable pageable);
 }

@@ -2,7 +2,7 @@ package com.ale.blog.controller.api;
 
 import com.ale.blog.entity.User;
 import com.ale.blog.entity.state.UserRole;
-import com.ale.blog.handler.mapper.pojo.UserMapper;
+import com.ale.blog.handler.mapper.UserMapper;
 import com.ale.blog.handler.mapper.pojo.request.UserInfoRequest;
 import com.ale.blog.handler.mapper.pojo.response.DataResponse;
 import com.ale.blog.handler.mapper.pojo.response.state.MessageCode;

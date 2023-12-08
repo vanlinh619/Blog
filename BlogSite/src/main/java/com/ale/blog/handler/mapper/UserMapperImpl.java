@@ -1,10 +1,10 @@
-package com.ale.blog.handler.mapper.pojo;
+package com.ale.blog.handler.mapper;
 
 import com.ale.blog.entity.User;
+import com.ale.blog.handler.mapper.Mapper;
 import com.ale.blog.handler.mapper.pojo.response.UserInfoResponse;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,4 +19,18 @@ public class UserMapperImpl implements UserMapper {
         }
         return userInfoResponse;
     }
+
+    @Override
+    public UserInfoResponse toUserInfoResponseForPostView(User user) {
+        UserInfoResponse userInfoResponse = UserInfoResponse.builder()
+                .username(user.getUsername())
+                .fullName(user.getFullName())
+                .build();
+        if (user.getAvatar() != null) {
+            userInfoResponse.setAvatarId(user.getAvatar().getId().toString());
+        }
+        return userInfoResponse;
+    }
+
+
 }

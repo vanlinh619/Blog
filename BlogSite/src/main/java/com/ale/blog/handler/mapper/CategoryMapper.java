@@ -8,4 +8,5 @@ import java.util.List;
 public interface CategoryMapper extends Mapper{
     List<CategoryResponse> toCategoriesResponses(List<Category> categories);
     CategoryResponse toCategoryResponses(Category category);
+    CategoryResponse toCategoryResponseForPostView(Category category);
 }

@@ -35,4 +35,5 @@ public interface PostService extends EntityService<Post, Long> {
     Post getByIdAndAuthor(Long id, User author);
     Post save(Post post);
     Optional<Post> postWithPermission(Post post, @Nullable User owner);
+    Page<Post> getAllPost(@Nullable User owner, QueryRequest queryRequest);
 }

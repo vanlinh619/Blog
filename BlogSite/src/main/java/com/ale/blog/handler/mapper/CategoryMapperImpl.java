@@ -24,4 +24,14 @@ public class CategoryMapperImpl implements CategoryMapper {
     public CategoryResponse toCategoryResponses(Category category) {
         return mapper.map(category, CategoryResponse.class);
     }
+
+    @Override
+    public CategoryResponse toCategoryResponseForPostView(Category category) {
+        return CategoryResponse.builder()
+                .slug(category.getSlug())
+                .title(category.getTitle())
+                .build();
+    }
+
+
 }
