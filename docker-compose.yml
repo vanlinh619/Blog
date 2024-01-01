@@ -1,23 +1,23 @@
 version: "3.8"
 
 services:
-  mysql:
-    image: mysql:latest
-    container_name: mysql
-    restart: unless-stopped
+  postgres-db:
+    image: postgres:latest
+    container_name: postgres-db
+    restart: on-failure
     environment:
-      - MYSQL_ROOT_PASSWORD=12345678
-      - MYSQL_DATABASE=blog
+      - POSTGRES_PASSWORD=12345678
+      - POSTGRES_DB=blog
     networks:
       - blog-net
     ports:
-      - 3306:3306
+      - 5432:5432
     volumes:
-      - db:/var/lib/mysql
-  spring:
+      - postgres-db:/var/lib/postgresql/data
+  spring-site:
     container_name: spring-boot
     depends_on:
-      - mysql
+      - postgres-db
     build: ./BlogSite
     restart: on-failure
     networks:
@@ -25,13 +25,13 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - spring:/root/.m2
+      - spring-data:/root/.m2
     stdin_open: true
     tty: true
-  vue:
+  vue-app:
     container_name: vue-3
     depends_on:
-      - spring
+      - postgres-db
     build: ./blog-app
     restart: on-failure
     networks:
@@ -39,12 +39,11 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - vue:/app
+      - vue-data:/app
     tty: true
 volumes:
-  db:
-  spring:
-  vue:
+  spring-data:
+  vue-data:
 networks:
   blog-net:
     driver: bridge

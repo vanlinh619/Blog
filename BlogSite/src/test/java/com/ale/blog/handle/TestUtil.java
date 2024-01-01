@@ -21,13 +21,14 @@ public class TestUtil {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    RefreshTokenRepository refreshTokenRepository;
+    private RefreshTokenRepository refreshTokenRepository;
 
     public static final String USERNAME = "Test";
     public static final String PASSWORD = "Test";
     public static final String EMAIL = "Test@email.com";
 
     public User createAdminUser() {
+        User m = userRepository.findFirstByRole(UserRole.ADMIN).orElse(null);
         User test = User.builder()
                 .username(USERNAME)
                 .password(PASSWORD)
@@ -35,7 +36,6 @@ public class TestUtil {
                 .firstName(USERNAME)
                 .email(EMAIL)
                 .phoneNumber("0999999999")
-                .intro("test")
                 .registered(Instant.now())
                 .role(UserRole.ADMIN)
                 .provider(OAuthProvider.LOCAL)
