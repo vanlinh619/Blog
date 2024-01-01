@@ -64,7 +64,6 @@ public class UserServiceTest {
                 .firstName(USERNAME)
                 .email(EMAIL)
                 .phoneNumber("0999999999")
-                .intro("test")
                 .registered(Instant.now())
                 .role(UserRole.ADMIN)
                 .provider(OAuthProvider.LOCAL)
