@@ -10,25 +10,43 @@ const reLogin = (error, callback) => {
             Redirect.login()
             return false
         }
-        axios.post(Api.refreshToken, {
-            token: refresh
-        }, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem(Key.accessToken)}`
-            }
-        })
-            .then(response => {
-                localStorage.setItem(Key.accessToken, response.data[Key.accessToken])
-                if(callback) callback()
+        let login = (token) => {
+            axios.post(Api.refreshToken, {
+                token: refresh
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem(Key.accessToken)}`
+                }
             })
-            .catch(error => {
-                console.log(error)
-                Redirect.login()
-            })
+                .then(response => {
+                    localStorage.setItem(Key.accessToken, response.data[Key.accessToken])
+                    if(callback) callback()
+                })
+                .catch(error => {
+                    console.log(error)
+                    Redirect.login()
+                })
+        }
+        getCsrfToken(login)
         return false
     }
     return true
+}
+
+const getCsrfToken = (callback) => {
+    axios.get(Api.csrfToken, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if(callback) return callback(response?.data?.token)
+        })
+        .catch(error => {
+            console.log(error)
+            Redirect.login()
+        })
 }
 
 const RequestApi = {
@@ -43,12 +61,16 @@ const RequestApi = {
             })
     },
     postRequest: (postUrl, body) => {
-        return axios.post(postUrl, body, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem(Key.accessToken)}`
-            }
-        })
+        let post = (token) => {
+            return axios.post(postUrl, body, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem(Key.accessToken)}`,
+                    'X-CSRF-TOKEN': token,
+                }
+            })
+        }
+        getCsrfToken(post)
     },
     postFormRequest: (postUrl, form) => {
             return axios.postForm(postUrl, form, {
@@ -76,6 +98,20 @@ const RequestApi = {
     },
     hasAuthorize: (error, callback) => {
         return reLogin(error, callback)
+    },
+    getCsrfToken: (callback) => {
+        axios.get(Api.csrfToken, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if(callback) return callback(response?.data?.token)
+            })
+            .catch(error => {
+                console.log(error)
+                Redirect.login()
+            })
     }
 }
 export default RequestApi

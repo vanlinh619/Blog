@@ -37,6 +37,7 @@
 import axios from 'axios';
 import Api from "../utils/api";
 import Key from "../utils/contain";
+import RequestApi from "@/utils/request-api";
 
 export default {
   data() {
@@ -48,18 +49,26 @@ export default {
   methods: {
     submit() {
       console.log(this.username + ": " + this.password)
-      axios.post( Api.login, {
-        username: this.username,
-        password: this.password
-      })
-          .then(response => {
-            console.log(response)
-            this.storeKey(response.data)
-            this.$router.push({name: 'home'});
-          })
-          .catch(error => {
-            console.log(error)
-          })
+      let login = (token) => {
+        axios.post( Api.login, {
+          username: this.username,
+          password: this.password
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': token,
+          }
+        })
+            .then(response => {
+              console.log(response)
+              this.storeKey(response.data)
+              this.$router.push({name: 'home'});
+            })
+            .catch(error => {
+              console.log(error)
+            })
+      }
+      RequestApi.getCsrfToken(login)
     },
     storeKey(data) {
       localStorage.setItem(Key.token, data[Key.token])

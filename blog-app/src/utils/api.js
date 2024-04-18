@@ -16,5 +16,6 @@ const Api = {
     image: `${baseUrl}/image/{0}`,
     deleteImage: `${baseUrl}/api/authorize/image/{0}`,
     uploadImage: `${baseUrl}/api/authorize/image`,
+    csrfToken: `${baseUrl}/api/public/csrf`,
 }
 export default Api
